@@ -288,15 +288,15 @@ project/
 
 ### Этап 4 — Backend API: план и Таблица 2
 
-- [ ] Роутер `table2.py`:
+- [x] Роутер `table2.py`:
   - `POST /api/v1/plans` — создать новый план
   - `GET /api/v1/plans` — список планов
   - `GET /api/v1/plans/{plan_id}/table2` — структура УП, сгруппированная по блокам/частям + агрегаты
   - `POST /api/v1/plans/{plan_id}/table2/elements` — добавить строку
   - `PATCH /api/v1/plans/{plan_id}/table2/elements/{el_id}` — изменить строку
   - `DELETE /api/v1/plans/{plan_id}/table2/elements/{el_id}` — удалить строку
-- [ ] При каждом изменении пересчитывать `hours` и агрегаты
-- [ ] Добавить изменение статуса плана:
+- [x] При каждом изменении пересчитывать `hours` и агрегаты
+- [x] Добавить изменение статуса плана:
   - `PATCH /api/v1/plans/{plan_id}/status`
   - утверждение разрешено только при отсутствии критических ошибок
 

@@ -41,6 +41,14 @@ class CurriculumPlanBase(BaseModel):
     status: str
 
 
+class CurriculumPlanCreate(BaseModel):
+    name: str
+
+
+class CurriculumPlanStatusUpdate(BaseModel):
+    status: str
+
+
 class CurriculumPlanRead(CurriculumPlanBase):
     id: int
     created_at: datetime
@@ -54,15 +62,29 @@ class PlanElementBase(BaseModel):
     block: str
     part: str
     credits: float
-    hours: float
     semester: int | None = None
     competency_ids: list[int]
+    source_element_id: int | None = None
+
+
+class PlanElementCreate(PlanElementBase):
+    pass
+
+
+class PlanElementUpdate(BaseModel):
+    name: str | None = None
+    block: str | None = None
+    part: str | None = None
+    credits: float | None = None
+    semester: int | None = None
+    competency_ids: list[int] | None = None
     source_element_id: int | None = None
 
 
 class PlanElementRead(PlanElementBase):
     id: int
     plan_id: int
+    hours: float
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -100,3 +122,25 @@ class CompetencyGroup(BaseModel):
 
 class CompetencyGroupedResponse(BaseModel):
     data: dict[str, list[CompetencyRead]]
+
+
+class CurriculumPlanListResponse(BaseModel):
+    data: list[CurriculumPlanRead]
+
+
+class CurriculumPlanResponse(BaseModel):
+    data: CurriculumPlanRead
+
+
+class PlanElementResponse(BaseModel):
+    data: PlanElementRead
+
+
+class Table2Data(BaseModel):
+    plan: CurriculumPlanRead
+    grouped_elements: dict[str, dict[str, list[PlanElementRead]]]
+    aggregates: dict[str, object]
+
+
+class Table2Response(BaseModel):
+    data: Table2Data

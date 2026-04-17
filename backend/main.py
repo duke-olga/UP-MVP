@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from backend.database import Base, SessionLocal, engine
 from backend.modules.plan_builder import calculator as _calculator  # noqa: F401
 from backend.modules.seed_ingest.loader import load_seed_data
-from backend.routers import competencies, validation
+from backend.routers import competencies, table2, validation
 
 
 @asynccontextmanager
@@ -21,6 +21,7 @@ async def lifespan(_: FastAPI):
 
 app = FastAPI(title="UP-MVP API", version="0.1.0", lifespan=lifespan)
 app.include_router(competencies.router)
+app.include_router(table2.router)
 app.include_router(validation.router)
 
 
