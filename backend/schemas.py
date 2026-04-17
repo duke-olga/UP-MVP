@@ -79,10 +79,18 @@ class CheckReportRead(BaseModel):
     id: int
     plan_id: int
     created_at: datetime
-    results: list[dict]
+    results: list["CheckResult"]
     llm_recommendations: str | None = None
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class CheckResult(BaseModel):
+    rule_id: int
+    level: str
+    message: str
+    actual: str | float | int | None = None
+    expected: str | float | int | None = None
 
 
 class CompetencyGroup(BaseModel):
