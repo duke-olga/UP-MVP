@@ -5,10 +5,30 @@ const api = axios.create({
   timeout: 20000,
 });
 
-export const getHealth = async () => {
-  const { data } = await api.get("/health");
-  return data;
+const backendErrorMap = {
+  "Plan cannot be approved while critical errors or errors are present":
+    "План нельзя утвердить, пока есть критические нарушения или ошибки.",
 };
+
+function normalizeMessage(rawMessage, fallbackMessage) {
+  if (!rawMessage) {
+    return fallbackMessage;
+  }
+
+  if (backendErrorMap[rawMessage]) {
+    return backendErrorMap[rawMessage];
+  }
+
+  const lowered = String(rawMessage).toLowerCase();
+  if (lowered.includes("timeout")) {
+    return "Сервер не успел ответить. Повторите попытку.";
+  }
+  if (lowered.includes("network")) {
+    return "Не удалось установить соединение с сервером.";
+  }
+
+  return rawMessage;
+}
 
 export const listPlans = async () => {
   const { data } = await api.get("/plans");
@@ -50,6 +70,11 @@ export const deleteTable2Element = async (planId, elementId) => {
   return data.data;
 };
 
+export const listCompetencies = async () => {
+  const { data } = await api.get("/competencies");
+  return data.data;
+};
+
 export const getTable3 = async (planId) => {
   const { data } = await api.get(`/plans/${planId}/table3`);
   return data.data;
@@ -68,6 +93,6 @@ export const updatePlanStatus = async (planId, status) => {
 export const getExportUrl = (planId) => `/api/v1/plans/${planId}/export/xlsx`;
 
 export const getErrorMessage = (error, fallbackMessage) =>
-  error?.response?.data?.detail || error?.message || fallbackMessage;
+  normalizeMessage(error?.response?.data?.detail || error?.message, fallbackMessage);
 
 export default api;

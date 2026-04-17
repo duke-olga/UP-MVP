@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 
 import { getErrorMessage, getTable1, transferTable1 } from "../api";
+import SourceBadge from "../components/SourceBadge";
+import StatusBadge from "../components/StatusBadge";
 
 function RecommendationList({ items, type = "static", selections, onToggle }) {
   if (!items.length) {
@@ -20,12 +22,11 @@ function RecommendationList({ items, type = "static", selections, onToggle }) {
           ) : null}
           <div>
             <strong>{item.name}</strong>
-            <span>
-              {item.credits ?? 0} з.е. · семестр {item.semester ?? "не указан"} · {item.source}
-            </span>
-            {item.competency_codes?.length ? (
-              <small>{item.competency_codes.join(", ")}</small>
-            ) : null}
+            <span>{item.credits ?? 0} з.е. · семестр {item.semester ?? "не указан"}</span>
+            <div className="recommendation-meta">
+              <SourceBadge source={item.source} />
+            </div>
+            {item.competency_codes?.length ? <small>{item.competency_codes.join(", ")}</small> : null}
           </div>
         </label>
       ))}
@@ -67,7 +68,7 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
         setSelections(nextSelections);
       } catch (loadError) {
         if (!cancelled) {
-          setError(getErrorMessage(loadError, "Не удалось загрузить Таблицу 1."));
+          setError(getErrorMessage(loadError, "Не удалось загрузить рекомендации."));
         }
       } finally {
         if (!cancelled) {
@@ -98,13 +99,11 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
         selected,
       }));
       const result = await transferTable1(planId, payload);
-      setGlobalNotice(
-        `Перенос завершён. Создано: ${result.created_count}, обновлено: ${result.updated_count}.`,
-      );
+      setGlobalNotice(`Перенос завершен. Добавлено: ${result.created_count}, обновлено: ${result.updated_count}.`);
       onRefresh();
       onNavigate("table2");
     } catch (transferError) {
-      setGlobalNotice(getErrorMessage(transferError, "Не удалось перенести элементы в Таблицу 2."));
+      setGlobalNotice(getErrorMessage(transferError, "Не удалось перенести элементы в структуру плана."));
     } finally {
       setTransferring(false);
     }
@@ -113,8 +112,8 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
   if (!plan) {
     return (
       <section className="card">
-        <h2>Таблица 1</h2>
-        <p>Сначала выбери или создай учебный план.</p>
+        <h2>Рекомендации</h2>
+        <p>Сначала выберите учебный план на стартовом экране.</p>
       </section>
     );
   }
@@ -124,16 +123,16 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
       <div className="card">
         <div className="section-header">
           <div>
-            <p className="card-kicker">Таблица 1</p>
-            <h2>Витрина рекомендаций</h2>
+            <p className="card-kicker">Рекомендации</p>
+            <h2>Рекомендации по компетенциям</h2>
           </div>
           <button className="primary-button" type="button" onClick={handleTransfer} disabled={transferring}>
-            {transferring ? "Перенос..." : "Перенести в Таблицу 2"}
+            {transferring ? "Перенос..." : "Перенести в структуру плана"}
           </button>
         </div>
         <p className="status-muted">
-          План: <strong>{plan.name}</strong>. Обязательные элементы переносятся автоматически, вариативные
-          дисциплины — по отмеченным чекбоксам.
+          Этот экран показывает рекомендации по компетенциям. Обязательные элементы переносятся в структуру
+          плана автоматически, рекомендуемые дисциплины — по отмеченным позициям.
         </p>
         {loading ? <p className="status-muted">Загрузка рекомендаций...</p> : null}
         {error ? <p className="status-message status-error">{error}</p> : null}
@@ -146,16 +145,15 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
               <p className="card-kicker">{section.competency.type}</p>
               <h3>{section.competency.code}</h3>
             </div>
-            <span className={section.mode === "manual" ? "mode-badge manual" : "mode-badge auto"}>
-              {section.mode === "manual" ? "Ручной режим" : "Auto"}
-            </span>
+            {section.mode === "manual" ? <StatusBadge value="manual" /> : null}
           </div>
           <p>{section.competency.name}</p>
           <p className="status-muted">{section.competency.description}</p>
 
           {section.mode === "manual" ? (
             <div className="manual-note">
-              Для ПКС автоподбор отключён. Добавляй дисциплины и практики вручную в Таблице 2.
+              Для этой компетенции автоматический подбор не применяется. Добавьте дисциплины и практики вручную
+              в разделе «Структура плана».
             </div>
           ) : (
             <div className="three-columns">
@@ -164,7 +162,7 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
                 <RecommendationList items={section.mandatory_disciplines} selections={selections} />
               </div>
               <div>
-                <h4>Вариативные дисциплины</h4>
+                <h4>Рекомендуемые дисциплины</h4>
                 <RecommendationList
                   items={section.variative_disciplines}
                   type="checkbox"

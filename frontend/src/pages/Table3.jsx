@@ -1,6 +1,55 @@
 import { useEffect, useState } from "react";
 
 import { getErrorMessage, getExportUrl, getTable3, updatePlanStatus, validatePlan } from "../api";
+import StatusBadge from "../components/StatusBadge";
+
+const levelLabels = {
+  critical: "Критическое нарушение",
+  error: "Ошибка",
+  warning: "Предупреждение",
+};
+
+function getSummary(report) {
+  if (!report?.results?.length) {
+    return {
+      tone: "approved",
+      title: "Нарушения не обнаружены",
+      description: "План можно утвердить. Блокирующих нарушений и ошибок нет.",
+    };
+  }
+
+  const hasCritical = report.results.some((item) => item.level === "critical");
+  const hasError = report.results.some((item) => item.level === "error");
+  const hasWarning = report.results.some((item) => item.level === "warning");
+
+  if (hasCritical) {
+    return {
+      tone: "critical",
+      title: "Есть критические нарушения",
+      description: "План нельзя утвердить, пока критические нарушения не устранены.",
+    };
+  }
+  if (hasError) {
+    return {
+      tone: "error",
+      title: "Есть ошибки",
+      description: "План нельзя утвердить, пока ошибки не устранены.",
+    };
+  }
+  if (hasWarning) {
+    return {
+      tone: "warning",
+      title: "Есть предупреждения",
+      description: "Предупреждения не блокируют утверждение, но требуют внимания методиста.",
+    };
+  }
+
+  return {
+    tone: "approved",
+    title: "Нарушения не обнаружены",
+    description: "План можно утвердить.",
+  };
+}
 
 function DeviationRow({ label, item }) {
   return (
@@ -39,7 +88,7 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
         }
       } catch (loadError) {
         if (!cancelled) {
-          setError(getErrorMessage(loadError, "Не удалось загрузить Таблицу 3."));
+          setError(getErrorMessage(loadError, "Не удалось загрузить экран проверки."));
         }
       } finally {
         if (!cancelled) {
@@ -60,7 +109,7 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
       await validatePlan(planId);
       onRefresh("Проверка плана выполнена.");
     } catch (validateError) {
-      setGlobalNotice(getErrorMessage(validateError, "Не удалось выполнить проверку."));
+      setGlobalNotice(getErrorMessage(validateError, "Не удалось выполнить проверку плана."));
     } finally {
       setBusyAction("");
     }
@@ -70,7 +119,7 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
     setBusyAction("approve");
     try {
       await updatePlanStatus(planId, "approved");
-      onRefresh("План утверждён.");
+      onRefresh("План утвержден.");
     } catch (approveError) {
       setGlobalNotice(getErrorMessage(approveError, "Не удалось утвердить план."));
     } finally {
@@ -85,41 +134,59 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
   if (!plan) {
     return (
       <section className="card">
-        <h2>Таблица 3</h2>
-        <p>Сначала выбери или создай учебный план.</p>
+        <h2>Проверка</h2>
+        <p>Сначала выберите учебный план на стартовом экране.</p>
       </section>
     );
   }
+
+  const summary = getSummary(data?.latest_report);
+  const humanStatus = plan.status === "approved" ? "Утвержден" : plan.status === "checked" ? "Проверен" : "Черновик";
 
   return (
     <section className="stack-panel">
       <div className="card">
         <div className="section-header">
           <div>
-            <p className="card-kicker">Таблица 3</p>
-            <h2>Автоматический контроль</h2>
+            <p className="card-kicker">Проверка</p>
+            <h2>Проверка и утверждение учебного плана</h2>
           </div>
           <div className="toolbar">
             <button className="primary-button" type="button" onClick={handleValidate} disabled={busyAction !== ""}>
-              {busyAction === "validate" ? "Проверка..." : "Проверить учебный план"}
+              {busyAction === "validate" ? "Проверка..." : "Проверить план"}
             </button>
             <button className="secondary-button" type="button" onClick={handleApprove} disabled={busyAction !== ""}>
-              {busyAction === "approve" ? "Утверждение..." : "Утвердить"}
+              {busyAction === "approve" ? "Утверждение..." : "Утвердить план"}
             </button>
             <button className="secondary-button" type="button" onClick={handleExport}>
-              Скачать XLSX
+              Скачать в Excel
             </button>
           </div>
         </div>
         <p className="status-muted">
-          План: <strong>{plan.name}</strong>. Статус: <strong>{plan.status}</strong>.
+          План: <strong>{plan.name}</strong>. Статус: <strong>{humanStatus}</strong>.
         </p>
-        {loading ? <p className="status-muted">Загрузка агрегатов и отчёта...</p> : null}
+        {loading ? <p className="status-muted">Загрузка данных проверки...</p> : null}
         {error ? <p className="status-message status-error">{error}</p> : null}
       </div>
 
       {data ? (
         <>
+          <div className={`card summary-card ${summary.tone}`}>
+            <div className="section-header">
+              <div>
+                <p className="card-kicker">Итог проверки</p>
+                <h3>{summary.title}</h3>
+              </div>
+              <StatusBadge value={summary.tone === "approved" ? "approved" : summary.tone} />
+            </div>
+            <p>{summary.description}</p>
+            <p className="status-muted">
+              Утверждение блокируется при критических нарушениях и ошибках. Предупреждения и рекомендации ИИ не
+              блокируют утверждение.
+            </p>
+          </div>
+
           <div className="card">
             <div className="section-header">
               <h3>Факт / норматив / отклонение</h3>
@@ -131,7 +198,7 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
                 <span>Норматив</span>
                 <span>Отклонение</span>
               </div>
-              <DeviationRow label="Общий объём" item={data.deviations.total_credits} />
+              <DeviationRow label="Общий объем" item={data.deviations.total_credits} />
               <DeviationRow label="Обязательная часть" item={data.deviations.mandatory_percent} />
               {Object.entries(data.deviations.by_block).map(([block, item]) => (
                 <DeviationRow key={block} label={`Блок ${block}`} item={item} />
@@ -152,7 +219,7 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
                   <div key={`${result.rule_id}-${result.message}`} className={`issue-card ${result.level}`}>
                     <div className="issue-head">
                       <strong>Правило #{result.rule_id}</strong>
-                      <span>{result.level}</span>
+                      <StatusBadge value={result.level}>{levelLabels[result.level] || result.level}</StatusBadge>
                     </div>
                     <p>{result.message}</p>
                     <small>
@@ -162,16 +229,20 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
                 ))}
               </div>
             ) : (
-              <p className="status-muted">Проверка ещё не запускалась.</p>
+              <p className="status-muted">После запуска проверки здесь появится список нарушений.</p>
             )}
           </div>
 
           <div className="card">
             <div className="section-header">
-              <h3>Рекомендации ИИ</h3>
+              <h3>Пояснения и рекомендации ИИ</h3>
             </div>
+            <p className="status-muted">
+              ИИ помогает интерпретировать результаты проверки, но не выполняет нормативные расчеты и не меняет
+              учебный план автоматически.
+            </p>
             <div className="llm-box">
-              {data.latest_report?.llm_recommendations || "После запуска проверки здесь появится текст LLM."}
+              {data.latest_report?.llm_recommendations || "После запуска проверки здесь появятся пояснения ИИ."}
             </div>
           </div>
         </>
