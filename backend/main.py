@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from backend.database import Base, SessionLocal, engine
+from backend.routers import export
 from backend.modules.plan_builder import calculator as _calculator  # noqa: F401
 from backend.modules.seed_ingest.loader import load_seed_data
 from backend.routers import competencies, table1, table2, table3, validation
@@ -25,6 +26,7 @@ app.include_router(table1.router)
 app.include_router(table2.router)
 app.include_router(table3.router)
 app.include_router(validation.router)
+app.include_router(export.router)
 
 
 @app.get("/api/v1/health")

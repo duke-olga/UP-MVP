@@ -3,3 +3,5 @@ __pycache__/
 .pytest_cache/
 *.pyc
 up_mvp.db
+frontend/node_modules/
+frontend/dist/
