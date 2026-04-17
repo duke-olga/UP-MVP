@@ -1,10 +1,10 @@
 import { useMemo, useState } from "react";
 
 const groupLabels = {
-  "УК": "УК",
-  "ОПК": "ОПК",
-  "ПК": "ПК",
-  "ПКС": "ПКС",
+  УК: "УК",
+  ОПК: "ОПК",
+  ПК: "ПК",
+  ПКС: "ПКС",
 };
 
 function normalize(value) {
@@ -60,15 +60,13 @@ export default function CompetencyMultiSelect({
         aria-expanded={expanded}
       >
         <span>{title}</span>
-        <strong>
-          {selectedItems.length > 0 ? `Выбрано: ${selectedItems.length}` : "Выбрать компетенции"}
-        </strong>
+        <strong>{selectedItems.length > 0 ? `Выбрано: ${selectedItems.length}` : "Выбрать компетенции"}</strong>
       </button>
 
       {selectedItems.length > 0 ? (
         <div className="selected-tags">
           {selectedItems.map((item) => (
-            <span key={item.id} className="selected-tag">
+            <span key={item.id} className="selected-tag" title={item.name}>
               {item.code}
             </span>
           ))}

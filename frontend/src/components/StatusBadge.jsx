@@ -1,7 +1,7 @@
 const statusMap = {
   draft: { label: "Черновик", tone: "draft" },
   checked: { label: "Проверен", tone: "checked" },
-  approved: { label: "Утвержден", tone: "approved" },
+  approved: { label: "Утверждён", tone: "approved" },
   critical: { label: "Критическое нарушение", tone: "critical" },
   error: { label: "Ошибка", tone: "error" },
   warning: { label: "Предупреждение", tone: "warning" },

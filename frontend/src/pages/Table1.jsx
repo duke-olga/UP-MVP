@@ -1,19 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { getErrorMessage, getTable1, transferTable1 } from "../api";
 import SourceBadge from "../components/SourceBadge";
 import StatusBadge from "../components/StatusBadge";
 
-function RecommendationList({ items, type = "static", selections, onToggle }) {
+function RecommendationList({ items, selectable = false, selections, onToggle, emptyText }) {
   if (!items.length) {
-    return <p className="status-muted">Нет элементов.</p>;
+    return <p className="status-muted">{emptyText}</p>;
   }
 
   return (
     <div className="recommendation-list">
       {items.map((item) => (
-        <label key={item.id} className={type === "checkbox" ? "recommendation checkbox" : "recommendation"}>
-          {type === "checkbox" ? (
+        <label key={item.id} className={selectable ? "recommendation checkbox" : "recommendation"}>
+          {selectable ? (
             <input
               type="checkbox"
               checked={Boolean(selections[item.id])}
@@ -22,7 +22,9 @@ function RecommendationList({ items, type = "static", selections, onToggle }) {
           ) : null}
           <div>
             <strong>{item.name}</strong>
-            <span>{item.credits ?? 0} з.е. · семестр {item.semester ?? "не указан"}</span>
+            <span>
+              {item.credits ?? 0} з.е. · семестр {item.semester ?? "не указан"}
+            </span>
             <div className="recommendation-meta">
               <SourceBadge source={item.source} />
             </div>
@@ -83,6 +85,21 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
     };
   }, [planId, refreshToken]);
 
+  const selectedVariativeCount = useMemo(
+    () => Object.values(selections).filter(Boolean).length,
+    [selections],
+  );
+
+  const autoSectionCount = useMemo(
+    () => sections.filter((section) => section.mode !== "manual").length,
+    [sections],
+  );
+
+  const manualSectionCount = useMemo(
+    () => sections.filter((section) => section.mode === "manual").length,
+    [sections],
+  );
+
   const handleToggle = (elementId, checked) => {
     setSelections((current) => ({ ...current, [elementId]: checked }));
   };
@@ -99,7 +116,7 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
         selected,
       }));
       const result = await transferTable1(planId, payload);
-      setGlobalNotice(`Перенос завершен. Добавлено: ${result.created_count}, обновлено: ${result.updated_count}.`);
+      setGlobalNotice(`Перенос завершён. Добавлено: ${result.created_count}, обновлено: ${result.updated_count}.`);
       onRefresh();
       onNavigate("table2");
     } catch (transferError) {
@@ -131,11 +148,31 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
           </button>
         </div>
         <p className="status-muted">
-          Этот экран показывает рекомендации по компетенциям. Обязательные элементы переносятся в структуру
-          плана автоматически, рекомендуемые дисциплины — по отмеченным позициям.
+          Этот экран показывает рекомендованные элементы для формирования учебного плана. Он не является самой
+          структурой плана: обязательные элементы переносятся автоматически, а вариативные дисциплины — только по
+          отмеченным позициям.
         </p>
         {loading ? <p className="status-muted">Загрузка рекомендаций...</p> : null}
         {error ? <p className="status-message status-error">{error}</p> : null}
+      </div>
+
+      <div className="card totals-grid">
+        <div className="metric-tile">
+          <span>Компетенций</span>
+          <strong>{sections.length}</strong>
+        </div>
+        <div className="metric-tile">
+          <span>Автоподбор</span>
+          <strong>{autoSectionCount}</strong>
+        </div>
+        <div className="metric-tile">
+          <span>Ручной режим</span>
+          <strong>{manualSectionCount}</strong>
+        </div>
+        <div className="metric-tile">
+          <span>Выбрано вариативных дисциплин</span>
+          <strong>{selectedVariativeCount}</strong>
+        </div>
       </div>
 
       {sections.map((section) => (
@@ -143,36 +180,47 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
           <div className="section-header">
             <div>
               <p className="card-kicker">{section.competency.type}</p>
-              <h3>{section.competency.code}</h3>
+              <h3>
+                {section.competency.code} — {section.competency.name}
+              </h3>
             </div>
             {section.mode === "manual" ? <StatusBadge value="manual" /> : null}
           </div>
-          <p>{section.competency.name}</p>
+
           <p className="status-muted">{section.competency.description}</p>
 
           {section.mode === "manual" ? (
             <div className="manual-note">
-              Для этой компетенции автоматический подбор не применяется. Добавьте дисциплины и практики вручную
-              в разделе «Структура плана».
+              Для этой компетенции автоматический подбор не применяется. Добавьте дисциплины и практики вручную в
+              разделе «Структура плана».
             </div>
           ) : (
             <div className="three-columns">
-              <div>
+              <div className="content-block">
                 <h4>Обязательные дисциплины</h4>
-                <RecommendationList items={section.mandatory_disciplines} selections={selections} />
+                <RecommendationList
+                  items={section.mandatory_disciplines}
+                  selections={selections}
+                  emptyText="Обязательные дисциплины не заданы."
+                />
               </div>
-              <div>
+              <div className="content-block">
                 <h4>Рекомендуемые дисциплины</h4>
                 <RecommendationList
                   items={section.variative_disciplines}
-                  type="checkbox"
+                  selectable
                   selections={selections}
                   onToggle={handleToggle}
+                  emptyText="Рекомендуемые вариативные дисциплины не найдены."
                 />
               </div>
-              <div>
+              <div className="content-block">
                 <h4>Обязательные практики</h4>
-                <RecommendationList items={section.mandatory_practices} selections={selections} />
+                <RecommendationList
+                  items={section.mandatory_practices}
+                  selections={selections}
+                  emptyText="Обязательные практики не заданы."
+                />
               </div>
             </div>
           )}

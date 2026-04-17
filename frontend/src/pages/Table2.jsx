@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import {
   createTable2Element,
@@ -29,8 +29,16 @@ const blockLabels = {
   "1": "Блок 1. Дисциплины",
   "2": "Блок 2. Практики",
   "3": "Блок 3. ГИА",
-  "fac": "Факультативы",
+  fac: "Факультативы",
 };
+
+function buildCompetencyMap(groupedCompetencies) {
+  return Object.fromEntries(
+    Object.values(groupedCompetencies)
+      .flat()
+      .map((item) => [item.id, item]),
+  );
+}
 
 export default function Table2({ plan, planId, refreshToken, onRefresh, setGlobalNotice }) {
   const [data, setData] = useState(null);
@@ -114,6 +122,8 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
     };
   }, [setGlobalNotice]);
 
+  const competencyMap = useMemo(() => buildCompetencyMap(competencies), [competencies]);
+
   const updateDraft = (elementId, field, value) => {
     setDrafts((current) => ({
       ...current,
@@ -157,7 +167,7 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
     setSaving(true);
     try {
       await deleteTable2Element(planId, elementId);
-      onRefresh("Элемент удален из структуры плана.");
+      onRefresh("Элемент удалён из структуры плана.");
     } catch (deleteError) {
       setGlobalNotice(getErrorMessage(deleteError, "Не удалось удалить элемент."));
     } finally {
@@ -187,12 +197,6 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
     }
   };
 
-  const competencyMap = Object.fromEntries(
-    Object.values(competencies)
-      .flat()
-      .map((item) => [item.id, item]),
-  );
-
   if (!plan) {
     return (
       <section className="card">
@@ -213,16 +217,38 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
           <StatusBadge value={plan.status} />
         </div>
         <p className="status-muted">
-          Здесь редактируется итоговая структура учебного плана. Часы рассчитываются автоматически по
-          количеству зачетных единиц.
+          Здесь редактируется итоговая структура учебного плана. Часы рассчитываются автоматически по количеству
+          зачётных единиц, а компетенции выбираются из списка кодов и названий.
         </p>
         {loading ? <p className="status-muted">Загрузка структуры плана...</p> : null}
         {error ? <p className="status-message status-error">{error}</p> : null}
       </div>
 
+      {data ? (
+        <div className="card totals-grid">
+          <div className="metric-tile">
+            <span>Всего з.е.</span>
+            <strong>{data.aggregates.total_credits}</strong>
+          </div>
+          <div className="metric-tile">
+            <span>Всего часов</span>
+            <strong>{data.aggregates.total_hours}</strong>
+          </div>
+          {Object.entries(data.aggregates.by_block).map(([block, value]) => (
+            <div key={block} className="metric-tile">
+              <span>{blockLabels[block] || `Блок ${block}`}</span>
+              <strong>{value}</strong>
+            </div>
+          ))}
+        </div>
+      ) : null}
+
       <form className="card stacked-form" onSubmit={handleCreateElement}>
         <div className="section-header">
-          <h3>Добавить элемент</h3>
+          <div>
+            <p className="card-kicker">Ручное добавление</p>
+            <h3>Добавить элемент</h3>
+          </div>
         </div>
         <div className="form-grid">
           <label className="field">
@@ -239,20 +265,20 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
               value={newElement.block}
               onChange={(event) => setNewElement((current) => ({ ...current, block: event.target.value }))}
             >
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="fac">fac</option>
+              <option value="1">Блок 1</option>
+              <option value="2">Блок 2</option>
+              <option value="3">Блок 3</option>
+              <option value="fac">Факультативы</option>
             </select>
           </label>
           <label className="field">
-            <span>Часть</span>
+            <span>Часть плана</span>
             <select
               value={newElement.part}
               onChange={(event) => setNewElement((current) => ({ ...current, part: event.target.value }))}
             >
-              <option value="mandatory">Обязательная</option>
-              <option value="variative">Вариативная</option>
+              <option value="mandatory">Обязательная часть</option>
+              <option value="variative">Вариативная часть</option>
             </select>
           </label>
           <label className="field">
@@ -275,11 +301,13 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
             />
           </label>
         </div>
+
         <CompetencyMultiSelect
           groupedCompetencies={competencies}
           selectedIds={newElement.competency_ids}
           onChange={(value) => setNewElement((current) => ({ ...current, competency_ids: value }))}
         />
+
         <button className="primary-button" type="submit" disabled={saving}>
           {saving ? "Сохранение..." : "Добавить элемент"}
         </button>
@@ -288,11 +316,15 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
       {editingId ? (
         <div className="card stacked-form">
           <div className="section-header">
-            <h3>Редактирование элемента</h3>
+            <div>
+              <p className="card-kicker">Редактирование</p>
+              <h3>Изменить элемент</h3>
+            </div>
             <button type="button" className="secondary-button" onClick={() => setEditingId(null)}>
               Закрыть
             </button>
           </div>
+
           <div className="form-grid">
             <label className="field">
               <span>Наименование</span>
@@ -307,20 +339,20 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
                 value={drafts[editingId]?.block || "1"}
                 onChange={(event) => updateDraft(editingId, "block", event.target.value)}
               >
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="fac">fac</option>
+                <option value="1">Блок 1</option>
+                <option value="2">Блок 2</option>
+                <option value="3">Блок 3</option>
+                <option value="fac">Факультативы</option>
               </select>
             </label>
             <label className="field">
-              <span>Часть</span>
+              <span>Часть плана</span>
               <select
                 value={drafts[editingId]?.part || "mandatory"}
                 onChange={(event) => updateDraft(editingId, "part", event.target.value)}
               >
-                <option value="mandatory">Обязательная</option>
-                <option value="variative">Вариативная</option>
+                <option value="mandatory">Обязательная часть</option>
+                <option value="variative">Вариативная часть</option>
               </select>
             </label>
             <label className="field">
@@ -341,100 +373,100 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
               />
             </label>
           </div>
+
           <CompetencyMultiSelect
             groupedCompetencies={competencies}
             selectedIds={drafts[editingId]?.competency_ids || []}
             onChange={(value) => updateDraft(editingId, "competency_ids", value)}
           />
+
           <button className="primary-button" type="button" onClick={() => handleSaveElement(editingId)} disabled={saving}>
             {saving ? "Сохранение..." : "Сохранить изменения"}
           </button>
         </div>
       ) : null}
 
-      {data ? (
-        <>
-          <div className="card totals-grid">
-            <div className="metric-tile">
-              <span>Всего з.е.</span>
-              <strong>{data.aggregates.total_credits}</strong>
-            </div>
-            <div className="metric-tile">
-              <span>Всего часов</span>
-              <strong>{data.aggregates.total_hours}</strong>
-            </div>
-            {Object.entries(data.aggregates.by_block).map(([block, value]) => (
-              <div key={block} className="metric-tile">
-                <span>{blockLabels[block] || `Блок ${block}`}</span>
-                <strong>{value}</strong>
-              </div>
-            ))}
-          </div>
-
-          {Object.entries(data.grouped_elements).map(([block, parts]) => (
+      {data
+        ? Object.entries(data.grouped_elements).map(([block, parts]) => (
             <div key={block} className="card">
               <div className="section-header">
-                <h3>{blockLabels[block] || `Блок ${block}`}</h3>
+                <div>
+                  <p className="card-kicker">Состав плана</p>
+                  <h3>{blockLabels[block] || `Блок ${block}`}</h3>
+                </div>
               </div>
+
               {Object.entries(parts).map(([part, elements]) => (
                 <div key={part} className="part-section">
                   <h4>{partLabels[part] || part}</h4>
-                  <div className="table-scroll">
-                    <table className="data-table">
-                      <thead>
-                        <tr>
-                          <th>Наименование</th>
-                          <th>Семестр</th>
-                          <th>З.е.</th>
-                          <th>Часы</th>
-                          <th>Компетенции</th>
-                          <th>Действия</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {elements.map((element) => (
-                          <tr key={element.id}>
-                            <td>
-                              <strong>{element.name}</strong>
-                              <div className="table-secondary">
-                                {(blockLabels[element.block] || `Блок ${element.block}`) +
-                                  " · " +
-                                  (partLabels[element.part] || element.part)}
-                              </div>
-                            </td>
-                            <td>{element.semester ?? "—"}</td>
-                            <td>{element.credits}</td>
-                            <td>{element.hours}</td>
-                            <td>
-                              <div className="selected-tags">
-                                {element.competency_ids.map((competencyId) => (
-                                  <span key={competencyId} className="selected-tag light">
-                                    {competencyMap[competencyId]?.code || `ID ${competencyId}`}
-                                  </span>
-                                ))}
-                              </div>
-                            </td>
-                            <td>
-                              <div className="row-actions">
-                                <button className="small-button" type="button" onClick={() => setEditingId(element.id)}>
-                                  Изменить
-                                </button>
-                                <button className="small-button danger" type="button" onClick={() => handleDeleteElement(element.id)} disabled={saving}>
-                                  Удалить
-                                </button>
-                              </div>
-                            </td>
+                  {elements.length === 0 ? (
+                    <p className="status-muted">В этой части пока нет элементов.</p>
+                  ) : (
+                    <div className="table-scroll">
+                      <table className="data-table">
+                        <thead>
+                          <tr>
+                            <th>Наименование</th>
+                            <th>Семестр</th>
+                            <th>З.е.</th>
+                            <th>Часы</th>
+                            <th>Компетенции</th>
+                            <th>Действия</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                        </thead>
+                        <tbody>
+                          {elements.map((element) => (
+                            <tr key={element.id}>
+                              <td>
+                                <strong>{element.name}</strong>
+                                <div className="table-secondary">
+                                  {(blockLabels[element.block] || `Блок ${element.block}`) +
+                                    " · " +
+                                    (partLabels[element.part] || element.part)}
+                                </div>
+                              </td>
+                              <td>{element.semester ?? "—"}</td>
+                              <td>{element.credits}</td>
+                              <td>{element.hours}</td>
+                              <td>
+                                <div className="selected-tags">
+                                  {element.competency_ids.map((competencyId) => (
+                                    <span
+                                      key={competencyId}
+                                      className="selected-tag light"
+                                      title={competencyMap[competencyId]?.name || "Компетенция"}
+                                    >
+                                      {competencyMap[competencyId]?.code || `ID ${competencyId}`}
+                                    </span>
+                                  ))}
+                                </div>
+                              </td>
+                              <td>
+                                <div className="row-actions">
+                                  <button className="small-button" type="button" onClick={() => setEditingId(element.id)}>
+                                    Изменить
+                                  </button>
+                                  <button
+                                    className="small-button danger"
+                                    type="button"
+                                    onClick={() => handleDeleteElement(element.id)}
+                                    disabled={saving}
+                                  >
+                                    Удалить
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
-          ))}
-        </>
-      ) : null}
+          ))
+        : null}
     </section>
   );
 }

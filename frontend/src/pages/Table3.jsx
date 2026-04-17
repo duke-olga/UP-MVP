@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { getErrorMessage, getExportUrl, getTable3, updatePlanStatus, validatePlan } from "../api";
 import StatusBadge from "../components/StatusBadge";
@@ -14,7 +14,7 @@ function getSummary(report) {
     return {
       tone: "approved",
       title: "Нарушения не обнаружены",
-      description: "План можно утвердить. Блокирующих нарушений и ошибок нет.",
+      description: "План можно утверждать. Блокирующих нарушений и ошибок нет.",
     };
   }
 
@@ -47,7 +47,7 @@ function getSummary(report) {
   return {
     tone: "approved",
     title: "Нарушения не обнаружены",
-    description: "План можно утвердить.",
+    description: "План можно утверждать.",
   };
 }
 
@@ -119,7 +119,7 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
     setBusyAction("approve");
     try {
       await updatePlanStatus(planId, "approved");
-      onRefresh("План утвержден.");
+      onRefresh("План утверждён.");
     } catch (approveError) {
       setGlobalNotice(getErrorMessage(approveError, "Не удалось утвердить план."));
     } finally {
@@ -131,6 +131,17 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
     window.open(getExportUrl(planId), "_blank", "noopener,noreferrer");
   };
 
+  const summary = getSummary(data?.latest_report);
+  const issues = data?.latest_report?.results || [];
+  const counts = useMemo(
+    () => ({
+      critical: issues.filter((item) => item.level === "critical").length,
+      error: issues.filter((item) => item.level === "error").length,
+      warning: issues.filter((item) => item.level === "warning").length,
+    }),
+    [issues],
+  );
+
   if (!plan) {
     return (
       <section className="card">
@@ -139,9 +150,6 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
       </section>
     );
   }
-
-  const summary = getSummary(data?.latest_report);
-  const humanStatus = plan.status === "approved" ? "Утвержден" : plan.status === "checked" ? "Проверен" : "Черновик";
 
   return (
     <section className="stack-panel">
@@ -164,32 +172,51 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
           </div>
         </div>
         <p className="status-muted">
-          План: <strong>{plan.name}</strong>. Статус: <strong>{humanStatus}</strong>.
+          Утверждение блокируется при критических нарушениях и ошибках. Предупреждения и рекомендации ИИ не блокируют
+          утверждение.
         </p>
         {loading ? <p className="status-muted">Загрузка данных проверки...</p> : null}
         {error ? <p className="status-message status-error">{error}</p> : null}
       </div>
 
+      <div className={`card summary-card ${summary.tone}`}>
+        <div className="section-header">
+          <div>
+            <p className="card-kicker">Итог проверки</p>
+            <h3>{summary.title}</h3>
+          </div>
+          <StatusBadge value={summary.tone === "approved" ? "approved" : summary.tone} />
+        </div>
+        <p>{summary.description}</p>
+      </div>
+
+      <div className="card totals-grid">
+        <div className="metric-tile">
+          <span>Критические нарушения</span>
+          <strong>{counts.critical}</strong>
+        </div>
+        <div className="metric-tile">
+          <span>Ошибки</span>
+          <strong>{counts.error}</strong>
+        </div>
+        <div className="metric-tile">
+          <span>Предупреждения</span>
+          <strong>{counts.warning}</strong>
+        </div>
+        <div className="metric-tile">
+          <span>Статус плана</span>
+          <strong>{plan.status === "approved" ? "Утверждён" : plan.status === "checked" ? "Проверен" : "Черновик"}</strong>
+        </div>
+      </div>
+
       {data ? (
         <>
-          <div className={`card summary-card ${summary.tone}`}>
-            <div className="section-header">
-              <div>
-                <p className="card-kicker">Итог проверки</p>
-                <h3>{summary.title}</h3>
-              </div>
-              <StatusBadge value={summary.tone === "approved" ? "approved" : summary.tone} />
-            </div>
-            <p>{summary.description}</p>
-            <p className="status-muted">
-              Утверждение блокируется при критических нарушениях и ошибках. Предупреждения и рекомендации ИИ не
-              блокируют утверждение.
-            </p>
-          </div>
-
           <div className="card">
             <div className="section-header">
-              <h3>Факт / норматив / отклонение</h3>
+              <div>
+                <p className="card-kicker">Нормативные показатели</p>
+                <h3>Факт / норматив / отклонение</h3>
+              </div>
             </div>
             <div className="deviation-table">
               <div className="deviation-row deviation-head">
@@ -198,7 +225,7 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
                 <span>Норматив</span>
                 <span>Отклонение</span>
               </div>
-              <DeviationRow label="Общий объем" item={data.deviations.total_credits} />
+              <DeviationRow label="Общий объём" item={data.deviations.total_credits} />
               <DeviationRow label="Обязательная часть" item={data.deviations.mandatory_percent} />
               {Object.entries(data.deviations.by_block).map(([block, item]) => (
                 <DeviationRow key={block} label={`Блок ${block}`} item={item} />
@@ -211,11 +238,14 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
 
           <div className="card">
             <div className="section-header">
-              <h3>Нарушения</h3>
+              <div>
+                <p className="card-kicker">Нарушения</p>
+                <h3>Результаты детерминированной проверки</h3>
+              </div>
             </div>
-            {data.latest_report?.results?.length ? (
+            {issues.length ? (
               <div className="issue-list">
-                {data.latest_report.results.map((result) => (
+                {issues.map((result) => (
                   <div key={`${result.rule_id}-${result.message}`} className={`issue-card ${result.level}`}>
                     <div className="issue-head">
                       <strong>Правило #{result.rule_id}</strong>
@@ -229,16 +259,19 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
                 ))}
               </div>
             ) : (
-              <p className="status-muted">После запуска проверки здесь появится список нарушений.</p>
+              <p className="status-muted">После запуска проверки здесь появится список нарушений и предупреждений.</p>
             )}
           </div>
 
           <div className="card">
             <div className="section-header">
-              <h3>Пояснения и рекомендации ИИ</h3>
+              <div>
+                <p className="card-kicker">ИИ</p>
+                <h3>Пояснения и рекомендации ИИ</h3>
+              </div>
             </div>
             <p className="status-muted">
-              ИИ помогает интерпретировать результаты проверки, но не выполняет нормативные расчеты и не меняет
+              ИИ помогает интерпретировать результаты проверки, но не выполняет нормативные расчёты и не изменяет
               учебный план автоматически.
             </p>
             <div className="llm-box">
