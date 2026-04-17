@@ -1,0 +1,13 @@
+[
+  { "key": "X_total", "value": 240.0 },
+  { "key": "X_year", "value": 60.0 },
+  { "key": "X_accelerated", "value": 80.0 },
+  { "key": "X_b1", "value": 160.0 },
+  { "key": "X_b2", "value": 20.0 },
+  { "key": "X_b3", "value": 9.0 },
+  { "key": "X_mandatory_percent", "value": 0.4 },
+  { "key": "X_pe_ze", "value": 2.0 },
+  { "key": "X_pe_hours", "value": 328.0 },
+  { "key": "CreditHourRatio", "value": 36.0 },
+  { "key": "X_semester_max", "value": 35.0 }
+]
