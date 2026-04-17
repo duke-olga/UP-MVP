@@ -121,15 +121,9 @@ textarea:focus {
 .plan-browser,
 .stack-panel,
 .plan-grid,
-.sidebar,
 .workspace {
   display: grid;
   gap: 20px;
-}
-
-.workspace {
-  grid-template-columns: 320px minmax(0, 1fr);
-  align-items: start;
 }
 
 .plan-grid {
@@ -143,7 +137,8 @@ textarea:focus {
 .section-header,
 .toolbar,
 .row-actions,
-.sidebar-actions {
+.workspace-header-main,
+.workspace-header-actions {
   display: flex;
   gap: 12px;
   align-items: center;
@@ -242,7 +237,7 @@ textarea:focus {
 .notice-banner,
 .manual-note,
 .selected-plan,
-.sidebar-hint,
+.workspace-hint,
 .empty-state {
   border-radius: 18px;
   padding: 16px 18px;
@@ -260,9 +255,26 @@ textarea:focus {
 }
 
 .selected-plan,
-.sidebar-hint,
+.workspace-hint,
 .empty-state {
   background: rgba(18, 33, 44, 0.05);
+}
+
+.workspace-header {
+  display: grid;
+  gap: 18px;
+}
+
+.workspace-header-main {
+  align-items: flex-start;
+}
+
+.workspace-header-actions {
+  justify-content: flex-end;
+}
+
+.workspace-hint {
+  padding: 14px 16px;
 }
 
 .step-list,
@@ -273,6 +285,14 @@ textarea:focus {
 
 .simple-list.compact {
   margin-top: 0;
+}
+
+.inline-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px 18px;
+  margin-top: 8px;
+  padding-left: 20px;
 }
 
 .plan-card {
@@ -574,9 +594,12 @@ textarea:focus {
 
 @media (max-width: 1100px) {
   .hero,
-  .workspace,
   .three-columns,
   .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .inline-steps {
     grid-template-columns: 1fr;
   }
 }

@@ -177,34 +177,33 @@ export default function App() {
         </section>
       ) : (
         <section className="workspace">
-          <aside className="sidebar card">
-            <div className="section-header">
+          <div className="card workspace-header">
+            <div className="workspace-header-main">
               <div>
                 <p className="card-kicker">Учебный план</p>
                 <h2>{selectedPlan.name}</h2>
               </div>
+
+              <div className="workspace-header-actions">
+                <div className="selected-plan">
+                  <span className="health-label">Статус</span>
+                  <StatusBadge value={selectedPlan.status} />
+                </div>
+                <button type="button" className="secondary-button" onClick={() => setSelectedPlanId(null)}>
+                  К списку планов
+                </button>
+              </div>
             </div>
 
-            <div className="selected-plan">
-              <span className="health-label">Статус</span>
-              <StatusBadge value={selectedPlan.status} />
-            </div>
-
-            <div className="sidebar-actions">
-              <button type="button" className="secondary-button" onClick={() => setSelectedPlanId(null)}>
-                К списку планов
-              </button>
-            </div>
-
-            <div className="sidebar-hint">
+            <div className="workspace-hint">
               <p className="card-kicker">Этапы работы</p>
-              <ol className="step-list">
+              <ol className="step-list inline-steps">
                 <li>Проверьте рекомендации по компетенциям.</li>
                 <li>Скорректируйте структуру учебного плана.</li>
-                <li>Запустите проверку и при необходимости утвердите план.</li>
+                <li>Запустите проверку и, если нужно, утвердите план.</li>
               </ol>
             </div>
-          </aside>
+          </div>
 
           <section className="content-area">
             <nav className="tabs" aria-label="Навигация по разделам плана">
