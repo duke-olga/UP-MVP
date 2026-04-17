@@ -36,6 +36,18 @@ class RecommendedElementRead(RecommendedElementBase):
     model_config = ConfigDict(from_attributes=True)
 
 
+class Table1RecommendedElement(BaseModel):
+    id: int
+    name: str
+    element_type: str
+    part: str
+    credits: float | None = None
+    semester: int | None = None
+    source: str
+    competency_codes: list[str]
+    selected: bool = False
+
+
 class CurriculumPlanBase(BaseModel):
     name: str
     status: str
@@ -144,3 +156,39 @@ class Table2Data(BaseModel):
 
 class Table2Response(BaseModel):
     data: Table2Data
+
+
+class Table1CompetencySection(BaseModel):
+    competency: CompetencyRead
+    mode: str
+    mandatory_disciplines: list[Table1RecommendedElement]
+    variative_disciplines: list[Table1RecommendedElement]
+    mandatory_practices: list[Table1RecommendedElement]
+
+
+class Table1Response(BaseModel):
+    data: list[Table1CompetencySection]
+
+
+class Table1TransferItem(BaseModel):
+    element_id: int
+    selected: bool
+
+
+class Table1TransferRequest(BaseModel):
+    selections: list[Table1TransferItem]
+
+
+class Table1TransferResponse(BaseModel):
+    data: dict[str, object]
+
+
+class Table3Data(BaseModel):
+    plan: CurriculumPlanRead
+    aggregates: dict[str, object]
+    deviations: dict[str, object]
+    latest_report: CheckReportRead | None = None
+
+
+class Table3Response(BaseModel):
+    data: Table3Data
