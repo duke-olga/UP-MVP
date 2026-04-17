@@ -1,0 +1,5 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+up_mvp.db

@@ -190,18 +190,18 @@ project/
 
 ### Этап 0 — Backend skeleton и база проекта
 
-- [ ] Создать базовую структуру папок проекта
-- [ ] Инициализировать FastAPI: `main.py`, эндпоинт `GET /api/v1/health` → `{ "status": "ok" }`
-- [ ] Настроить SQLAlchemy + SQLite в `database.py`
-- [ ] Создать каркас `models.py` и `schemas.py`
-- [ ] Подготовить структуру backend-модулей:
+- [x] Создать базовую структуру папок проекта
+- [x] Инициализировать FastAPI: `main.py`, эндпоинт `GET /api/v1/health` → `{ "status": "ok" }`
+- [x] Настроить SQLAlchemy + SQLite в `database.py`
+- [x] Создать каркас `models.py` и `schemas.py`
+- [x] Подготовить структуру backend-модулей:
   - `seed_ingest/`
   - `recommendation/`
   - `plan_builder/`
   - `validation/`
   - `llm_explainer/`
   - `export/`
-- [ ] Подготовить `README.md` с минимальными командами локального запуска backend
+- [x] Подготовить `README.md` с минимальными командами локального запуска backend
 
 **Критерий:** backend запускается локально, `GET /api/v1/health` отвечает успешно.
 
