@@ -39,6 +39,17 @@ def test_extract_records_from_real_pdf_returns_normalized_entries() -> None:
     assert not any("формируются образовательной организацией" in record.name for record in records)
 
 
+def test_extract_records_from_text_layer_pdf_returns_entries() -> None:
+    pdf_path = Path("backend/seed/poop_pdf/090301_POOP_B_1.pdf")
+
+    records = extract_records_from_pdf(pdf_path)
+
+    assert len(records) >= 20
+    assert all(record.source_name == pdf_path.name for record in records)
+    assert any(record.credits == 12.0 and record.fgos_mandatory == "foreign_language" for record in records)
+    assert any(record.element_type == "practice" for record in records)
+
+
 class _FakeAdapter:
     def generate(self, prompt: str, system_prompt: str) -> str:
         if "source_type: best_practices" in prompt:

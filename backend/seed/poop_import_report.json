@@ -1,0 +1,144 @@
+[
+  {
+    "direction_code": "010302",
+    "source_name": "010302_POOP_B.pdf",
+    "source_type": "poop",
+    "strategy_used": "hybrid",
+    "extractor_used": "llm",
+    "candidate_row_count": 0,
+    "record_count": 1,
+    "quality_score": 0.85,
+    "needs_review": true,
+    "warnings": [
+      "docling_convert_failed: [Errno 13] Permission denied: 'C:\\\\Users\\\\USER\\\\AppData\\\\Roaming\\\\Python\\\\Python313\\\\site-packages\\\\rapidocr\\\\models\\\\ch_PP-OCRv4_det_mobile.onnx'",
+      "pypdf_no_plan_text",
+      "no_records_extracted",
+      "used_llm_fallback"
+    ],
+    "candidate_samples": []
+  },
+  {
+    "direction_code": "090302",
+    "source_name": "090302_ИТМО.pdf",
+    "source_type": "best_practices",
+    "strategy_used": "hybrid",
+    "extractor_used": "pymupdf",
+    "candidate_row_count": 143,
+    "record_count": 110,
+    "quality_score": 0.708,
+    "needs_review": false,
+    "warnings": [],
+    "candidate_samples": [
+      {
+        "page_number": 1,
+        "extractor": "pymupdf",
+        "source_name": "090302_ИТМО.pdf",
+        "source_type": "best_practices",
+        "row_id": "5",
+        "name": "Промышленный Python",
+        "cells": [
+          "5",
+          "Промышленный Python",
+          "4",
+          "144"
+        ],
+        "row_text": "5 Промышленный Python 4 144",
+        "credits_candidate": 4.0,
+        "semesters_candidate": [
+          5
+        ],
+        "competency_codes_candidate": [],
+        "part_candidate": "mandatory",
+        "kind_cell": null
+      },
+      {
+        "page_number": 1,
+        "extractor": "pymupdf",
+        "source_name": "090302_ИТМО.pdf",
+        "source_type": "best_practices",
+        "row_id": "6",
+        "name": "Генеративный искусственный интеллект",
+        "cells": [
+          "6",
+          "Генеративный искусственный интеллект",
+          "3",
+          "108"
+        ],
+        "row_text": "6 Генеративный искусственный интеллект 3 108",
+        "credits_candidate": 3.0,
+        "semesters_candidate": [
+          6
+        ],
+        "competency_codes_candidate": [],
+        "part_candidate": "mandatory",
+        "kind_cell": null
+      },
+      {
+        "page_number": 1,
+        "extractor": "pymupdf",
+        "source_name": "090302_ИТМО.pdf",
+        "source_type": "best_practices",
+        "row_id": "6",
+        "name": "Технологии сбора и визуализации данных",
+        "cells": [
+          "6",
+          "Технологии сбора и визуализации данных",
+          "4",
+          "144"
+        ],
+        "row_text": "6 Технологии сбора и визуализации данных 4 144",
+        "credits_candidate": 4.0,
+        "semesters_candidate": [
+          6
+        ],
+        "competency_codes_candidate": [],
+        "part_candidate": "mandatory",
+        "kind_cell": null
+      },
+      {
+        "page_number": 1,
+        "extractor": "pymupdf",
+        "source_name": "090302_ИТМО.pdf",
+        "source_type": "best_practices",
+        "row_id": "6",
+        "name": "Хранилища данных",
+        "cells": [
+          "6",
+          "Хранилища данных",
+          "3",
+          "108"
+        ],
+        "row_text": "6 Хранилища данных 3 108",
+        "credits_candidate": 3.0,
+        "semesters_candidate": [
+          6
+        ],
+        "competency_codes_candidate": [],
+        "part_candidate": "mandatory",
+        "kind_cell": null
+      },
+      {
+        "page_number": 1,
+        "extractor": "pymupdf",
+        "source_name": "090302_ИТМО.pdf",
+        "source_type": "best_practices",
+        "row_id": "6",
+        "name": "Дополнительные главы машинного обучения",
+        "cells": [
+          "6",
+          "Дополнительные главы машинного обучения",
+          "3",
+          "108"
+        ],
+        "row_text": "6 Дополнительные главы машинного обучения 3 108",
+        "credits_candidate": 3.0,
+        "semesters_candidate": [
+          6
+        ],
+        "competency_codes_candidate": [],
+        "part_candidate": "mandatory",
+        "kind_cell": null
+      }
+    ]
+  }
+]
