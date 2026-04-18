@@ -15,11 +15,11 @@ def _build_test_client():
         connect_args={"check_same_thread": False},
         poolclass=StaticPool,
     )
-    TestingSessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
+    testing_session_local = sessionmaker(bind=engine, autocommit=False, autoflush=False)
     Base.metadata.create_all(bind=engine)
 
     def override_get_db():
-        db = TestingSessionLocal()
+        db = testing_session_local()
         try:
             yield db
         finally:
@@ -30,7 +30,7 @@ def _build_test_client():
     app.include_router(validation.router)
     app.dependency_overrides[get_db] = override_get_db
 
-    db = TestingSessionLocal()
+    db = testing_session_local()
     try:
         db.add_all(
             [
@@ -100,6 +100,21 @@ def test_create_plan_and_table2_crud_flow() -> None:
     delete_element_response = client.delete(f"/api/v1/plans/{plan_id}/table2/elements/{element_id}")
     assert delete_element_response.status_code == 200
     assert delete_element_response.json()["data"]["deleted"] is True
+
+
+def test_delete_plan_removes_plan() -> None:
+    client = _build_test_client()
+
+    create_plan_response = client.post("/api/v1/plans", json={"name": "Delete me"})
+    plan_id = create_plan_response.json()["data"]["id"]
+
+    delete_response = client.delete(f"/api/v1/plans/{plan_id}")
+    assert delete_response.status_code == 200
+    assert delete_response.json()["data"] == {"deleted": True, "plan_id": plan_id}
+
+    list_response = client.get("/api/v1/plans")
+    ids = [item["id"] for item in list_response.json()["data"]]
+    assert plan_id not in ids
 
 
 def test_approve_is_blocked_when_validation_has_errors() -> None:

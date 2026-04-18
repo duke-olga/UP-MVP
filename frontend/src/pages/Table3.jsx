@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { getErrorMessage, getExportUrl, getTable3, updatePlanStatus, validatePlan } from "../api";
 import StatusBadge from "../components/StatusBadge";
@@ -9,47 +9,28 @@ const levelLabels = {
   warning: "Предупреждение",
 };
 
-function getSummary(report) {
-  if (!report?.results?.length) {
-    return {
-      tone: "approved",
-      title: "Нарушения не обнаружены",
-      description: "План можно утверждать. Блокирующих нарушений и ошибок нет.",
-    };
-  }
-
-  const hasCritical = report.results.some((item) => item.level === "critical");
-  const hasError = report.results.some((item) => item.level === "error");
-  const hasWarning = report.results.some((item) => item.level === "warning");
-
-  if (hasCritical) {
-    return {
-      tone: "critical",
-      title: "Есть критические нарушения",
-      description: "План нельзя утвердить, пока критические нарушения не устранены.",
-    };
-  }
-  if (hasError) {
-    return {
-      tone: "error",
-      title: "Есть ошибки",
-      description: "План нельзя утвердить, пока ошибки не устранены.",
-    };
-  }
-  if (hasWarning) {
-    return {
-      tone: "warning",
-      title: "Есть предупреждения",
-      description: "Предупреждения не блокируют утверждение, но требуют внимания методиста.",
-    };
-  }
-
-  return {
+const summaryMap = {
+  ok: {
     tone: "approved",
     title: "Нарушения не обнаружены",
-    description: "План можно утверждать.",
-  };
-}
+    description: "План можно утверждать. Блокирующих нарушений и ошибок нет.",
+  },
+  critical: {
+    tone: "critical",
+    title: "Есть критические нарушения",
+    description: "План нельзя утвердить, пока критические нарушения не устранены.",
+  },
+  error: {
+    tone: "error",
+    title: "Есть ошибки",
+    description: "План нельзя утвердить, пока ошибки не устранены.",
+  },
+  warning: {
+    tone: "warning",
+    title: "Есть предупреждения",
+    description: "Предупреждения не блокируют утверждение, но требуют внимания методиста.",
+  },
+};
 
 function DeviationRow({ label, item }) {
   return (
@@ -131,17 +112,6 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
     window.open(getExportUrl(planId), "_blank", "noopener,noreferrer");
   };
 
-  const summary = getSummary(data?.latest_report);
-  const issues = data?.latest_report?.results || [];
-  const counts = useMemo(
-    () => ({
-      critical: issues.filter((item) => item.level === "critical").length,
-      error: issues.filter((item) => item.level === "error").length,
-      warning: issues.filter((item) => item.level === "warning").length,
-    }),
-    [issues],
-  );
-
   if (!plan) {
     return (
       <section className="card">
@@ -150,6 +120,15 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
       </section>
     );
   }
+
+  const validationSummary = data?.validation_summary || {
+    status: "ok",
+    critical_count: 0,
+    error_count: 0,
+    warning_count: 0,
+  };
+  const summary = summaryMap[validationSummary.status] || summaryMap.ok;
+  const issues = data?.latest_report?.results || [];
 
   return (
     <section className="stack-panel">
@@ -193,15 +172,15 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
       <div className="card totals-grid">
         <div className="metric-tile">
           <span>Критические нарушения</span>
-          <strong>{counts.critical}</strong>
+          <strong>{validationSummary.critical_count}</strong>
         </div>
         <div className="metric-tile">
           <span>Ошибки</span>
-          <strong>{counts.error}</strong>
+          <strong>{validationSummary.error_count}</strong>
         </div>
         <div className="metric-tile">
           <span>Предупреждения</span>
-          <strong>{counts.warning}</strong>
+          <strong>{validationSummary.warning_count}</strong>
         </div>
         <div className="metric-tile">
           <span>Статус плана</span>

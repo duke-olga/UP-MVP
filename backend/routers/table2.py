@@ -16,6 +16,8 @@ from backend.schemas import (
     CurriculumPlanRead,
     CurriculumPlanResponse,
     CurriculumPlanStatusUpdate,
+    PlanDeletionPayload,
+    PlanDeletionResponse,
     PlanElementCreate,
     PlanElementRead,
     PlanElementResponse,
@@ -108,9 +110,15 @@ def create_plan(payload: CurriculumPlanCreate, db: Session = Depends(get_db)) ->
 @router.get("", response_model=CurriculumPlanListResponse)
 def list_plans(db: Session = Depends(get_db)) -> CurriculumPlanListResponse:
     plans = db.query(CurriculumPlan).order_by(CurriculumPlan.updated_at.desc(), CurriculumPlan.id.desc()).all()
-    return CurriculumPlanListResponse(
-        data=[CurriculumPlanRead.model_validate(plan) for plan in plans]
-    )
+    return CurriculumPlanListResponse(data=[CurriculumPlanRead.model_validate(plan) for plan in plans])
+
+
+@router.delete("/{plan_id}", response_model=PlanDeletionResponse)
+def delete_plan(plan_id: int, db: Session = Depends(get_db)) -> PlanDeletionResponse:
+    plan = _get_plan_or_404(plan_id, db)
+    db.delete(plan)
+    db.commit()
+    return PlanDeletionResponse(data=PlanDeletionPayload(deleted=True, plan_id=plan_id))
 
 
 @router.get("/{plan_id}/table2", response_model=Table2Response)
@@ -177,10 +185,7 @@ def update_plan_status(
 ) -> CurriculumPlanResponse:
     plan = _get_plan_or_404(plan_id, db)
     if payload.status not in ALLOWED_PLAN_STATUSES:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Unsupported plan status '{payload.status}'",
-        )
+        raise HTTPException(status_code=400, detail=f"Unsupported plan status '{payload.status}'")
 
     if payload.status == "approved":
         _assert_can_approve(plan_id, db)

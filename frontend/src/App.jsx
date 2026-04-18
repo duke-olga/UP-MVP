@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { createPlan, getErrorMessage, listPlans } from "./api";
+import { createPlan, deletePlan, getErrorMessage, listPlans } from "./api";
 import StatusBadge from "./components/StatusBadge";
 import Table1 from "./pages/Table1";
 import Table2 from "./pages/Table2";
@@ -28,6 +28,7 @@ export default function App() {
   const [refreshToken, setRefreshToken] = useState(0);
   const [globalNotice, setGlobalNotice] = useState("");
   const [creatingPlan, setCreatingPlan] = useState(false);
+  const [deletingPlanId, setDeletingPlanId] = useState(null);
 
   const selectedPlan = plans.find((plan) => plan.id === selectedPlanId) || null;
 
@@ -83,6 +84,26 @@ export default function App() {
       setGlobalNotice(getErrorMessage(error, "Не удалось создать учебный план."));
     } finally {
       setCreatingPlan(false);
+    }
+  };
+
+  const handleDeletePlan = async (plan) => {
+    if (!window.confirm(`Удалить учебный план «${plan.name}»? Это действие нельзя отменить.`)) {
+      return;
+    }
+
+    setDeletingPlanId(plan.id);
+    try {
+      await deletePlan(plan.id);
+      if (selectedPlanId === plan.id) {
+        setSelectedPlanId(null);
+      }
+      setGlobalNotice(`Учебный план «${plan.name}» удалён.`);
+      setRefreshToken((value) => value + 1);
+    } catch (error) {
+      setGlobalNotice(getErrorMessage(error, "Не удалось удалить учебный план."));
+    } finally {
+      setDeletingPlanId(null);
     }
   };
 
@@ -168,9 +189,19 @@ export default function App() {
                   <StatusBadge value={plan.status} />
                 </div>
                 <p className="status-muted">Последнее изменение: {new Date(plan.updated_at).toLocaleString("ru-RU")}</p>
-                <button type="button" className="primary-button" onClick={() => setSelectedPlanId(plan.id)}>
-                  Открыть
-                </button>
+                <div className="row-actions">
+                  <button type="button" className="primary-button" onClick={() => setSelectedPlanId(plan.id)}>
+                    Открыть
+                  </button>
+                  <button
+                    type="button"
+                    className="small-button danger"
+                    onClick={() => handleDeletePlan(plan)}
+                    disabled={deletingPlanId === plan.id}
+                  >
+                    {deletingPlanId === plan.id ? "Удаление..." : "Удалить"}
+                  </button>
+                </div>
               </article>
             ))}
           </div>

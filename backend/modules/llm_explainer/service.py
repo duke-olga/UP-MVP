@@ -5,7 +5,7 @@ from backend.modules.llm_explainer.prompt_builder import SYSTEM_PROMPT, build_us
 
 def generate_recommendations(report: CheckReport, adapter: OllamaAdapter | None = None) -> str:
     if not report.results:
-        return "Нарушений не обнаружено. Дополнительные рекомендации LLM не требуются."
+        return "Нарушений не обнаружено. Дополнительные рекомендации ИИ не требуются."
 
     active_adapter = adapter or OllamaAdapter()
     try:
@@ -14,4 +14,4 @@ def generate_recommendations(report: CheckReport, adapter: OllamaAdapter | None 
             system_prompt=SYSTEM_PROMPT,
         )
     except LLMAdapterError as exc:
-        return f"LLM недоступна. Сохранен только детерминированный отчет. Причина: {exc}"
+        return f"Пояснения ИИ сейчас недоступны. Сохранён только детерминированный отчёт. Причина: {exc}"

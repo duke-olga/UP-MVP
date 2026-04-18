@@ -9,7 +9,7 @@ def test_build_user_prompt_contains_structured_results() -> None:
             {
                 "rule_id": 1,
                 "level": "critical",
-                "message": "Общий объем программы не соответствует нормативу.",
+                "message": "Общий объём программы не соответствует нормативу.",
                 "actual": 230,
                 "expected": 240,
             },
@@ -30,7 +30,7 @@ def test_build_user_prompt_contains_structured_results() -> None:
     assert "critical" in prompt
     assert "Не придумывай новые нормативы" in prompt
     assert "Формат ответа:" in prompt
-    assert "не выполняешь нормативные расчеты" in SYSTEM_PROMPT
+    assert "Отвечай строго только на русском языке" in SYSTEM_PROMPT
 
 
 def test_build_user_prompt_for_clean_report() -> None:

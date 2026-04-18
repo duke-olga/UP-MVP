@@ -153,7 +153,7 @@ def test_demo_flow_covers_mvp_scenario(monkeypatch) -> None:
     assert table1_response.status_code == 200
     table1_data = table1_response.json()["data"]
     assert len(table1_data) == 3
-    assert any(section["mode"] == "manual" for section in table1_data)
+    assert any(section["mode"] == "manual_only" for section in table1_data)
 
     transfer_response = client.post(
         f"/api/v1/plans/{plan_id}/table1/transfer",

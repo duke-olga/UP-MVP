@@ -16,6 +16,13 @@ from backend.schemas import (
 router = APIRouter(prefix="/api/v1/plans", tags=["table1"])
 
 MANUAL_MODE_TYPE = "ПКС"
+AUTO_MODE_TYPES = {"УК", "ОПК", "ПК"}
+SOURCE_LABELS = {
+    "poop": "ПООП",
+    "best_practice": "Лучшие практики",
+    "local_requirement": "Локальные требования вуза",
+    "local": "Локальные требования вуза",
+}
 
 
 def _get_plan_or_404(plan_id: int, db: Session) -> CurriculumPlan:
@@ -23,6 +30,10 @@ def _get_plan_or_404(plan_id: int, db: Session) -> CurriculumPlan:
     if plan is None:
         raise HTTPException(status_code=404, detail=f"Plan with id={plan_id} was not found")
     return plan
+
+
+def _get_source_label(source: str) -> str:
+    return SOURCE_LABELS.get(source, "Источник не указан")
 
 
 def _build_recommendation_payload(
@@ -37,6 +48,7 @@ def _build_recommendation_payload(
         credits=element.credits,
         semester=element.semester,
         source=element.source,
+        source_label=_get_source_label(element.source),
         competency_codes=[competency.code for competency in sorted(element.competencies, key=lambda item: item.code)],
         selected=element.id in selected_source_ids,
     )
@@ -132,7 +144,7 @@ def get_table1(plan_id: int, db: Session = Depends(get_db)) -> Table1Response:
             sections.append(
                 Table1CompetencySection(
                     competency=CompetencyRead.model_validate(competency),
-                    mode="manual",
+                    mode="manual_only",
                     mandatory_disciplines=[],
                     variative_disciplines=[],
                     mandatory_practices=[],
@@ -147,7 +159,7 @@ def get_table1(plan_id: int, db: Session = Depends(get_db)) -> Table1Response:
         sections.append(
             Table1CompetencySection(
                 competency=CompetencyRead.model_validate(competency),
-                mode="auto",
+                mode="recommendation" if competency.type in AUTO_MODE_TYPES else "manual_only",
                 mandatory_disciplines=mandatory_disciplines,
                 variative_disciplines=variative_disciplines,
                 mandatory_practices=mandatory_practices,

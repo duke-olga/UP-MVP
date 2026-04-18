@@ -44,6 +44,7 @@ class Table1RecommendedElement(BaseModel):
     credits: float | None = None
     semester: int | None = None
     source: str
+    source_label: str
     competency_codes: list[str]
     selected: bool = False
 
@@ -67,6 +68,15 @@ class CurriculumPlanRead(CurriculumPlanBase):
     updated_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class PlanDeletionPayload(BaseModel):
+    deleted: bool
+    plan_id: int
+
+
+class PlanDeletionResponse(BaseModel):
+    data: PlanDeletionPayload
 
 
 class PlanElementBase(BaseModel):
@@ -109,22 +119,31 @@ class NormativeParamRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
-class CheckReportRead(BaseModel):
-    id: int
-    plan_id: int
-    created_at: datetime
-    results: list["CheckResult"]
-    llm_recommendations: str | None = None
-
-    model_config = ConfigDict(from_attributes=True)
-
-
 class CheckResult(BaseModel):
     rule_id: int
     level: str
     message: str
     actual: str | float | int | None = None
     expected: str | float | int | None = None
+
+
+class CheckReportRead(BaseModel):
+    id: int
+    plan_id: int
+    created_at: datetime
+    results: list[CheckResult]
+    llm_recommendations: str | None = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class ValidationSummary(BaseModel):
+    status: str
+    has_blocking_issues: bool
+    has_warnings: bool
+    critical_count: int
+    error_count: int
+    warning_count: int
 
 
 class CompetencyGroup(BaseModel):
@@ -187,6 +206,7 @@ class Table3Data(BaseModel):
     plan: CurriculumPlanRead
     aggregates: dict[str, object]
     deviations: dict[str, object]
+    validation_summary: ValidationSummary
     latest_report: CheckReportRead | None = None
 
 

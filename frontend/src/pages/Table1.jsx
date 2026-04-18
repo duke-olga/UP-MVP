@@ -26,7 +26,7 @@ function RecommendationList({ items, selectable = false, selections, onToggle, e
               {item.credits ?? 0} з.е. · семестр {item.semester ?? "не указан"}
             </span>
             <div className="recommendation-meta">
-              <SourceBadge source={item.source} />
+              <SourceBadge source={item.source_label || item.source} />
             </div>
             {item.competency_codes?.length ? <small>{item.competency_codes.join(", ")}</small> : null}
           </div>
@@ -91,12 +91,12 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
   );
 
   const autoSectionCount = useMemo(
-    () => sections.filter((section) => section.mode !== "manual").length,
+    () => sections.filter((section) => section.mode === "recommendation").length,
     [sections],
   );
 
   const manualSectionCount = useMemo(
-    () => sections.filter((section) => section.mode === "manual").length,
+    () => sections.filter((section) => section.mode === "manual_only").length,
     [sections],
   );
 
@@ -184,12 +184,12 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
                 {section.competency.code} — {section.competency.name}
               </h3>
             </div>
-            {section.mode === "manual" ? <StatusBadge value="manual" /> : null}
+            {section.mode === "manual_only" ? <StatusBadge value="manual" /> : null}
           </div>
 
           <p className="status-muted">{section.competency.description}</p>
 
-          {section.mode === "manual" ? (
+          {section.mode === "manual_only" ? (
             <div className="manual-note">
               Для этой компетенции автоматический подбор не применяется. Добавьте дисциплины и практики вручную в
               разделе «Структура плана».

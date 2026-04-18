@@ -9,7 +9,7 @@ from backend.modules.plan_builder.calculator import (
     aggregate_by_year,
     aggregate_mandatory_percent,
 )
-from backend.schemas import CheckReportRead, CurriculumPlanRead, Table3Data, Table3Response
+from backend.schemas import CheckReportRead, CurriculumPlanRead, Table3Data, Table3Response, ValidationSummary
 
 
 router = APIRouter(prefix="/api/v1/plans", tags=["table3"])
@@ -94,6 +94,41 @@ def _build_deviations(aggregates: dict[str, object], params: dict[str, float]) -
     }
 
 
+def _build_validation_summary(report: CheckReport | None) -> ValidationSummary:
+    if report is None or not report.results:
+        return ValidationSummary(
+            status="ok",
+            has_blocking_issues=False,
+            has_warnings=False,
+            critical_count=0,
+            error_count=0,
+            warning_count=0,
+        )
+
+    critical_count = sum(1 for item in report.results if item["level"] == "critical")
+    error_count = sum(1 for item in report.results if item["level"] == "error")
+    warning_count = sum(1 for item in report.results if item["level"] == "warning")
+    has_blocking_issues = critical_count > 0 or error_count > 0
+
+    if critical_count > 0:
+        status = "critical"
+    elif error_count > 0:
+        status = "error"
+    elif warning_count > 0:
+        status = "warning"
+    else:
+        status = "ok"
+
+    return ValidationSummary(
+        status=status,
+        has_blocking_issues=has_blocking_issues,
+        has_warnings=warning_count > 0,
+        critical_count=critical_count,
+        error_count=error_count,
+        warning_count=warning_count,
+    )
+
+
 @router.get("/{plan_id}/table3", response_model=Table3Response)
 def get_table3(plan_id: int, db: Session = Depends(get_db)) -> Table3Response:
     plan = _get_plan_or_404(plan_id, db)
@@ -113,6 +148,7 @@ def get_table3(plan_id: int, db: Session = Depends(get_db)) -> Table3Response:
             plan=CurriculumPlanRead.model_validate(plan),
             aggregates=aggregates,
             deviations=deviations,
+            validation_summary=_build_validation_summary(latest_report),
             latest_report=CheckReportRead.model_validate(latest_report) if latest_report else None,
         )
     )

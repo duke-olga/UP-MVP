@@ -40,6 +40,11 @@ export const createPlan = async (name) => {
   return data.data;
 };
 
+export const deletePlan = async (planId) => {
+  const { data } = await api.delete(`/plans/${planId}`);
+  return data.data;
+};
+
 export const getTable1 = async (planId) => {
   const { data } = await api.get(`/plans/${planId}/table1`);
   return data.data;

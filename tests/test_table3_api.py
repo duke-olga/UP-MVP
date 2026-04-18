@@ -15,11 +15,11 @@ def _build_test_client():
         connect_args={"check_same_thread": False},
         poolclass=StaticPool,
     )
-    TestingSessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
+    testing_session_local = sessionmaker(bind=engine, autocommit=False, autoflush=False)
     Base.metadata.create_all(bind=engine)
 
     def override_get_db():
-        db = TestingSessionLocal()
+        db = testing_session_local()
         try:
             yield db
         finally:
@@ -31,7 +31,7 @@ def _build_test_client():
     app.include_router(validation.router)
     app.dependency_overrides[get_db] = override_get_db
 
-    db = TestingSessionLocal()
+    db = testing_session_local()
     try:
         db.add_all(
             [
@@ -60,7 +60,7 @@ def _build_test_client():
     return TestClient(app)
 
 
-def test_table3_returns_aggregates_and_deviations() -> None:
+def test_table3_returns_aggregates_deviations_and_summary() -> None:
     client = _build_test_client()
 
     create_plan_response = client.post("/api/v1/plans", json={"name": "Plan for table3"})
@@ -102,9 +102,11 @@ def test_table3_returns_aggregates_and_deviations() -> None:
     assert data["deviations"]["total_credits"]["delta"] == -227.0
     assert data["deviations"]["by_block"]["1"]["delta"] == -140.0
     assert data["latest_report"] is None
+    assert data["validation_summary"]["status"] == "ok"
+    assert data["validation_summary"]["has_blocking_issues"] is False
 
 
-def test_table3_returns_latest_check_report_when_present() -> None:
+def test_table3_returns_latest_check_report_and_summary_when_present() -> None:
     client = _build_test_client()
 
     create_plan_response = client.post("/api/v1/plans", json={"name": "Plan with report"})
@@ -132,3 +134,4 @@ def test_table3_returns_latest_check_report_when_present() -> None:
 
     assert data["latest_report"] is not None
     assert len(data["latest_report"]["results"]) > 0
+    assert data["validation_summary"]["status"] in {"critical", "error", "warning"}

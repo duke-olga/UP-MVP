@@ -15,11 +15,11 @@ def _build_test_client():
         connect_args={"check_same_thread": False},
         poolclass=StaticPool,
     )
-    TestingSessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
+    testing_session_local = sessionmaker(bind=engine, autocommit=False, autoflush=False)
     Base.metadata.create_all(bind=engine)
 
     def override_get_db():
-        db = TestingSessionLocal()
+        db = testing_session_local()
         try:
             yield db
         finally:
@@ -30,7 +30,7 @@ def _build_test_client():
     app.include_router(table2.router)
     app.dependency_overrides[get_db] = override_get_db
 
-    db = TestingSessionLocal()
+    db = testing_session_local()
     try:
         uk = Competency(code="УК-1", type="УК", name="УК 1", description="desc")
         opk = Competency(code="ОПК-1", type="ОПК", name="ОПК 1", description="desc")
@@ -54,7 +54,7 @@ def _build_test_client():
             part="variative",
             credits=2.0,
             semester=2,
-            source="poop",
+            source="best_practice",
         )
         variative_discipline.competencies = [uk, opk]
 
@@ -64,7 +64,7 @@ def _build_test_client():
             part="mandatory",
             credits=3.0,
             semester=4,
-            source="poop",
+            source="local_requirement",
         )
         mandatory_practice.competencies = [opk]
 
@@ -85,10 +85,26 @@ def test_table1_returns_manual_mode_for_pks() -> None:
     sections = response.json()["data"]
 
     pks_section = next(item for item in sections if item["competency"]["type"] == "ПКС")
-    assert pks_section["mode"] == "manual"
+    assert pks_section["mode"] == "manual_only"
     assert pks_section["mandatory_disciplines"] == []
     assert pks_section["variative_disciplines"] == []
     assert pks_section["mandatory_practices"] == []
+
+
+def test_table1_returns_normalized_source_labels() -> None:
+    client = _build_test_client()
+
+    response = client.get("/api/v1/plans/1/table1")
+    assert response.status_code == 200
+    sections = response.json()["data"]
+
+    uk_section = next(item for item in sections if item["competency"]["code"] == "УК-1")
+    assert uk_section["mode"] == "recommendation"
+    assert uk_section["mandatory_disciplines"][0]["source_label"] == "ПООП"
+    assert uk_section["variative_disciplines"][0]["source_label"] == "Лучшие практики"
+
+    opk_section = next(item for item in sections if item["competency"]["code"] == "ОПК-1")
+    assert opk_section["mandatory_practices"][0]["source_label"] == "Локальные требования вуза"
 
 
 def test_table1_transfer_moves_mandatory_and_selected_variative_elements() -> None:
