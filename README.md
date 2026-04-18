@@ -154,3 +154,40 @@ python -m pytest tests/test_demo_flow.py -q
 ```bash
 python -m pytest tests -q
 ```
+
+## Импорт PDF-источников в seed JSON
+
+- Входные PDF ПООП хранятся в `backend/seed/poop_pdf/`.
+- PDF лучших практик хранятся в `backend/seed/best_practices_pdf/`.
+- Нормализованный JSON сохраняется в `backend/seed/poop_disciplines.json`.
+- Импорт использует универсальный pipeline на `PyMuPDF`: выделяет релевантные страницы с учебным планом, извлекает таблицы, пытается детерминированно собрать строки и при необходимости использует локальную LLM через Ollama.
+- На плохих или агрегированных строках импорт не падает: пишет предупреждение в лог и идет дальше.
+- Доступны три режима:
+  - `deterministic` — только правила и парсинг таблиц;
+  - `hybrid` — сначала правила, потом fallback через локальную LLM в Ollama;
+  - `llm` — только LLM-извлечение по релевантным табличным блокам.
+- Для лучших практик `source_type` записывается как `best_practices`.
+- Для ПООП `source_type` записывается как `poop`.
+
+Запуск:
+
+```bash
+python scripts/import_poop_pdf.py
+```
+
+Или с явными путями:
+
+```bash
+python -m backend.modules.seed_ingest.poop_pdf_importer --poop-dir backend/seed/poop_pdf --best-practices-dir backend/seed/best_practices_pdf --output backend/seed/poop_disciplines.json
+```
+
+Рекомендуемый AI-assisted режим:
+
+```bash
+python scripts/import_poop_pdf.py --strategy hybrid
+```
+
+Для `hybrid` и `llm` должен быть локально запущен Ollama. Если Ollama недоступен, `hybrid` не падает и оставляет только детерминированный результат.
+
+Практически для разнородных ПООП и учебных планов других вузов лучше использовать `hybrid`.
+Для локального Ollama под эту задачу разумно начинать с моделей класса `qwen2.5:7b-instruct` или сильнее, если хватает памяти.

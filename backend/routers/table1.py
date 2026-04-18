@@ -24,6 +24,7 @@ MANUAL_MODE_TYPE = "ПКС"
 AUTO_MODE_TYPES = {"УК", "ОПК", "ПК"}
 SOURCE_LABELS = {
     "poop": "ПООП",
+    "best_practices": "Лучшие практики",
     "best_practice": "Лучшие практики",
     "local_requirement": "Локальные требования вуза",
     "local": "Локальные требования вуза",

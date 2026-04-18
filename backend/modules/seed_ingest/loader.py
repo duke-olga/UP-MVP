@@ -18,6 +18,15 @@ def _group_recommended_elements(payload: list[dict]) -> list[dict]:
     grouped: dict[tuple, dict] = {}
 
     for item in payload:
+        source = item.get("source_type", item.get("source"))
+        if source is None:
+            raise KeyError("Recommended element seed item must contain source or source_type")
+        if source == "best_practice":
+            source = "best_practices"
+
+        fgos_requirement = item.get("fgos_mandatory", item.get("fgos_requirement"))
+        is_fgos_mandatory = bool(item.get("is_fgos_mandatory", bool(fgos_requirement)))
+
         raw_semesters = item.get("semesters")
         if raw_semesters is None:
             semester = item.get("semester")
@@ -37,10 +46,10 @@ def _group_recommended_elements(payload: list[dict]) -> list[dict]:
             item.get("credits"),
             item.get("extra_hours", 0),
             tuple(semesters),
-            item["source"],
+            source,
             item.get("practice_type"),
-            bool(item.get("is_fgos_mandatory", False)),
-            item.get("fgos_requirement"),
+            is_fgos_mandatory,
+            fgos_requirement,
         )
 
         bucket = grouped.setdefault(
@@ -52,10 +61,10 @@ def _group_recommended_elements(payload: list[dict]) -> list[dict]:
                 "credits": item.get("credits"),
                 "extra_hours": item.get("extra_hours", 0),
                 "semesters": semesters,
-                "source": item["source"],
+                "source": source,
                 "practice_type": item.get("practice_type"),
-                "is_fgos_mandatory": bool(item.get("is_fgos_mandatory", False)),
-                "fgos_requirement": item.get("fgos_requirement"),
+                "is_fgos_mandatory": is_fgos_mandatory,
+                "fgos_requirement": fgos_requirement,
                 "competency_codes": [],
             },
         )
