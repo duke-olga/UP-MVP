@@ -6,6 +6,13 @@ import HelpTooltip from "../components/HelpTooltip";
 import SourceBadge from "../components/SourceBadge";
 import StatusBadge from "../components/StatusBadge";
 
+function formatSemesters(semesters) {
+  if (!semesters?.length) {
+    return "семестры не указаны";
+  }
+  return `семестры ${semesters.join(", ")}`;
+}
+
 function RecommendationList({ items, selectable = false, selections, onToggle, emptyText }) {
   if (!items.length) {
     return <p className="status-muted">{emptyText}</p>;
@@ -25,7 +32,7 @@ function RecommendationList({ items, selectable = false, selections, onToggle, e
           <div>
             <strong>{item.name}</strong>
             <span>
-              {item.credits ?? 0} з.е. · семестр {item.semester ?? "не указан"}
+              {item.credits ?? 0} з.е. · {formatSemesters(item.semesters)}
             </span>
             <div className="recommendation-meta">
               <SourceBadge source={item.source_label || item.source} />
@@ -150,9 +157,8 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
           </button>
         </div>
         <p className="status-muted">
-          Здесь показаны рекомендуемые элементы для формирования учебного плана. Этот экран не
-          является самой структурой плана: обязательные элементы переносятся автоматически, а
-          вариативные дисциплины включаются только по отмеченным позициям.
+          Здесь показаны рекомендуемые элементы для формирования учебного плана. Каждый элемент
+          хранится как единый объект с полным списком семестров и компетенций.
         </p>
         {loading ? <p className="status-muted">Загрузка рекомендаций...</p> : null}
         {error ? <p className="status-message status-error">{error}</p> : null}

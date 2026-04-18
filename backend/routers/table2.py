@@ -32,6 +32,19 @@ router = APIRouter(prefix="/api/v1/plans", tags=["table2"])
 ALLOWED_PLAN_STATUSES = {"draft", "checked", "approved"}
 
 
+def _normalize_semesters(semesters: list[int] | None) -> list[int]:
+    if not semesters:
+        return []
+    return sorted({int(value) for value in semesters if int(value) > 0})
+
+
+def _semester_sort_key(element: PlanElement) -> tuple[int, ...]:
+    semesters = _normalize_semesters(element.semesters)
+    if not semesters:
+        return (999,)
+    return tuple(semesters)
+
+
 def _get_plan_or_404(plan_id: int, db: Session) -> CurriculumPlan:
     plan = db.query(CurriculumPlan).filter(CurriculumPlan.id == plan_id).first()
     if plan is None:
@@ -55,7 +68,7 @@ def _get_plan_element_or_404(plan_id: int, element_id: int, db: Session) -> Plan
 
 def _build_grouped_elements(elements: list[PlanElement]) -> dict[str, dict[str, list[PlanElementRead]]]:
     grouped: dict[str, dict[str, list[PlanElementRead]]] = {}
-    for element in elements:
+    for element in sorted(elements, key=lambda item: (item.block, item.part, _semester_sort_key(item), item.id)):
         block = str(element.block)
         part = str(element.part)
         grouped.setdefault(block, {}).setdefault(part, []).append(PlanElementRead.model_validate(element))
@@ -79,18 +92,27 @@ def _normalize_competency_ids(competency_ids: list[int], db: Session) -> list[in
     if not competency_ids:
         return []
 
-    valid_ids = {
-        row[0]
-        for row in db.query(Competency.id).filter(Competency.id.in_(competency_ids)).all()
-    }
+    valid_ids = {row[0] for row in db.query(Competency.id).filter(Competency.id.in_(competency_ids)).all()}
     return [competency_id for competency_id in competency_ids if competency_id in valid_ids]
+
+
+def _sanitize_element_payload(payload_data: dict[str, object], db: Session) -> dict[str, object]:
+    competency_ids = payload_data.get("competency_ids", [])
+    semesters = payload_data.get("semesters", [])
+    payload_data["competency_ids"] = _normalize_competency_ids(list(competency_ids or []), db)
+    payload_data["semesters"] = _normalize_semesters(list(semesters or []))
+    return payload_data
 
 
 def _sanitize_element_competency_ids(element: PlanElement, db: Session) -> bool:
     normalized_ids = _normalize_competency_ids(element.competency_ids, db)
-    if normalized_ids == element.competency_ids:
+    normalized_semesters = _normalize_semesters(element.semesters)
+
+    if normalized_ids == element.competency_ids and normalized_semesters == element.semesters:
         return False
+
     element.competency_ids = normalized_ids
+    element.semesters = normalized_semesters
     db.add(element)
     return True
 
@@ -144,12 +166,7 @@ def delete_plan(plan_id: int, db: Session = Depends(get_db)) -> PlanDeletionResp
 @router.get("/{plan_id}/table2", response_model=Table2Response)
 def get_table2(plan_id: int, db: Session = Depends(get_db)) -> Table2Response:
     plan = _get_plan_or_404(plan_id, db)
-    elements = (
-        db.query(PlanElement)
-        .filter(PlanElement.plan_id == plan_id)
-        .order_by(PlanElement.block, PlanElement.part, PlanElement.semester, PlanElement.id)
-        .all()
-    )
+    elements = db.query(PlanElement).filter(PlanElement.plan_id == plan_id).all()
 
     dirty = False
     for element in elements:
@@ -175,8 +192,7 @@ def create_plan_element(
     db: Session = Depends(get_db),
 ) -> PlanElementResponse:
     _get_plan_or_404(plan_id, db)
-    payload_data = payload.model_dump()
-    payload_data["competency_ids"] = _normalize_competency_ids(payload_data["competency_ids"], db)
+    payload_data = _sanitize_element_payload(payload.model_dump(), db)
     element = PlanElement(plan_id=plan_id, hours=0, **payload_data)
     db.add(element)
     db.commit()
@@ -192,9 +208,7 @@ def update_plan_element(
     db: Session = Depends(get_db),
 ) -> PlanElementResponse:
     element = _get_plan_element_or_404(plan_id, element_id, db)
-    for field, value in payload.model_dump(exclude_unset=True).items():
-        if field == "competency_ids" and value is not None:
-            value = _normalize_competency_ids(value, db)
+    for field, value in _sanitize_element_payload(payload.model_dump(exclude_unset=True), db).items():
         setattr(element, field, value)
     db.add(element)
     db.commit()

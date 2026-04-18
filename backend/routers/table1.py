@@ -46,7 +46,7 @@ def _build_recommendation_payload(
         element_type=element.element_type,
         part=element.part,
         credits=element.credits,
-        semester=element.semester,
+        semesters=sorted(element.semesters or []),
         source=element.source,
         source_label=_get_source_label(element.source),
         competency_codes=[competency.code for competency in sorted(element.competencies, key=lambda item: item.code)],
@@ -62,7 +62,12 @@ def _classify_recommendations(
     variative_disciplines: list[Table1RecommendedElement] = []
     mandatory_practices: list[Table1RecommendedElement] = []
 
-    for element in sorted(competency.recommended_elements, key=lambda item: (item.part, item.name, item.id)):
+    def sort_key(item: RecommendedElement) -> tuple[int, str, int]:
+        semesters = sorted(item.semesters or [])
+        first_semester = semesters[0] if semesters else 999
+        return (first_semester, item.name, item.id)
+
+    for element in sorted(competency.recommended_elements, key=sort_key):
         payload = _build_recommendation_payload(element, selected_source_ids)
         if element.element_type == "discipline" and element.part == "mandatory":
             mandatory_disciplines.append(payload)
@@ -107,7 +112,7 @@ def _upsert_plan_element_from_recommendation(
         existing.block = _get_block_for_recommendation(element)
         existing.part = element.part
         existing.credits = float(element.credits or 0.0)
-        existing.semester = element.semester
+        existing.semesters = sorted(element.semesters or [])
         existing.competency_ids = competency_ids
         db.add(existing)
         return existing, False
@@ -119,7 +124,7 @@ def _upsert_plan_element_from_recommendation(
         part=element.part,
         credits=float(element.credits or 0.0),
         hours=0,
-        semester=element.semester,
+        semesters=sorted(element.semesters or []),
         competency_ids=competency_ids,
         source_element_id=element.id,
     )

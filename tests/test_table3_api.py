@@ -43,6 +43,7 @@ def _build_test_client():
                 NormativeParam(key="X_mandatory_percent", value=0.4),
                 NormativeParam(key="X_pe_ze", value=2.0),
                 NormativeParam(key="X_pe_hours", value=72.0),
+                NormativeParam(key="X_semester_max", value=35.0),
                 NormativeParam(key="CreditHourRatio", value=36.0),
             ]
         )
@@ -73,7 +74,7 @@ def test_table3_returns_aggregates_deviations_and_summary() -> None:
             "block": "1",
             "part": "mandatory",
             "credits": 10.0,
-            "semester": 1,
+            "semesters": [1, 2],
             "competency_ids": [1],
             "source_element_id": None,
         },
@@ -85,7 +86,7 @@ def test_table3_returns_aggregates_deviations_and_summary() -> None:
             "block": "2",
             "part": "mandatory",
             "credits": 3.0,
-            "semester": 2,
+            "semesters": [2],
             "competency_ids": [2],
             "source_element_id": None,
         },
@@ -99,6 +100,8 @@ def test_table3_returns_aggregates_deviations_and_summary() -> None:
     assert data["aggregates"]["by_block"]["1"] == 10.0
     assert data["aggregates"]["by_block"]["2"] == 3.0
     assert data["aggregates"]["by_year"]["1"] == 13.0
+    assert data["aggregates"]["by_semester"]["1"] == 5.0
+    assert data["aggregates"]["by_semester"]["2"] == 8.0
     assert data["deviations"]["total_credits"]["delta"] == -227.0
     assert data["deviations"]["by_block"]["1"]["delta"] == -140.0
     assert data["latest_report"] is None
@@ -119,7 +122,7 @@ def test_table3_returns_latest_check_report_and_summary_when_present() -> None:
             "block": "1",
             "part": "mandatory",
             "credits": 10.0,
-            "semester": 1,
+            "semesters": [1],
             "competency_ids": [1],
             "source_element_id": None,
         },

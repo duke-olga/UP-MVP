@@ -18,14 +18,27 @@ def _group_recommended_elements(payload: list[dict]) -> list[dict]:
     grouped: dict[tuple, dict] = {}
 
     for item in payload:
+        raw_semesters = item.get("semesters")
+        if raw_semesters is None:
+            semester = item.get("semester")
+            raw_semesters = [] if semester is None else [semester]
+        semesters = sorted({int(value) for value in raw_semesters})
+
+        raw_codes = item.get("competency_codes")
+        if raw_codes is None:
+            code = item.get("competency_code")
+            raw_codes = [] if code is None else [code]
+        competency_codes = sorted({str(code) for code in raw_codes if code})
+
         key = (
             item["name"],
             item["element_type"],
             item["part"],
             item.get("credits"),
-            item.get("semester"),
+            tuple(semesters),
             item["source"],
         )
+
         bucket = grouped.setdefault(
             key,
             {
@@ -33,20 +46,18 @@ def _group_recommended_elements(payload: list[dict]) -> list[dict]:
                 "element_type": item["element_type"],
                 "part": item["part"],
                 "credits": item.get("credits"),
-                "semester": item.get("semester"),
+                "semesters": semesters,
                 "source": item["source"],
                 "competency_codes": [],
             },
         )
 
-        codes = item.get("competency_codes")
-        if codes is None:
-            code = item.get("competency_code")
-            codes = [code] if code else []
-
-        for code in codes:
+        for code in competency_codes:
             if code not in bucket["competency_codes"]:
                 bucket["competency_codes"].append(code)
+
+    for bucket in grouped.values():
+        bucket["competency_codes"].sort()
 
     return list(grouped.values())
 
@@ -62,7 +73,7 @@ def _recommended_element_key(item: dict) -> tuple:
         item["element_type"],
         item["part"],
         item.get("credits"),
-        item.get("semester"),
+        tuple(item.get("semesters", [])),
         item["source"],
     )
 
@@ -119,7 +130,7 @@ def _sync_recommended_elements(
                 "element_type": item.element_type,
                 "part": item.part,
                 "credits": item.credits,
-                "semester": item.semester,
+                "semesters": list(item.semesters or []),
                 "source": item.source,
             }
         ): item
@@ -150,7 +161,7 @@ def _sync_recommended_elements(
         element.element_type = seed_item["element_type"]
         element.part = seed_item["part"]
         element.credits = seed_item.get("credits")
-        element.semester = seed_item.get("semester")
+        element.semesters = list(seed_item.get("semesters", []))
         element.source = seed_item["source"]
         element.competencies = [competency_map[code] for code in filtered_codes]
         db.add(element)
@@ -168,7 +179,7 @@ def _sync_recommended_elements(
             element_type=seed_item["element_type"],
             part=seed_item["part"],
             credits=seed_item.get("credits"),
-            semester=seed_item.get("semester"),
+            semesters=list(seed_item.get("semesters", [])),
             source=seed_item["source"],
         )
         recommended_element.competencies = [competency_map[code] for code in filtered_codes]

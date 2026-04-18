@@ -12,6 +12,11 @@ from backend.modules.export.xlsx_builder import build_plan_workbook
 router = APIRouter(prefix="/api/v1/plans", tags=["export"])
 
 
+def _semester_sort_key(element: PlanElement) -> tuple[int, ...]:
+    semesters = sorted(element.semesters or [])
+    return tuple(semesters) if semesters else (999,)
+
+
 def _get_plan_or_404(plan_id: int, db: Session) -> CurriculumPlan:
     plan = db.query(CurriculumPlan).filter(CurriculumPlan.id == plan_id).first()
     if plan is None:
@@ -25,9 +30,9 @@ def export_plan_xlsx(plan_id: int, db: Session = Depends(get_db)) -> StreamingRe
     elements = (
         db.query(PlanElement)
         .filter(PlanElement.plan_id == plan_id)
-        .order_by(PlanElement.block, PlanElement.part, PlanElement.semester, PlanElement.id)
         .all()
     )
+    elements = sorted(elements, key=lambda item: (item.block, item.part, _semester_sort_key(item), item.id))
 
     workbook_bytes = build_plan_workbook(plan, elements)
     filename = f"plan_{plan_id}.xlsx"

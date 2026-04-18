@@ -41,7 +41,7 @@ class RecommendedElement(Base):
     element_type: Mapped[str] = mapped_column(String(20), nullable=False)
     part: Mapped[str] = mapped_column(String(20), nullable=False)
     credits: Mapped[float | None] = mapped_column(Float, nullable=True)
-    semester: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    semesters: Mapped[list[int]] = mapped_column(JSON, default=list, nullable=False)
     source: Mapped[str] = mapped_column(String(50), nullable=False)
     competencies: Mapped[list["Competency"]] = relationship(
         secondary=recommended_element_competencies,
@@ -83,7 +83,7 @@ class PlanElement(Base):
     part: Mapped[str] = mapped_column(String(20), nullable=False)
     credits: Mapped[float] = mapped_column(Float, nullable=False)
     hours: Mapped[float] = mapped_column(Float, nullable=False)
-    semester: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    semesters: Mapped[list[int]] = mapped_column(JSON, default=list, nullable=False)
     competency_ids: Mapped[list[int]] = mapped_column(JSON, default=list, nullable=False)
     source_element_id: Mapped[int | None] = mapped_column(
         ForeignKey("recommended_elements.id"),

@@ -42,6 +42,7 @@ def _build_test_client():
                 NormativeParam(key="X_mandatory_percent", value=0.4),
                 NormativeParam(key="X_pe_ze", value=2.0),
                 NormativeParam(key="X_pe_hours", value=72.0),
+                NormativeParam(key="X_semester_max", value=35.0),
                 NormativeParam(key="CreditHourRatio", value=36.0),
             ]
         )
@@ -73,7 +74,7 @@ def test_create_plan_and_table2_crud_flow() -> None:
             "block": "1",
             "part": "mandatory",
             "credits": 3.0,
-            "semester": 1,
+            "semesters": [1, 2],
             "competency_ids": [1, 2],
             "source_element_id": None,
         },
@@ -81,20 +82,24 @@ def test_create_plan_and_table2_crud_flow() -> None:
     assert create_element_response.status_code == 200
     element = create_element_response.json()["data"]
     assert element["hours"] == 108
+    assert element["semesters"] == [1, 2]
 
     element_id = element["id"]
     update_element_response = client.patch(
         f"/api/v1/plans/{plan_id}/table2/elements/{element_id}",
-        json={"credits": 4.0},
+        json={"credits": 4.0, "semesters": [2, 3]},
     )
     assert update_element_response.status_code == 200
     assert update_element_response.json()["data"]["hours"] == 144
+    assert update_element_response.json()["data"]["semesters"] == [2, 3]
 
     table2_response = client.get(f"/api/v1/plans/{plan_id}/table2")
     assert table2_response.status_code == 200
     data = table2_response.json()["data"]
     assert data["aggregates"]["total_credits"] == 4.0
     assert data["aggregates"]["by_block"]["1"] == 4.0
+    assert data["aggregates"]["by_year"]["1"] == 2.0
+    assert data["aggregates"]["by_year"]["2"] == 2.0
     assert len(data["grouped_elements"]["1"]["mandatory"]) == 1
 
     delete_element_response = client.delete(f"/api/v1/plans/{plan_id}/table2/elements/{element_id}")
@@ -130,7 +135,7 @@ def test_approve_is_blocked_when_validation_has_errors() -> None:
             "block": "1",
             "part": "mandatory",
             "credits": 10.0,
-            "semester": 1,
+            "semesters": [1],
             "competency_ids": [1],
             "source_element_id": None,
         },
@@ -158,7 +163,7 @@ def test_table2_filters_unknown_competency_ids() -> None:
             "block": "1",
             "part": "mandatory",
             "credits": 3.0,
-            "semester": 1,
+            "semesters": [1],
             "competency_ids": [1, 999, 2],
             "source_element_id": None,
         },

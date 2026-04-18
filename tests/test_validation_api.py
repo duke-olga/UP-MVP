@@ -42,6 +42,7 @@ def _build_test_client():
                 NormativeParam(key="X_mandatory_percent", value=0.4),
                 NormativeParam(key="X_pe_ze", value=2.0),
                 NormativeParam(key="X_pe_hours", value=72.0),
+                NormativeParam(key="X_semester_max", value=35.0),
                 NormativeParam(key="CreditHourRatio", value=36.0),
             ]
         )
@@ -77,7 +78,7 @@ def test_validate_plan_saves_llm_recommendations(monkeypatch) -> None:
             "block": "1",
             "part": "mandatory",
             "credits": 10.0,
-            "semester": 1,
+            "semesters": [1],
             "competency_ids": [1],
             "source_element_id": None,
         },

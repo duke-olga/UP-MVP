@@ -18,7 +18,7 @@ const defaultNewElement = {
   block: "1",
   part: "mandatory",
   credits: "3",
-  semester: "1",
+  semesters: "1",
   competency_ids: [],
 };
 
@@ -44,6 +44,39 @@ function buildCompetencyMap(groupedCompetencies) {
 
 function collectAllElements(groupedElements) {
   return Object.values(groupedElements || {}).flatMap((parts) => Object.values(parts).flat());
+}
+
+function parseSemesters(value) {
+  if (!value || !String(value).trim()) {
+    return [];
+  }
+
+  const normalized = String(value)
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .map((item) => Number(item))
+    .filter((item) => Number.isInteger(item) && item > 0);
+
+  return [...new Set(normalized)].sort((left, right) => left - right);
+}
+
+function formatSemesters(semesters) {
+  if (!semesters || semesters.length === 0) {
+    return "—";
+  }
+  return semesters.join(", ");
+}
+
+function toDraft(element) {
+  return {
+    name: element.name,
+    block: element.block,
+    part: element.part,
+    credits: String(element.credits),
+    semesters: formatSemesters(element.semesters || []),
+    competency_ids: element.competency_ids,
+  };
 }
 
 export default function Table2({ plan, planId, refreshToken, onRefresh, setGlobalNotice }) {
@@ -75,14 +108,7 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
         setData(table2);
         const nextDrafts = {};
         collectAllElements(table2.grouped_elements).forEach((element) => {
-          nextDrafts[element.id] = {
-            name: element.name,
-            block: element.block,
-            part: element.part,
-            credits: String(element.credits),
-            semester: element.semester == null ? "" : String(element.semester),
-            competency_ids: element.competency_ids,
-          };
+          nextDrafts[element.id] = toDraft(element);
         });
         setDrafts(nextDrafts);
       } catch (loadError) {
@@ -145,7 +171,7 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
         block: draft.block,
         part: draft.part,
         credits: Number(draft.credits),
-        semester: draft.semester === "" ? null : Number(draft.semester),
+        semesters: parseSemesters(draft.semesters),
         competency_ids: draft.competency_ids,
       });
       setEditingId(null);
@@ -159,7 +185,6 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
 
   const handleDeleteElement = async (elementId) => {
     const currentElement = collectAllElements(data?.grouped_elements).find((element) => element.id === elementId);
-
     if (!window.confirm(`Удалить элемент «${currentElement?.name || "без названия"}» из структуры плана?`)) {
       return;
     }
@@ -167,7 +192,7 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
     setSaving(true);
     try {
       await deleteTable2Element(planId, elementId);
-      onRefresh("Элемент удалён из структуры плана.");
+      onRefresh("Элемент удален из структуры плана.");
     } catch (deleteError) {
       setGlobalNotice(getErrorMessage(deleteError, "Не удалось удалить элемент."));
     } finally {
@@ -184,7 +209,7 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
         block: newElement.block,
         part: newElement.part,
         credits: Number(newElement.credits),
-        semester: newElement.semester === "" ? null : Number(newElement.semester),
+        semesters: parseSemesters(newElement.semesters),
         competency_ids: newElement.competency_ids,
         source_element_id: null,
       });
@@ -217,8 +242,8 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
           <StatusBadge value={plan.status} />
         </div>
         <p className="status-muted">
-          Здесь редактируется итоговая структура учебного плана. Часы рассчитываются автоматически
-          по количеству зачётных единиц, а компетенции выбираются из списка кодов и названий.
+          Здесь редактируется итоговая структура учебного плана. Часы рассчитываются автоматически по количеству
+          зачетных единиц, а многосеместровые элементы хранятся одной строкой.
         </p>
         {loading ? <p className="status-muted">Загрузка структуры плана...</p> : null}
         {error ? <p className="status-message status-error">{error}</p> : null}
@@ -296,12 +321,14 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
             />
           </label>
           <label className="field">
-            <span>Семестр</span>
+            <div className="field-label-row">
+              <span>Семестры</span>
+              <HelpTooltip text="Укажите один или несколько семестров через запятую, например: 1, 2, 3." />
+            </div>
             <input
-              type="number"
-              min="1"
-              value={newElement.semester}
-              onChange={(event) => setNewElement((current) => ({ ...current, semester: event.target.value }))}
+              value={newElement.semesters}
+              onChange={(event) => setNewElement((current) => ({ ...current, semesters: event.target.value }))}
+              placeholder="Например: 1, 2, 3"
             />
           </label>
         </div>
@@ -377,11 +404,13 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
               />
             </label>
             <label className="field">
-              <span>Семестр</span>
+              <div className="field-label-row">
+                <span>Семестры</span>
+                <HelpTooltip text="Укажите один или несколько семестров через запятую, например: 1, 2, 3." />
+              </div>
               <input
-                type="number"
-                value={drafts[editingId]?.semester || ""}
-                onChange={(event) => updateDraft(editingId, "semester", event.target.value)}
+                value={drafts[editingId]?.semesters || ""}
+                onChange={(event) => updateDraft(editingId, "semesters", event.target.value)}
               />
             </label>
           </div>
@@ -431,7 +460,7 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
                         <thead>
                           <tr>
                             <th>Наименование</th>
-                            <th>Семестр</th>
+                            <th>Семестры</th>
                             <th>З.е.</th>
                             <th>Часы</th>
                             <th>Компетенции</th>
@@ -449,7 +478,7 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
                                     (partLabels[element.part] || element.part)}
                                 </div>
                               </td>
-                              <td>{element.semester ?? "—"}</td>
+                              <td>{formatSemesters(element.semesters)}</td>
                               <td>{element.credits}</td>
                               <td>{element.hours}</td>
                               <td>

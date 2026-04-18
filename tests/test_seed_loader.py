@@ -27,7 +27,7 @@ def test_load_seed_data_removes_stale_pk_and_auto_recommendations(monkeypatch) -
             element_type="discipline",
             part="mandatory",
             credits=3.0,
-            semester=1,
+            semesters=[1],
             source="poop",
             competencies=[stale_pk],
         )
@@ -46,18 +46,18 @@ def test_load_seed_data_removes_stale_pk_and_auto_recommendations(monkeypatch) -
                     "element_type": "discipline",
                     "part": "mandatory",
                     "credits": 3.0,
-                    "semester": 1,
+                    "semesters": [1],
                     "source": "poop",
-                    "competency_code": "УК-1",
+                    "competency_codes": ["УК-1"],
                 },
                 {
                     "name": "Невалидная рекомендация для ПК",
                     "element_type": "discipline",
                     "part": "mandatory",
                     "credits": 2.0,
-                    "semester": 2,
+                    "semesters": [2],
                     "source": "poop",
-                    "competency_code": "ПК-1",
+                    "competency_codes": ["ПК-1"],
                 },
             ],
             "normative_params.json": [
@@ -74,8 +74,10 @@ def test_load_seed_data_removes_stale_pk_and_auto_recommendations(monkeypatch) -
         assert "ПК-1" not in competency_codes
         assert competency_codes == {"УК-1", "ОПК-1", "ПКС-1"}
 
-        recommendation_names = {item.name for item in db.query(RecommendedElement).all()}
-        assert recommendation_names == {"Философия"}
+        recommendations = db.query(RecommendedElement).all()
+        assert len(recommendations) == 1
+        assert recommendations[0].name == "Философия"
+        assert recommendations[0].semesters == [1]
     finally:
         db.close()
 
@@ -99,7 +101,7 @@ def test_load_seed_data_removes_stale_competency_ids_from_plan_elements(monkeypa
             part="mandatory",
             credits=3.0,
             hours=108.0,
-            semester=1,
+            semesters=[1],
             competency_ids=[valid_uk.id, stale_pk.id, 999],
             source_element_id=None,
         )
@@ -124,5 +126,6 @@ def test_load_seed_data_removes_stale_competency_ids_from_plan_elements(monkeypa
         db.refresh(element)
 
         assert element.competency_ids == [valid_uk.id]
+        assert element.semesters == [1]
     finally:
         db.close()

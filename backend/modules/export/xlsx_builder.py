@@ -20,6 +20,11 @@ PART_TITLES = {
 }
 
 
+def _format_semesters(semesters: list[int]) -> str:
+    values = sorted(int(item) for item in semesters or [])
+    return ", ".join(str(item) for item in values)
+
+
 def build_plan_workbook(plan: CurriculumPlan, elements: list[PlanElement]) -> bytes:
     workbook = Workbook()
     sheet = workbook.active
@@ -38,7 +43,7 @@ def build_plan_workbook(plan: CurriculumPlan, elements: list[PlanElement]) -> by
         "Наименование",
         "Блок",
         "Часть",
-        "Семестр",
+        "Семестры",
         "З.е.",
         "Часы",
         "Компетенции",
@@ -67,7 +72,7 @@ def build_plan_workbook(plan: CurriculumPlan, elements: list[PlanElement]) -> by
             element.name,
             str(element.block),
             str(element.part),
-            element.semester,
+            _format_semesters(element.semesters),
             element.credits,
             element.hours,
             competency_text,
@@ -88,7 +93,7 @@ def build_plan_workbook(plan: CurriculumPlan, elements: list[PlanElement]) -> by
         "A": 45,
         "B": 18,
         "C": 22,
-        "D": 10,
+        "D": 16,
         "E": 10,
         "F": 10,
         "G": 24,

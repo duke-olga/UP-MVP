@@ -19,10 +19,31 @@ def _normalize_block(block: Any) -> str:
     return str(block)
 
 
+def _normalize_semesters(raw_semesters: Any) -> list[int]:
+    if raw_semesters is None:
+        return []
+
+    if isinstance(raw_semesters, int):
+        values = [raw_semesters]
+    else:
+        values = list(raw_semesters or [])
+
+    semesters = sorted({int(value) for value in values if int(value) > 0})
+    return semesters
+
+
 def _semester_to_year(semester: int | None) -> int | None:
     if semester is None or semester <= 0:
         return None
     return (semester + 1) // 2
+
+
+def _split_credits(credits: float, semesters: list[int]) -> dict[int, float]:
+    if not semesters:
+        return {}
+
+    share = credits / len(semesters)
+    return {semester: share for semester in semesters}
 
 
 def compute_hours(credits: float, credit_hour_ratio: float = DEFAULT_CREDIT_HOUR_RATIO) -> int:
@@ -41,22 +62,23 @@ def aggregate_by_block(elements: Iterable[Any]) -> dict[str, float]:
 def aggregate_by_year(elements: Iterable[Any]) -> dict[int, float]:
     totals: dict[int, float] = {}
     for element in elements:
-        year = _semester_to_year(_get_value(element, "semester"))
-        if year is None:
-            continue
         credits = float(_get_value(element, "credits", 0) or 0)
-        totals[year] = totals.get(year, 0.0) + credits
+        semesters = _normalize_semesters(_get_value(element, "semesters", []))
+        for semester, share in _split_credits(credits, semesters).items():
+            year = _semester_to_year(semester)
+            if year is None:
+                continue
+            totals[year] = totals.get(year, 0.0) + share
     return totals
 
 
 def aggregate_by_semester(elements: Iterable[Any]) -> dict[int, float]:
     totals: dict[int, float] = {}
     for element in elements:
-        semester = _get_value(element, "semester")
-        if semester is None:
-            continue
         credits = float(_get_value(element, "credits", 0) or 0)
-        totals[int(semester)] = totals.get(int(semester), 0.0) + credits
+        semesters = _normalize_semesters(_get_value(element, "semesters", []))
+        for semester, share in _split_credits(credits, semesters).items():
+            totals[semester] = totals.get(semester, 0.0) + share
     return totals
 
 
@@ -101,4 +123,5 @@ def _get_credit_hour_ratio(connection) -> float:
 @event.listens_for(PlanElement, "before_update")
 def set_plan_element_hours(_, connection, target: PlanElement) -> None:
     ratio = _get_credit_hour_ratio(connection)
+    target.semesters = _normalize_semesters(target.semesters)
     target.hours = compute_hours(target.credits, ratio)

@@ -15,6 +15,11 @@ from backend.schemas import CheckReportRead, CurriculumPlanRead, Table3Data, Tab
 router = APIRouter(prefix="/api/v1/plans", tags=["table3"])
 
 
+def _semester_sort_key(element: PlanElement) -> tuple[int, ...]:
+    semesters = sorted(element.semesters or [])
+    return tuple(semesters) if semesters else (999,)
+
+
 def _get_plan_or_404(plan_id: int, db: Session) -> CurriculumPlan:
     plan = db.query(CurriculumPlan).filter(CurriculumPlan.id == plan_id).first()
     if plan is None:
@@ -135,9 +140,9 @@ def get_table3(plan_id: int, db: Session = Depends(get_db)) -> Table3Response:
     elements = (
         db.query(PlanElement)
         .filter(PlanElement.plan_id == plan_id)
-        .order_by(PlanElement.block, PlanElement.part, PlanElement.semester, PlanElement.id)
         .all()
     )
+    elements = sorted(elements, key=lambda item: (item.block, item.part, _semester_sort_key(item), item.id))
     params = _get_normative_params(db)
     aggregates = _build_aggregates(elements)
     deviations = _build_deviations(aggregates, params)

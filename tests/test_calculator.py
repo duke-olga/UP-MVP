@@ -32,27 +32,25 @@ def test_aggregate_by_block_sums_credits() -> None:
     assert aggregate_by_block(elements) == {"1": 15.0, "2": 6.0, "fac": 2.0}
 
 
-def test_aggregate_by_year_uses_semester_mapping() -> None:
+def test_aggregate_by_year_splits_multisemester_elements() -> None:
     elements = [
-        {"semester": 1, "credits": 10},
-        {"semester": 2, "credits": 8},
-        {"semester": 3, "credits": 7},
-        {"semester": 4, "credits": 5},
-        {"semester": None, "credits": 9},
+        {"semesters": [1, 2], "credits": 12},
+        {"semesters": [3], "credits": 7},
+        {"semesters": [4], "credits": 5},
+        {"semesters": [], "credits": 9},
     ]
 
-    assert aggregate_by_year(elements) == {1: 18.0, 2: 12.0}
+    assert aggregate_by_year(elements) == {1: 12.0, 2: 12.0}
 
 
-def test_aggregate_by_semester_sums_credits() -> None:
+def test_aggregate_by_semester_splits_credits_evenly() -> None:
     elements = [
-        {"semester": 1, "credits": 10},
-        {"semester": 1, "credits": 2},
-        {"semester": 2, "credits": 5},
-        {"semester": None, "credits": 9},
+        {"semesters": [1, 2, 3], "credits": 18},
+        {"semesters": [1], "credits": 2},
+        {"semesters": [2], "credits": 5},
     ]
 
-    assert aggregate_by_semester(elements) == {1: 12.0, 2: 5.0}
+    assert aggregate_by_semester(elements) == {1: 8.0, 2: 11.0, 3: 6.0}
 
 
 def test_aggregate_mandatory_percent_returns_share() -> None:
@@ -89,10 +87,10 @@ def test_get_competency_coverage_marks_covered_and_missing() -> None:
 
 def test_plan_element_hours_are_computed_by_sqlalchemy_events() -> None:
     engine = create_engine("sqlite:///:memory:")
-    TestingSessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
+    testing_session_local = sessionmaker(bind=engine, autocommit=False, autoflush=False)
     Base.metadata.create_all(bind=engine)
 
-    db = TestingSessionLocal()
+    db = testing_session_local()
     try:
         db.add(NormativeParam(key="CreditHourRatio", value=36.0))
         db.flush()
@@ -108,18 +106,21 @@ def test_plan_element_hours_are_computed_by_sqlalchemy_events() -> None:
             part="mandatory",
             credits=3.0,
             hours=0,
-            semester=1,
+            semesters=[1, 2],
             competency_ids=[],
         )
         db.add(element)
         db.commit()
         db.refresh(element)
         assert element.hours == 108
+        assert element.semesters == [1, 2]
 
         element.credits = 4.0
+        element.semesters = [2, 1, 2]
         db.add(element)
         db.commit()
         db.refresh(element)
         assert element.hours == 144
+        assert element.semesters == [1, 2]
     finally:
         db.close()

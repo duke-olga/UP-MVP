@@ -4,685 +4,125 @@
     "element_type": "discipline",
     "part": "mandatory",
     "credits": 12.0,
-    "semester": 1,
+    "semesters": [1, 2, 3, 4, 5, 6],
     "source": "poop",
-    "competency_code": "УК-3"
-  },
-  {
-    "name": "Иностранный язык",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 12.0,
-    "semester": 1,
-    "source": "poop",
-    "competency_code": "УК-4"
+    "competency_codes": ["УК-3", "УК-4"]
   },
   {
     "name": "Программирование",
     "element_type": "discipline",
     "part": "mandatory",
     "credits": 18.0,
-    "semester": 1,
+    "semesters": [1, 2, 3],
     "source": "poop",
-    "competency_code": "ОПК-2"
-  },
-  {
-    "name": "Программирование",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 18.0,
-    "semester": 1,
-    "source": "poop",
-    "competency_code": "ОПК-5"
-  },
-  {
-    "name": "Программирование",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 18.0,
-    "semester": 1,
-    "source": "poop",
-    "competency_code": "ОПК-6"
-  },
-  {
-    "name": "Программирование",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 18.0,
-    "semester": 1,
-    "source": "poop",
-    "competency_code": "ПК-7"
+    "competency_codes": ["ОПК-2", "ОПК-5", "ОПК-6", "ПК-7"]
   },
   {
     "name": "Математический анализ",
     "element_type": "discipline",
     "part": "mandatory",
     "credits": 5.0,
-    "semester": 1,
+    "semesters": [1],
     "source": "poop",
-    "competency_code": "ОПК-1"
+    "competency_codes": ["ОПК-1"]
   },
   {
     "name": "Аналитическая геометрия",
     "element_type": "discipline",
     "part": "mandatory",
     "credits": 4.0,
-    "semester": 1,
+    "semesters": [1],
     "source": "poop",
-    "competency_code": "ОПК-1"
+    "competency_codes": ["ОПК-1"]
   },
   {
     "name": "История",
     "element_type": "discipline",
     "part": "mandatory",
     "credits": 3.0,
-    "semester": null,
+    "semesters": [2],
     "source": "poop",
-    "competency_code": "УК-5"
+    "competency_codes": ["УК-5"]
   },
   {
     "name": "Философия",
     "element_type": "discipline",
     "part": "mandatory",
     "credits": 3.0,
-    "semester": null,
+    "semesters": [4],
     "source": "poop",
-    "competency_code": "УК-5"
+    "competency_codes": ["УК-5"]
   },
   {
     "name": "Экономика",
     "element_type": "discipline",
     "part": "mandatory",
     "credits": 4.0,
-    "semester": null,
+    "semesters": [6, 7],
     "source": "poop",
-    "competency_code": "ПК-1"
-  },
-  {
-    "name": "Интегралы и дифференциальные уравнения",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 5.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ОПК-1"
-  },
-  {
-    "name": "Линейная алгебра и функции нескольких переменных",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ОПК-1"
-  },
-  {
-    "name": "Физика",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 9.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ОПК-1"
-  },
-  {
-    "name": "Дискретная математика",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 5.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ОПК-1"
-  },
-  {
-    "name": "Теория вероятности",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ОПК-1"
-  },
-  {
-    "name": "Экология",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "УК-8"
-  },
-  {
-    "name": "Основы программной инженерии",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "УК-2"
-  },
-  {
-    "name": "Основы программной инженерии",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ОПК-6"
-  },
-  {
-    "name": "Основы программной инженерии",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ОПК-4"
-  },
-  {
-    "name": "Основы программной инженерии",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ПК-8"
-  },
-  {
-    "name": "Основы программной инженерии",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ОПК-7"
-  },
-  {
-    "name": "Операционные системы",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 9.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ПК-9"
-  },
-  {
-    "name": "Операционные системы. Курсовая работа",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ПК-9"
-  },
-  {
-    "name": "Базы данных",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 6.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ПК-10"
-  },
-  {
-    "name": "Базы данных",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 6.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ПК-9"
-  },
-  {
-    "name": "Базы данных",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 6.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ОПК-8"
-  },
-  {
-    "name": "Базы данных. Курсовая работа",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ПК-9"
-  },
-  {
-    "name": "Базы данных. Курсовая работа",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ОПК-8"
-  },
-  {
-    "name": "Архитектура ЭВМ",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 8.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ПК-9"
-  },
-  {
-    "name": "Компьютерные сети",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ПК-9"
-  },
-  {
-    "name": "Компьютерные сети",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ПК-10"
-  },
-  {
-    "name": "Компьютерные сети. Курсовая работа",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ПК-9"
-  },
-  {
-    "name": "Компьютерные сети. Курсовая работа",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ПК-3"
-  },
-  {
-    "name": "Проектирование программного обеспечения",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ПК-2"
-  },
-  {
-    "name": "Проектирование программного обеспечения",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ПК-4"
-  },
-  {
-    "name": "Проектирование программного обеспечения",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ОПК-3"
-  },
-  {
-    "name": "Тестирование и отладка программного обеспечения",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ОПК-6"
-  },
-  {
-    "name": "Тестирование и отладка программного обеспечения",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ПК-2"
-  },
-  {
-    "name": "Безопасность жизнедеятельности",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "УК-2"
-  },
-  {
-    "name": "Безопасность жизнедеятельности",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "УК-8"
-  },
-  {
-    "name": "Физическая культура",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "УК-6"
-  },
-  {
-    "name": "Физическая культура",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "УК-7"
-  },
-
-  {
-    "name": "Теоретическая информатика",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 2.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ОПК-1"
-  },
-  {
-    "name": "Инженерная графика",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 5.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ОПК-4"
-  },
-  {
-    "name": "Политология",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 3.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "УК-1"
-  },
-  {
-    "name": "Правоведение",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 3.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "УК-1"
-  },
-  {
-    "name": "Правоведение",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 3.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "УК-2"
-  },
-  {
-    "name": "Основы межличностных отношений",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 3.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "УК-4"
-  },
-  {
-    "name": "Основы электроники",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 4.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ОПК-1"
-  },
-  {
-    "name": "Типы и структуры данных",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 4.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ПК-9"
-  },
-  {
-    "name": "Логика и теория алгоритмов",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 3.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "УК-1"
-  },
-  {
-    "name": "Логика и теория алгоритмов",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 3.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ОПК-1"
-  },
-  {
-    "name": "Вычислительные алгоритмы",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 3.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ПК-4"
-  },
-  {
-    "name": "Математическая статистика",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 4.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "УК-1"
-  },
-  {
-    "name": "Математическая статистика",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 4.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ОПК-1"
-  },
-  {
-    "name": "Машинно-зависимые языки программирования",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 3.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ПК-7"
-  },
-  {
-    "name": "Машинно-зависимые языки программирования",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 3.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ПК-10"
-  },
-  {
-    "name": "Объектно-ориентированное программирование",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 3.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ПК-10"
-  },
-  {
-    "name": "Компьютерная графика",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 4.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "УК-1"
-  },
-  {
-    "name": "Компьютерная графика",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 4.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ПК-5"
-  },
-  {
-    "name": "Компьютерная графика. Курсовой проект",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 2.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ПК-10"
-  },
-  {
-    "name": "Компьютерная графика. Курсовой проект",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 2.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ПК-3"
-  },
-  {
-    "name": "Защита информации",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 3.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "УК-1"
-  },
-  {
-    "name": "Защита информации",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 3.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ПК-10"
-  },
-  {
-    "name": "Моделирование",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 9.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "УК-1"
-  },
-  {
-    "name": "Моделирование",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 9.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ПК-6"
-  },
-  {
-    "name": "Функционально-логическое программирование",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 3.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "ПК-10"
-  },
-
-  {
-    "name": "научно-исследовательская работа",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semester": null,
-    "source": "poop",
-    "competency_code": "УК-1"
+    "competency_codes": ["ПК-1"]
   },
   {
     "name": "научно-исследовательская работа",
     "element_type": "practice",
     "part": "mandatory",
     "credits": 2.0,
-    "semester": null,
+    "semesters": [7],
     "source": "poop",
-    "competency_code": "ОПК-1"
+    "competency_codes": ["УК-1", "ОПК-1"]
   },
   {
     "name": "научно-исследовательская работа (получение первичных навыков научно-исследовательской работы)",
     "element_type": "practice",
     "part": "mandatory",
     "credits": 2.0,
-    "semester": null,
+    "semesters": [4],
     "source": "poop",
-    "competency_code": "ОПК-1"
+    "competency_codes": ["ОПК-1"]
   },
   {
     "name": "ознакомительная практика",
     "element_type": "practice",
     "part": "mandatory",
     "credits": 2.0,
-    "semester": null,
+    "semesters": [2],
     "source": "poop",
-    "competency_code": "ПК-10"
+    "competency_codes": ["ПК-10"]
   },
   {
     "name": "технологическая (проектно-технологическая) практика",
     "element_type": "practice",
     "part": "mandatory",
     "credits": 2.0,
-    "semester": null,
+    "semesters": [4],
     "source": "poop",
-    "competency_code": "ПК-11"
+    "competency_codes": ["ПК-11"]
   },
   {
     "name": "технологическая (проектно-технологическая) практика",
     "element_type": "practice",
     "part": "mandatory",
     "credits": 3.0,
-    "semester": null,
+    "semesters": [5],
     "source": "poop",
-    "competency_code": "ПК-11"
+    "competency_codes": ["ПК-11"]
   },
   {
     "name": "эксплуатационная практика",
     "element_type": "practice",
     "part": "mandatory",
     "credits": 3.0,
-    "semester": null,
+    "semesters": [6],
     "source": "poop",
-    "competency_code": "ПК-12"
+    "competency_codes": ["ПК-12"]
   },
   {
     "name": "эксплуатационная практика",
     "element_type": "practice",
     "part": "mandatory",
     "credits": 2.0,
-    "semester": null,
+    "semesters": [7],
     "source": "poop",
-    "competency_code": "ПК-12"
+    "competency_codes": ["ПК-12"]
   }
 ]

@@ -45,6 +45,7 @@ def _build_test_client():
                 NormativeParam(key="X_mandatory_percent", value=0.4),
                 NormativeParam(key="X_pe_ze", value=2.0),
                 NormativeParam(key="X_pe_hours", value=72.0),
+                NormativeParam(key="X_semester_max", value=35.0),
                 NormativeParam(key="CreditHourRatio", value=36.0),
             ]
         )
@@ -69,7 +70,7 @@ def test_export_xlsx_returns_downloadable_workbook() -> None:
             "block": "1",
             "part": "mandatory",
             "credits": 3.0,
-            "semester": 1,
+            "semesters": [1, 2],
             "competency_ids": [1],
             "source_element_id": None,
         },
@@ -78,10 +79,7 @@ def test_export_xlsx_returns_downloadable_workbook() -> None:
     response = client.get(f"/api/v1/plans/{plan_id}/export/xlsx")
 
     assert response.status_code == 200
-    assert (
-        response.headers["content-type"]
-        == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    )
+    assert response.headers["content-type"] == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     assert 'attachment; filename="plan_' in response.headers["content-disposition"]
 
     workbook = load_workbook(BytesIO(response.content))
@@ -91,3 +89,4 @@ def test_export_xlsx_returns_downloadable_workbook() -> None:
     assert sheet["A2"].value == "План: Plan for export"
     assert sheet["A6"].value == "Блок 1. Дисциплины"
     assert sheet["A7"].value == "Философия"
+    assert sheet["D7"].value == "1, 2"

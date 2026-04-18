@@ -43,30 +43,28 @@ def _build_test_client():
             element_type="discipline",
             part="mandatory",
             credits=3.0,
-            semester=1,
+            semesters=[1],
             source="poop",
+            competencies=[uk],
         )
-        mandatory_discipline.competencies = [uk]
-
         variative_discipline = RecommendedElement(
             name="Политология",
             element_type="discipline",
             part="variative",
             credits=2.0,
-            semester=2,
+            semesters=[2, 3],
             source="best_practice",
+            competencies=[uk, opk],
         )
-        variative_discipline.competencies = [uk, opk]
-
         mandatory_practice = RecommendedElement(
             name="Учебная практика",
             element_type="practice",
             part="mandatory",
             credits=3.0,
-            semester=4,
+            semesters=[4],
             source="local_requirement",
+            competencies=[opk],
         )
-        mandatory_practice.competencies = [opk]
 
         db.add_all([mandatory_discipline, variative_discipline, mandatory_practice])
         db.add(CurriculumPlan(name="Test plan", status="draft"))
@@ -91,7 +89,7 @@ def test_table1_returns_manual_mode_for_pks() -> None:
     assert pks_section["mandatory_practices"] == []
 
 
-def test_table1_returns_normalized_source_labels() -> None:
+def test_table1_returns_normalized_source_labels_and_semesters() -> None:
     client = _build_test_client()
 
     response = client.get("/api/v1/plans/1/table1")
@@ -101,7 +99,9 @@ def test_table1_returns_normalized_source_labels() -> None:
     uk_section = next(item for item in sections if item["competency"]["code"] == "УК-1")
     assert uk_section["mode"] == "recommendation"
     assert uk_section["mandatory_disciplines"][0]["source_label"] == "ПООП"
+    assert uk_section["mandatory_disciplines"][0]["semesters"] == [1]
     assert uk_section["variative_disciplines"][0]["source_label"] == "Лучшие практики"
+    assert uk_section["variative_disciplines"][0]["semesters"] == [2, 3]
 
     opk_section = next(item for item in sections if item["competency"]["code"] == "ОПК-1")
     assert opk_section["mandatory_practices"][0]["source_label"] == "Локальные требования вуза"
@@ -131,11 +131,14 @@ def test_table1_transfer_moves_mandatory_and_selected_variative_elements() -> No
 
     assert len(mandatory_block) == 1
     assert mandatory_block[0]["name"] == "Философия"
+    assert mandatory_block[0]["semesters"] == [1]
     assert len(variative_block) == 1
     assert variative_block[0]["name"] == "Политология"
+    assert variative_block[0]["semesters"] == [2, 3]
     assert sorted(variative_block[0]["competency_ids"]) == [1, 2]
     assert len(practices_block) == 1
     assert practices_block[0]["name"] == "Учебная практика"
+    assert practices_block[0]["semesters"] == [4]
 
 
 def test_table1_transfer_is_idempotent_for_same_selection() -> None:

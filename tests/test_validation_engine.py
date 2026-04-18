@@ -8,9 +8,9 @@ from backend.modules.validation.engine import run_checks
 
 def _prepare_db():
     engine = create_engine("sqlite:///:memory:")
-    TestingSessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
+    testing_session_local = sessionmaker(bind=engine, autocommit=False, autoflush=False)
     Base.metadata.create_all(bind=engine)
-    db = TestingSessionLocal()
+    db = testing_session_local()
     return db
 
 
@@ -24,6 +24,7 @@ def _add_normative_params(db):
         ("X_mandatory_percent", 0.4),
         ("X_pe_ze", 2.0),
         ("X_pe_hours", 72.0),
+        ("X_semester_max", 35.0),
         ("CreditHourRatio", 36.0),
     ]
     for key, value in params:
@@ -60,7 +61,7 @@ def test_run_checks_returns_expected_violations_for_invalid_plan() -> None:
                     part="mandatory",
                     credits=10.0,
                     hours=0,
-                    semester=1,
+                    semesters=[1],
                     competency_ids=[competencies[0].id],
                 ),
                 PlanElement(
@@ -70,7 +71,7 @@ def test_run_checks_returns_expected_violations_for_invalid_plan() -> None:
                     part="mandatory",
                     credits=3.0,
                     hours=0,
-                    semester=2,
+                    semesters=[2],
                     competency_ids=[competencies[1].id],
                 ),
             ]
@@ -108,7 +109,7 @@ def test_run_checks_detects_invalid_hours_ratio() -> None:
             part="mandatory",
             credits=2.0,
             hours=999.0,
-            semester=1,
+            semesters=[1, 2],
             competency_ids=[competencies[0].id, competencies[1].id, competencies[2].id],
         )
         db.add(element)
@@ -125,5 +126,38 @@ def test_run_checks_detects_invalid_hours_ratio() -> None:
         rule_ids = {item["rule_id"] for item in report.results}
 
         assert 16 in rule_ids
+    finally:
+        db.close()
+
+
+def test_run_checks_adds_semester_warning_for_overloaded_semester() -> None:
+    db = _prepare_db()
+    try:
+        _add_normative_params(db)
+        competencies = _add_competencies(db)
+
+        plan = CurriculumPlan(name="Semester overload", status="draft")
+        db.add(plan)
+        db.flush()
+
+        db.add(
+            PlanElement(
+                plan_id=plan.id,
+                name="Программирование",
+                block="1",
+                part="mandatory",
+                credits=72.0,
+                hours=0,
+                semesters=[1, 2],
+                competency_ids=[competencies[0].id],
+            )
+        )
+        db.commit()
+
+        report = run_checks(plan.id, db)
+        semester_results = [item for item in report.results if item["rule_id"] == 17]
+
+        assert len(semester_results) == 2
+        assert all(item["level"] == "warning" for item in semester_results)
     finally:
         db.close()

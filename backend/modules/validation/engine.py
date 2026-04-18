@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from backend.models import CheckReport, Competency, CurriculumPlan, NormativeParam, PlanElement
 from backend.modules.plan_builder.calculator import (
     aggregate_by_block,
+    aggregate_by_semester,
     aggregate_by_year,
     aggregate_mandatory_percent,
     get_competency_coverage,
@@ -122,7 +123,7 @@ def _check_required_disciplines(elements: list[PlanElement]) -> CheckResult | No
     discipline_names = {
         _normalize_name(element.name)
         for element in elements
-        if element.block == "1" or str(element.block) == "1"
+        if str(element.block) == "1"
     }
     required_groups = {
         "Философия": any("философ" in name for name in discipline_names),
@@ -185,10 +186,7 @@ def _is_industrial_practice(name: str) -> bool:
 
 
 def _check_practice_presence(elements: list[PlanElement], rule_id: int, checker, message: str) -> CheckResult | None:
-    practices = [
-        element for element in elements
-        if str(element.block) == "2" and checker(element.name)
-    ]
+    practices = [element for element in elements if str(element.block) == "2" and checker(element.name)]
     if not practices:
         return CheckResult(
             rule_id=rule_id,
@@ -246,6 +244,26 @@ def _check_hours_match(elements: list[PlanElement], params: dict[str, float]) ->
     return results
 
 
+def _check_semester_credits(elements: list[PlanElement], params: dict[str, float]) -> list[CheckResult]:
+    results: list[CheckResult] = []
+    expected = params.get("X_semester_max")
+    if expected is None:
+        return results
+
+    for semester, total in aggregate_by_semester(elements).items():
+        if total > expected:
+            results.append(
+                CheckResult(
+                    rule_id=17,
+                    level="warning",
+                    message=f"Нагрузка в семестре {semester} превышает рекомендуемый максимум.",
+                    actual=total,
+                    expected=expected,
+                )
+            )
+    return results
+
+
 def run_checks(plan_id: int, db: Session) -> CheckReport:
     plan = _get_plan_or_raise(plan_id, db)
     elements = list(plan.elements)
@@ -282,6 +300,7 @@ def run_checks(plan_id: int, db: Session) -> CheckReport:
     results.extend(_check_yearly_credits(elements, params))
     results.extend(_check_block_minimums(elements, params))
     results.extend(_check_hours_match(elements, params))
+    results.extend(_check_semester_credits(elements, params))
 
     report = CheckReport(
         plan_id=plan.id,

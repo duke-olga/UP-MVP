@@ -25,7 +25,7 @@ class RecommendedElementBase(BaseModel):
     element_type: str
     part: str
     credits: float | None = None
-    semester: int | None = None
+    semesters: list[int] = []
     source: str
     competency_codes: list[str] = []
 
@@ -42,7 +42,7 @@ class Table1RecommendedElement(BaseModel):
     element_type: str
     part: str
     credits: float | None = None
-    semester: int | None = None
+    semesters: list[int]
     source: str
     source_label: str
     competency_codes: list[str]
@@ -84,7 +84,7 @@ class PlanElementBase(BaseModel):
     block: str
     part: str
     credits: float
-    semester: int | None = None
+    semesters: list[int] = []
     competency_ids: list[int]
     source_element_id: int | None = None
 
@@ -98,7 +98,7 @@ class PlanElementUpdate(BaseModel):
     block: str | None = None
     part: str | None = None
     credits: float | None = None
-    semester: int | None = None
+    semesters: list[int] | None = None
     competency_ids: list[int] | None = None
     source_element_id: int | None = None
 
