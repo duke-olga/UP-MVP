@@ -86,7 +86,9 @@ export const getTable3 = async (planId) => {
 };
 
 export const validatePlan = async (planId) => {
-  const { data } = await api.post(`/plans/${planId}/validate`);
+  const { data } = await api.post(`/plans/${planId}/validate`, null, {
+    timeout: 180000,
+  });
   return data;
 };
 

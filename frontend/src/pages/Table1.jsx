@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { getErrorMessage, getTable1, transferTable1 } from "../api";
+import EmptyState from "../components/EmptyState";
+import HelpTooltip from "../components/HelpTooltip";
 import SourceBadge from "../components/SourceBadge";
 import StatusBadge from "../components/StatusBadge";
 
@@ -90,7 +92,7 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
     [selections],
   );
 
-  const autoSectionCount = useMemo(
+  const recommendationSectionCount = useMemo(
     () => sections.filter((section) => section.mode === "recommendation").length,
     [sections],
   );
@@ -148,9 +150,9 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
           </button>
         </div>
         <p className="status-muted">
-          Этот экран показывает рекомендованные элементы для формирования учебного плана. Он не является самой
-          структурой плана: обязательные элементы переносятся автоматически, а вариативные дисциплины — только по
-          отмеченным позициям.
+          Здесь показаны рекомендуемые элементы для формирования учебного плана. Этот экран не
+          является самой структурой плана: обязательные элементы переносятся автоматически, а
+          вариативные дисциплины включаются только по отмеченным позициям.
         </p>
         {loading ? <p className="status-muted">Загрузка рекомендаций...</p> : null}
         {error ? <p className="status-message status-error">{error}</p> : null}
@@ -162,8 +164,8 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
           <strong>{sections.length}</strong>
         </div>
         <div className="metric-tile">
-          <span>Автоподбор</span>
-          <strong>{autoSectionCount}</strong>
+          <span>Компетенции с рекомендациями</span>
+          <strong>{recommendationSectionCount}</strong>
         </div>
         <div className="metric-tile">
           <span>Ручной режим</span>
@@ -174,6 +176,13 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
           <strong>{selectedVariativeCount}</strong>
         </div>
       </div>
+
+      {!loading && !error && sections.length === 0 ? (
+        <EmptyState
+          title="Рекомендации пока не найдены"
+          description="Для выбранного плана система пока не подготовила рекомендации по компетенциям."
+        />
+      ) : null}
 
       {sections.map((section) => (
         <article key={section.competency.id} className="card competency-card">
@@ -191,13 +200,22 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
 
           {section.mode === "manual_only" ? (
             <div className="manual-note">
-              Для этой компетенции автоматический подбор не применяется. Добавьте дисциплины и практики вручную в
-              разделе «Структура плана».
+              <div className="inline-hint">
+                <strong>Для этой компетенции действует ручной режим.</strong>
+                <HelpTooltip text="Для ПКС автоматический подбор не применяется. Добавьте дисциплины и практики вручную в разделе «Структура плана»." />
+              </div>
+              <p>
+                Автоматический подбор не применяется. Добавьте дисциплины и практики вручную в
+                разделе «Структура плана».
+              </p>
             </div>
           ) : (
             <div className="three-columns">
               <div className="content-block">
-                <h4>Обязательные дисциплины</h4>
+                <div className="inline-hint">
+                  <h4>Обязательные дисциплины</h4>
+                  <HelpTooltip text="Эти элементы переносятся в структуру плана автоматически." />
+                </div>
                 <RecommendationList
                   items={section.mandatory_disciplines}
                   selections={selections}
@@ -205,7 +223,10 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
                 />
               </div>
               <div className="content-block">
-                <h4>Рекомендуемые дисциплины</h4>
+                <div className="inline-hint">
+                  <h4>Рекомендуемые дисциплины</h4>
+                  <HelpTooltip text="Отметьте только те вариативные дисциплины, которые нужно включить в структуру плана." />
+                </div>
                 <RecommendationList
                   items={section.variative_disciplines}
                   selectable
@@ -215,7 +236,10 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
                 />
               </div>
               <div className="content-block">
-                <h4>Обязательные практики</h4>
+                <div className="inline-hint">
+                  <h4>Обязательные практики</h4>
+                  <HelpTooltip text="Вариативные практики в MVP не предлагаются автоматически и добавляются вручную в структуру плана." />
+                </div>
                 <RecommendationList
                   items={section.mandatory_practices}
                   selections={selections}

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from backend.database import get_db
-from backend.models import CheckReport, CurriculumPlan, PlanElement
+from backend.models import CheckReport, Competency, CurriculumPlan, PlanElement
 from backend.modules.plan_builder.calculator import (
     aggregate_by_block,
     aggregate_by_semester,
@@ -75,6 +75,26 @@ def _build_aggregates(elements: list[PlanElement]) -> dict[str, object]:
     }
 
 
+def _normalize_competency_ids(competency_ids: list[int], db: Session) -> list[int]:
+    if not competency_ids:
+        return []
+
+    valid_ids = {
+        row[0]
+        for row in db.query(Competency.id).filter(Competency.id.in_(competency_ids)).all()
+    }
+    return [competency_id for competency_id in competency_ids if competency_id in valid_ids]
+
+
+def _sanitize_element_competency_ids(element: PlanElement, db: Session) -> bool:
+    normalized_ids = _normalize_competency_ids(element.competency_ids, db)
+    if normalized_ids == element.competency_ids:
+        return False
+    element.competency_ids = normalized_ids
+    db.add(element)
+    return True
+
+
 def _get_latest_report(plan_id: int, db: Session) -> CheckReport | None:
     return (
         db.query(CheckReport)
@@ -130,6 +150,15 @@ def get_table2(plan_id: int, db: Session = Depends(get_db)) -> Table2Response:
         .order_by(PlanElement.block, PlanElement.part, PlanElement.semester, PlanElement.id)
         .all()
     )
+
+    dirty = False
+    for element in elements:
+        dirty = _sanitize_element_competency_ids(element, db) or dirty
+    if dirty:
+        db.commit()
+        for element in elements:
+            db.refresh(element)
+
     return Table2Response(
         data=Table2Data(
             plan=CurriculumPlanRead.model_validate(plan),
@@ -146,7 +175,9 @@ def create_plan_element(
     db: Session = Depends(get_db),
 ) -> PlanElementResponse:
     _get_plan_or_404(plan_id, db)
-    element = PlanElement(plan_id=plan_id, hours=0, **payload.model_dump())
+    payload_data = payload.model_dump()
+    payload_data["competency_ids"] = _normalize_competency_ids(payload_data["competency_ids"], db)
+    element = PlanElement(plan_id=plan_id, hours=0, **payload_data)
     db.add(element)
     db.commit()
     db.refresh(element)
@@ -162,6 +193,8 @@ def update_plan_element(
 ) -> PlanElementResponse:
     element = _get_plan_element_or_404(plan_id, element_id, db)
     for field, value in payload.model_dump(exclude_unset=True).items():
+        if field == "competency_ids" and value is not None:
+            value = _normalize_competency_ids(value, db)
         setattr(element, field, value)
     db.add(element)
     db.commit()

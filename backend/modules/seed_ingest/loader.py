@@ -193,6 +193,17 @@ def _sync_normative_params(db: Session, payload: list[dict]) -> None:
         db.add(param)
 
 
+def _cleanup_plan_element_competency_ids(db: Session, competency_map: dict[str, models.Competency]) -> None:
+    valid_ids = {competency.id for competency in competency_map.values()}
+
+    for element in db.query(models.PlanElement).all():
+        filtered_ids = [competency_id for competency_id in element.competency_ids if competency_id in valid_ids]
+        if filtered_ids == element.competency_ids:
+            continue
+        element.competency_ids = filtered_ids
+        db.add(element)
+
+
 def load_seed_data(db: Session) -> None:
     competencies_payload = _read_json("competencies.json")
     recommended_elements_payload = _group_recommended_elements(_read_json("poop_disciplines.json"))
@@ -201,5 +212,6 @@ def load_seed_data(db: Session) -> None:
     competency_map = _sync_competencies(db, competencies_payload)
     _sync_recommended_elements(db, recommended_elements_payload, competency_map)
     _sync_normative_params(db, normative_params_payload)
+    _cleanup_plan_element_competency_ids(db, competency_map)
 
     db.commit()

@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 from backend.database import Base
-from backend.models import Competency, RecommendedElement
+from backend.models import Competency, CurriculumPlan, PlanElement, RecommendedElement
 from backend.modules.seed_ingest import loader
 
 
@@ -76,5 +76,53 @@ def test_load_seed_data_removes_stale_pk_and_auto_recommendations(monkeypatch) -
 
         recommendation_names = {item.name for item in db.query(RecommendedElement).all()}
         assert recommendation_names == {"Философия"}
+    finally:
+        db.close()
+
+
+def test_load_seed_data_removes_stale_competency_ids_from_plan_elements(monkeypatch) -> None:
+    db = _build_session()
+    try:
+        stale_pk = Competency(code="ПК-1", type="ПК", name="ПК 1", description="legacy")
+        valid_uk = Competency(code="УК-1", type="УК", name="УК 1", description="desc")
+        db.add_all([stale_pk, valid_uk])
+        db.flush()
+
+        plan = CurriculumPlan(name="Legacy plan", status="draft")
+        db.add(plan)
+        db.flush()
+
+        element = PlanElement(
+            plan_id=plan.id,
+            name="Старая дисциплина",
+            block="1",
+            part="mandatory",
+            credits=3.0,
+            hours=108.0,
+            semester=1,
+            competency_ids=[valid_uk.id, stale_pk.id, 999],
+            source_element_id=None,
+        )
+        db.add(element)
+        db.commit()
+
+        payloads = {
+            "competencies.json": [
+                {"code": "УК-1", "type": "УК", "name": "УК 1", "description": "desc"},
+                {"code": "ОПК-1", "type": "ОПК", "name": "ОПК 1", "description": "desc"},
+            ],
+            "poop_disciplines.json": [],
+            "normative_params.json": [
+                {"key": "X_total", "value": 240.0},
+                {"key": "CreditHourRatio", "value": 36.0},
+            ],
+        }
+
+        monkeypatch.setattr(loader, "_read_json", lambda filename: payloads[filename])
+
+        loader.load_seed_data(db)
+        db.refresh(element)
+
+        assert element.competency_ids == [valid_uk.id]
     finally:
         db.close()

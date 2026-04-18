@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { createPlan, deletePlan, getErrorMessage, listPlans } from "./api";
+import EmptyState from "./components/EmptyState";
 import StatusBadge from "./components/StatusBadge";
 import Table1 from "./pages/Table1";
 import Table2 from "./pages/Table2";
@@ -44,7 +45,7 @@ export default function App() {
           return;
         }
         setPlans(data);
-        if (data.length > 0 && selectedPlanId !== null && !data.some((plan) => plan.id === selectedPlanId)) {
+        if (selectedPlanId !== null && !data.some((plan) => plan.id === selectedPlanId)) {
           setSelectedPlanId(null);
         }
       } catch (error) {
@@ -123,16 +124,16 @@ export default function App() {
           <p className="eyebrow">Интеллектуальный методист</p>
           <h1>Формирование учебного плана</h1>
           <p className="hero-copy">
-            Модуль помогает перенести рекомендации по компетенциям в структуру плана, проверить нормативные
-            ограничения и подготовить итоговую выгрузку.
+            Модуль помогает перенести рекомендации по компетенциям в структуру плана, выполнить
+            детерминированную проверку и подготовить итоговую выгрузку.
           </p>
         </div>
         <div className="hero-side card">
           <p className="card-kicker">Логика MVP</p>
           <ul className="simple-list compact">
             <li>Рекомендации не являются самим учебным планом.</li>
-            <li>Структура плана редактируется отдельно.</li>
-            <li>Проверка и утверждение выполняются на финальном этапе.</li>
+            <li>Итоговый состав дисциплин и практик редактируется только в структуре плана.</li>
+            <li>Проверка и утверждение выполняются на отдельном финальном экране.</li>
           </ul>
         </div>
       </header>
@@ -168,17 +169,19 @@ export default function App() {
 
           <div className="plan-grid">
             {plansLoading ? (
-              <div className="card empty-state">
-                <h3>Загрузка</h3>
-                <p>Получаем список учебных планов.</p>
-              </div>
+              <EmptyState
+                title="Загрузка"
+                description="Получаем список учебных планов."
+              />
             ) : null}
+
             {!plansLoading && plans.length === 0 ? (
-              <div className="card empty-state">
-                <h3>Планов пока нет</h3>
-                <p>Создайте первый учебный план, чтобы перейти к рекомендациям и проверке.</p>
-              </div>
+              <EmptyState
+                title="Планов пока нет"
+                description="Создайте первый учебный план, чтобы перейти к рекомендациям, структуре и проверке."
+              />
             ) : null}
+
             {plans.map((plan) => (
               <article key={plan.id} className="card plan-card">
                 <div className="section-header">
@@ -188,7 +191,9 @@ export default function App() {
                   </div>
                   <StatusBadge value={plan.status} />
                 </div>
-                <p className="status-muted">Последнее изменение: {new Date(plan.updated_at).toLocaleString("ru-RU")}</p>
+                <p className="status-muted">
+                  Последнее изменение: {new Date(plan.updated_at).toLocaleString("ru-RU")}
+                </p>
                 <div className="row-actions">
                   <button type="button" className="primary-button" onClick={() => setSelectedPlanId(plan.id)}>
                     Открыть
@@ -231,7 +236,7 @@ export default function App() {
               <ol className="step-list inline-steps">
                 <li>Проверьте рекомендации по компетенциям.</li>
                 <li>Скорректируйте структуру учебного плана.</li>
-                <li>Запустите проверку и, если нужно, утвердите план.</li>
+                <li>Запустите проверку и при необходимости утвердите план.</li>
               </ol>
             </div>
           </div>

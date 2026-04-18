@@ -143,3 +143,37 @@ def test_approve_is_blocked_when_validation_has_errors() -> None:
 
     assert approve_response.status_code == 400
     assert "cannot be approved" in approve_response.json()["detail"]
+
+
+def test_table2_filters_unknown_competency_ids() -> None:
+    client = _build_test_client()
+
+    create_plan_response = client.post("/api/v1/plans", json={"name": "Filtered competencies"})
+    plan_id = create_plan_response.json()["data"]["id"]
+
+    create_element_response = client.post(
+        f"/api/v1/plans/{plan_id}/table2/elements",
+        json={
+            "name": "Программирование",
+            "block": "1",
+            "part": "mandatory",
+            "credits": 3.0,
+            "semester": 1,
+            "competency_ids": [1, 999, 2],
+            "source_element_id": None,
+        },
+    )
+    assert create_element_response.status_code == 200
+    assert create_element_response.json()["data"]["competency_ids"] == [1, 2]
+
+    element_id = create_element_response.json()["data"]["id"]
+    update_element_response = client.patch(
+        f"/api/v1/plans/{plan_id}/table2/elements/{element_id}",
+        json={"competency_ids": [2, 12345]},
+    )
+    assert update_element_response.status_code == 200
+    assert update_element_response.json()["data"]["competency_ids"] == [2]
+
+    table2_response = client.get(f"/api/v1/plans/{plan_id}/table2")
+    elements = table2_response.json()["data"]["grouped_elements"]["1"]["mandatory"]
+    assert elements[0]["competency_ids"] == [2]

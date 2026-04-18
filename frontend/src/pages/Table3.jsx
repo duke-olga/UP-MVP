@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 
 import { getErrorMessage, getExportUrl, getTable3, updatePlanStatus, validatePlan } from "../api";
+import EmptyState from "../components/EmptyState";
+import HelpTooltip from "../components/HelpTooltip";
 import StatusBadge from "../components/StatusBadge";
 
 const levelLabels = {
@@ -150,10 +152,13 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
             </button>
           </div>
         </div>
-        <p className="status-muted">
-          Утверждение блокируется при критических нарушениях и ошибках. Предупреждения и рекомендации ИИ не блокируют
-          утверждение.
-        </p>
+        <div className="inline-hint status-muted">
+          <span>
+            Утверждение блокируется при критических нарушениях и ошибках. Предупреждения и
+            рекомендации ИИ не блокируют утверждение.
+          </span>
+          <HelpTooltip text="Решение об утверждении принимает детерминированная проверка. Пояснения ИИ носят только консультативный характер." />
+        </div>
         {loading ? <p className="status-muted">Загрузка данных проверки...</p> : null}
         {error ? <p className="status-message status-error">{error}</p> : null}
       </div>
@@ -238,7 +243,10 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
                 ))}
               </div>
             ) : (
-              <p className="status-muted">После запуска проверки здесь появится список нарушений и предупреждений.</p>
+              <EmptyState
+                title="Нарушения пока не показаны"
+                description="Запустите проверку плана, чтобы получить список нарушений и предупреждений."
+              />
             )}
           </div>
 
@@ -248,10 +256,11 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
                 <p className="card-kicker">ИИ</p>
                 <h3>Пояснения и рекомендации ИИ</h3>
               </div>
+              <HelpTooltip text="ИИ получает только структурированный отчёт проверки. Он не считает нормативы и не меняет учебный план автоматически." />
             </div>
             <p className="status-muted">
-              ИИ помогает интерпретировать результаты проверки, но не выполняет нормативные расчёты и не изменяет
-              учебный план автоматически.
+              ИИ помогает интерпретировать результаты проверки, но не выполняет нормативные расчёты
+              и не изменяет учебный план автоматически.
             </p>
             <div className="llm-box">
               {data.latest_report?.llm_recommendations || "После запуска проверки здесь появятся пояснения ИИ."}

@@ -9,6 +9,8 @@ import {
   updateTable2Element,
 } from "../api";
 import CompetencyMultiSelect from "../components/CompetencyMultiSelect";
+import EmptyState from "../components/EmptyState";
+import HelpTooltip from "../components/HelpTooltip";
 import StatusBadge from "../components/StatusBadge";
 
 const defaultNewElement = {
@@ -40,6 +42,10 @@ function buildCompetencyMap(groupedCompetencies) {
   );
 }
 
+function collectAllElements(groupedElements) {
+  return Object.values(groupedElements || {}).flatMap((parts) => Object.values(parts).flat());
+}
+
 export default function Table2({ plan, planId, refreshToken, onRefresh, setGlobalNotice }) {
   const [data, setData] = useState(null);
   const [drafts, setDrafts] = useState({});
@@ -68,19 +74,15 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
         }
         setData(table2);
         const nextDrafts = {};
-        Object.values(table2.grouped_elements).forEach((parts) => {
-          Object.values(parts).forEach((elements) => {
-            elements.forEach((element) => {
-              nextDrafts[element.id] = {
-                name: element.name,
-                block: element.block,
-                part: element.part,
-                credits: String(element.credits),
-                semester: element.semester == null ? "" : String(element.semester),
-                competency_ids: element.competency_ids,
-              };
-            });
-          });
+        collectAllElements(table2.grouped_elements).forEach((element) => {
+          nextDrafts[element.id] = {
+            name: element.name,
+            block: element.block,
+            part: element.part,
+            credits: String(element.credits),
+            semester: element.semester == null ? "" : String(element.semester),
+            competency_ids: element.competency_ids,
+          };
         });
         setDrafts(nextDrafts);
       } catch (loadError) {
@@ -156,9 +158,7 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
   };
 
   const handleDeleteElement = async (elementId) => {
-    const currentElement = Object.values(data?.grouped_elements || {})
-      .flatMap((parts) => Object.values(parts).flat())
-      .find((element) => element.id === elementId);
+    const currentElement = collectAllElements(data?.grouped_elements).find((element) => element.id === elementId);
 
     if (!window.confirm(`Удалить элемент «${currentElement?.name || "без названия"}» из структуры плана?`)) {
       return;
@@ -217,8 +217,8 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
           <StatusBadge value={plan.status} />
         </div>
         <p className="status-muted">
-          Здесь редактируется итоговая структура учебного плана. Часы рассчитываются автоматически по количеству
-          зачётных единиц, а компетенции выбираются из списка кодов и названий.
+          Здесь редактируется итоговая структура учебного плана. Часы рассчитываются автоматически
+          по количеству зачётных единиц, а компетенции выбираются из списка кодов и названий.
         </p>
         {loading ? <p className="status-muted">Загрузка структуры плана...</p> : null}
         {error ? <p className="status-message status-error">{error}</p> : null}
@@ -250,6 +250,7 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
             <h3>Добавить элемент</h3>
           </div>
         </div>
+
         <div className="form-grid">
           <label className="field">
             <span>Наименование</span>
@@ -272,7 +273,10 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
             </select>
           </label>
           <label className="field">
-            <span>Часть плана</span>
+            <div className="field-label-row">
+              <span>Часть плана</span>
+              <HelpTooltip text="Определяет, относится элемент к обязательной или вариативной части плана." />
+            </div>
             <select
               value={newElement.part}
               onChange={(event) => setNewElement((current) => ({ ...current, part: event.target.value }))}
@@ -300,6 +304,11 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
               onChange={(event) => setNewElement((current) => ({ ...current, semester: event.target.value }))}
             />
           </label>
+        </div>
+
+        <div className="form-note">
+          <span>Часы рассчитываются автоматически по количеству з.е.</span>
+          <HelpTooltip text="Поле часов не редактируется вручную и пересчитывается системой автоматически." />
         </div>
 
         <CompetencyMultiSelect
@@ -346,7 +355,10 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
               </select>
             </label>
             <label className="field">
-              <span>Часть плана</span>
+              <div className="field-label-row">
+                <span>Часть плана</span>
+                <HelpTooltip text="Определяет, относится элемент к обязательной или вариативной части плана." />
+              </div>
               <select
                 value={drafts[editingId]?.part || "mandatory"}
                 onChange={(event) => updateDraft(editingId, "part", event.target.value)}
@@ -374,6 +386,11 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
             </label>
           </div>
 
+          <div className="form-note">
+            <span>Часы пересчитываются автоматически после сохранения изменений.</span>
+            <HelpTooltip text="Поле часов вычисляется системой, поэтому отдельно не редактируется." />
+          </div>
+
           <CompetencyMultiSelect
             groupedCompetencies={competencies}
             selectedIds={drafts[editingId]?.competency_ids || []}
@@ -384,6 +401,13 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
             {saving ? "Сохранение..." : "Сохранить изменения"}
           </button>
         </div>
+      ) : null}
+
+      {!loading && !error && data && collectAllElements(data.grouped_elements).length === 0 ? (
+        <EmptyState
+          title="Структура плана пока пуста"
+          description="Перенесите рекомендации с предыдущего экрана или добавьте элементы вручную."
+        />
       ) : null}
 
       {data
@@ -430,15 +454,17 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
                               <td>{element.hours}</td>
                               <td>
                                 <div className="selected-tags">
-                                  {element.competency_ids.map((competencyId) => (
-                                    <span
-                                      key={competencyId}
-                                      className="selected-tag light"
-                                      title={competencyMap[competencyId]?.name || "Компетенция"}
-                                    >
-                                      {competencyMap[competencyId]?.code || `ID ${competencyId}`}
-                                    </span>
-                                  ))}
+                                  {element.competency_ids
+                                    .filter((competencyId) => competencyMap[competencyId])
+                                    .map((competencyId) => (
+                                      <span
+                                        key={competencyId}
+                                        className="selected-tag light"
+                                        title={competencyMap[competencyId].name}
+                                      >
+                                        {competencyMap[competencyId].code}
+                                      </span>
+                                    ))}
                                 </div>
                               </td>
                               <td>

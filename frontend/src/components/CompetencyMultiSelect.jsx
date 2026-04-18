@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 
+import HelpTooltip from "./HelpTooltip";
+
 const groupLabels = {
   УК: "УК",
   ОПК: "ОПК",
@@ -53,6 +55,11 @@ export default function CompetencyMultiSelect({
 
   return (
     <div className="competency-select">
+      <div className="field-label-row">
+        <span className="field-title">{title}</span>
+        <HelpTooltip text="Выберите одну или несколько компетенций. Поиск работает по коду и названию." />
+      </div>
+
       <button
         type="button"
         className="select-toggle"
