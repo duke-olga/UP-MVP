@@ -1,3 +1,4 @@
+from collections import defaultdict
 from dataclasses import asdict, dataclass
 
 from sqlalchemy.orm import Session
@@ -23,6 +24,10 @@ class CheckResult:
 
 def _normalize_name(value: str) -> str:
     return " ".join(value.strip().lower().split())
+
+
+def _countable_elements(elements: list[PlanElement]) -> list[PlanElement]:
+    return [element for element in elements if str(element.block) != "fac"]
 
 
 def _get_normative_params(db: Session) -> dict[str, float]:
@@ -119,26 +124,26 @@ def _check_mandatory_percent(elements: list[PlanElement], params: dict[str, floa
     return None
 
 
+def _has_required_discipline(elements: list[PlanElement], tokens: tuple[str, ...]) -> bool:
+    discipline_names = [_normalize_name(element.name) for element in elements if str(element.block) == "1"]
+    return any(any(token in name for token in tokens) for name in discipline_names)
+
+
 def _check_required_disciplines(elements: list[PlanElement]) -> CheckResult | None:
-    discipline_names = {
-        _normalize_name(element.name)
-        for element in elements
-        if str(element.block) == "1"
-    }
     required_groups = {
-        "Философия": any("философ" in name for name in discipline_names),
-        "История": any("история" in name for name in discipline_names),
-        "Иностранный язык": any("иностранный язык" in name for name in discipline_names),
-        "БЖД": any("безопасность жизнедеятельности" in name or "бжд" in name for name in discipline_names),
+        "Философия": _has_required_discipline(elements, ("философ",)),
+        "История": _has_required_discipline(elements, ("история",)),
+        "Иностранный язык": _has_required_discipline(elements, ("иностранный язык",)),
+        "Безопасность жизнедеятельности": _has_required_discipline(elements, ("безопасность жизнедеятельности", "бжд")),
     }
     missing = [name for name, exists in required_groups.items() if not exists]
     if missing:
         return CheckResult(
             rule_id=9,
             level="error",
-            message="В учебном плане отсутствуют обязательные дисциплины.",
+            message="В учебном плане отсутствуют обязательные дисциплины ФГОС.",
             actual=", ".join(missing),
-            expected="Философия, История, Иностранный язык, БЖД",
+            expected="Философия, История, Иностранный язык, Безопасность жизнедеятельности",
         )
     return None
 
@@ -162,7 +167,7 @@ def _check_pe_credits(elements: list[PlanElement], params: dict[str, float]) -> 
 
 
 def _check_pe_hours(elements: list[PlanElement], params: dict[str, float]) -> CheckResult | None:
-    pe_total = sum(element.hours for element in _find_physical_education_elements(elements))
+    pe_total = sum(float(element.hours or 0) + float(element.extra_hours or 0) for element in _find_physical_education_elements(elements))
     expected = params["X_pe_hours"]
     if pe_total < expected:
         return CheckResult(
@@ -175,18 +180,12 @@ def _check_pe_hours(elements: list[PlanElement], params: dict[str, float]) -> Ch
     return None
 
 
-def _is_educational_practice(name: str) -> bool:
-    normalized = _normalize_name(name)
-    return "учеб" in normalized or "ознаком" in normalized or "получение первичных навыков" in normalized
-
-
-def _is_industrial_practice(name: str) -> bool:
-    normalized = _normalize_name(name)
-    return any(token in normalized for token in ["производ", "технологичес", "эксплуатацион", "преддиплом"])
-
-
-def _check_practice_presence(elements: list[PlanElement], rule_id: int, checker, message: str) -> CheckResult | None:
-    practices = [element for element in elements if str(element.block) == "2" and checker(element.name)]
+def _check_practice_presence(elements: list[PlanElement], rule_id: int, practice_type: str, message: str) -> CheckResult | None:
+    practices = [
+        element
+        for element in elements
+        if str(element.block) == "2" and (element.practice_type or "").strip().lower() == practice_type
+    ]
     if not practices:
         return CheckResult(
             rule_id=rule_id,
@@ -264,9 +263,91 @@ def _check_semester_credits(elements: list[PlanElement], params: dict[str, float
     return results
 
 
+def _check_practice_balance(elements: list[PlanElement]) -> CheckResult | None:
+    practices = [element for element in elements if str(element.block) == "2"]
+    if len(practices) <= 1:
+        return None
+
+    semesters = defaultdict(int)
+    for element in practices:
+        for semester in element.semesters or []:
+            semesters[int(semester)] += 1
+
+    if not semesters:
+        return None
+
+    max_in_one_semester = max(semesters.values())
+    if max_in_one_semester == len(practices):
+        semester = next(key for key, value in semesters.items() if value == max_in_one_semester)
+        return CheckResult(
+            rule_id=18,
+            level="warning",
+            message="Практики сосредоточены в одном семестре.",
+            actual=f"semester {semester}",
+            expected="balanced distribution",
+        )
+    return None
+
+
+def _check_competency_balance(elements: list[PlanElement], competencies: list[Competency]) -> CheckResult | None:
+    counts: dict[int, int] = defaultdict(int)
+    for element in elements:
+        for competency_id in element.competency_ids or []:
+            counts[int(competency_id)] += 1
+
+    sparse_codes = sorted(competency.code for competency in competencies if counts.get(competency.id, 0) < 2)
+    if sparse_codes:
+        return CheckResult(
+            rule_id=19,
+            level="warning",
+            message="Часть компетенций формируется менее чем двумя элементами.",
+            actual=", ".join(sparse_codes),
+            expected="Каждая компетенция формируется минимум двумя элементами",
+        )
+    return None
+
+
+def _check_structure_parts(elements: list[PlanElement]) -> list[CheckResult]:
+    results: list[CheckResult] = []
+    for element in elements:
+        block = str(element.block)
+        part = str(element.part)
+        if block in {"1", "2"} and part not in {"mandatory", "variative"}:
+            results.append(
+                CheckResult(
+                    rule_id=20,
+                    level="error",
+                    message=f"Элемент '{element.name}' имеет некорректную часть плана.",
+                    actual=part,
+                    expected="mandatory or variative",
+                )
+            )
+        if block == "3" and part != "mandatory":
+            results.append(
+                CheckResult(
+                    rule_id=20,
+                    level="error",
+                    message=f"Элемент '{element.name}' из блока ГИА должен относиться к обязательной части.",
+                    actual=part,
+                    expected="mandatory",
+                )
+            )
+        if block == "2" and not (element.practice_type or "").strip():
+            results.append(
+                CheckResult(
+                    rule_id=20,
+                    level="error",
+                    message=f"Практика '{element.name}' должна иметь атрибут типа практики.",
+                    actual="missing",
+                    expected="educational or industrial",
+                )
+            )
+    return results
+
+
 def run_checks(plan_id: int, db: Session) -> CheckReport:
     plan = _get_plan_or_raise(plan_id, db)
-    elements = list(plan.elements)
+    elements = _countable_elements(list(plan.elements))
     competencies = db.query(Competency).order_by(Competency.code).all()
     params = _get_normative_params(db)
 
@@ -282,17 +363,19 @@ def run_checks(plan_id: int, db: Session) -> CheckReport:
         _check_practice_presence(
             elements,
             12,
-            _is_educational_practice,
+            "educational",
             "В учебном плане отсутствует учебная практика.",
         ),
         _check_practice_presence(
             elements,
             13,
-            _is_industrial_practice,
+            "industrial",
             "В учебном плане отсутствует производственная практика.",
         ),
         _check_competency_coverage(elements, competencies),
         _check_competency_types(competencies),
+        _check_practice_balance(elements),
+        _check_competency_balance(elements, competencies),
     ]:
         if single_check is not None:
             results.append(single_check)
@@ -301,10 +384,11 @@ def run_checks(plan_id: int, db: Session) -> CheckReport:
     results.extend(_check_block_minimums(elements, params))
     results.extend(_check_hours_match(elements, params))
     results.extend(_check_semester_credits(elements, params))
+    results.extend(_check_structure_parts(elements))
 
     report = CheckReport(
         plan_id=plan.id,
-        results=[asdict(result) for result in sorted(results, key=lambda item: (item.rule_id, item.level))],
+        results=[asdict(result) for result in sorted(results, key=lambda item: (item.rule_id, item.level, item.message))],
         llm_recommendations=None,
     )
     db.add(report)

@@ -71,7 +71,7 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
         }
       } catch (loadError) {
         if (!cancelled) {
-          setError(getErrorMessage(loadError, "Не удалось загрузить экран проверки."));
+          setError(getErrorMessage(loadError, "Не удалось загрузить Таблицу 3."));
         }
       } finally {
         if (!cancelled) {
@@ -90,9 +90,9 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
     setBusyAction("validate");
     try {
       await validatePlan(planId);
-      onRefresh("Проверка плана выполнена.");
+      onRefresh("Проверка учебного плана выполнена.");
     } catch (validateError) {
-      setGlobalNotice(getErrorMessage(validateError, "Не удалось выполнить проверку плана."));
+      setGlobalNotice(getErrorMessage(validateError, "Не удалось выполнить проверку учебного плана."));
     } finally {
       setBusyAction("");
     }
@@ -117,7 +117,7 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
   if (!plan) {
     return (
       <section className="card">
-        <h2>Проверка</h2>
+        <h2>Таблица 3</h2>
         <p>Сначала выберите учебный план на стартовом экране.</p>
       </section>
     );
@@ -137,29 +137,26 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
       <div className="card">
         <div className="section-header">
           <div>
-            <p className="card-kicker">Проверка</p>
-            <h2>Проверка и утверждение учебного плана</h2>
+            <p className="card-kicker">Таблица 3</p>
+            <h2>Контроль нормативов и утверждение плана</h2>
           </div>
           <div className="toolbar">
             <button className="primary-button" type="button" onClick={handleValidate} disabled={busyAction !== ""}>
-              {busyAction === "validate" ? "Проверка..." : "Проверить план"}
+              {busyAction === "validate" ? "Проверка..." : "Проверить учебный план"}
             </button>
             <button className="secondary-button" type="button" onClick={handleApprove} disabled={busyAction !== ""}>
-              {busyAction === "approve" ? "Утверждение..." : "Утвердить план"}
+              {busyAction === "approve" ? "Утверждение..." : "Утвердить"}
             </button>
             <button className="secondary-button" type="button" onClick={handleExport}>
-              Скачать в Excel
+              Скачать XLSX
             </button>
           </div>
         </div>
         <div className="inline-hint status-muted">
-          <span>
-            Утверждение блокируется при критических нарушениях и ошибках. Предупреждения и
-            рекомендации ИИ не блокируют утверждение.
-          </span>
-          <HelpTooltip text="Решение об утверждении принимает детерминированная проверка. Пояснения ИИ носят только консультативный характер." />
+          <span>Утверждение блокируется только критическими нарушениями и ошибками. Предупреждения и рекомендации ИИ носят консультативный характер.</span>
+          <HelpTooltip text="Сначала выполняются детерминированные проверки. Только после этого формируются пояснения и рекомендации LLM." />
         </div>
-        {loading ? <p className="status-muted">Загрузка данных проверки...</p> : null}
+        {loading ? <p className="status-muted">Загрузка Таблицы 3...</p> : null}
         {error ? <p className="status-message status-error">{error}</p> : null}
       </div>
 
@@ -174,31 +171,33 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
         <p>{summary.description}</p>
       </div>
 
-      <div className="card totals-grid">
-        <div className="metric-tile">
-          <span>Критические нарушения</span>
-          <strong>{validationSummary.critical_count}</strong>
+      {data ? (
+        <div className="card totals-grid">
+          <div className="metric-tile">
+            <span>Всего з.е.</span>
+            <strong>{data.aggregates.total_credits}</strong>
+          </div>
+          <div className="metric-tile">
+            <span>Часы по з.е.</span>
+            <strong>{data.aggregates.total_base_hours}</strong>
+          </div>
+          <div className="metric-tile">
+            <span>Дополнительные часы</span>
+            <strong>{data.aggregates.total_extra_hours}</strong>
+          </div>
+          <div className="metric-tile">
+            <span>Суммарная нагрузка</span>
+            <strong>{data.aggregates.total_hours}</strong>
+          </div>
         </div>
-        <div className="metric-tile">
-          <span>Ошибки</span>
-          <strong>{validationSummary.error_count}</strong>
-        </div>
-        <div className="metric-tile">
-          <span>Предупреждения</span>
-          <strong>{validationSummary.warning_count}</strong>
-        </div>
-        <div className="metric-tile">
-          <span>Статус плана</span>
-          <strong>{plan.status === "approved" ? "Утверждён" : plan.status === "checked" ? "Проверен" : "Черновик"}</strong>
-        </div>
-      </div>
+      ) : null}
 
       {data ? (
         <>
           <div className="card">
             <div className="section-header">
               <div>
-                <p className="card-kicker">Нормативные показатели</p>
+                <p className="card-kicker">Отклонения</p>
                 <h3>Факт / норматив / отклонение</h3>
               </div>
             </div>
@@ -209,7 +208,7 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
                 <span>Норматив</span>
                 <span>Отклонение</span>
               </div>
-              <DeviationRow label="Общий объём" item={data.deviations.total_credits} />
+              <DeviationRow label="Общий объём программы" item={data.deviations.total_credits} />
               <DeviationRow label="Обязательная часть" item={data.deviations.mandatory_percent} />
               {Object.entries(data.deviations.by_block).map(([block, item]) => (
                 <DeviationRow key={block} label={`Блок ${block}`} item={item} />
@@ -244,8 +243,8 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
               </div>
             ) : (
               <EmptyState
-                title="Нарушения пока не показаны"
-                description="Запустите проверку плана, чтобы получить список нарушений и предупреждений."
+                title="Проверка ещё не запускалась"
+                description="Нажмите «Проверить учебный план», чтобы получить список нарушений и рекомендации ИИ."
               />
             )}
           </div>
@@ -254,16 +253,12 @@ export default function Table3({ plan, planId, refreshToken, onRefresh, setGloba
             <div className="section-header">
               <div>
                 <p className="card-kicker">ИИ</p>
-                <h3>Пояснения и рекомендации ИИ</h3>
+                <h3>Пояснения и рекомендации</h3>
               </div>
-              <HelpTooltip text="ИИ получает только структурированный отчёт проверки. Он не считает нормативы и не меняет учебный план автоматически." />
+              <HelpTooltip text="LLM получает только структурированный отчёт о нарушениях. Он не выполняет расчёты и не меняет план автоматически." />
             </div>
-            <p className="status-muted">
-              ИИ помогает интерпретировать результаты проверки, но не выполняет нормативные расчёты
-              и не изменяет учебный план автоматически.
-            </p>
             <div className="llm-box">
-              {data.latest_report?.llm_recommendations || "После запуска проверки здесь появятся пояснения ИИ."}
+              {data.latest_report?.llm_recommendations || "После запуска проверки здесь появятся пояснения и предложения по корректировке плана."}
             </div>
           </div>
         </>

@@ -87,6 +87,6 @@ def test_validate_plan_saves_llm_recommendations(monkeypatch) -> None:
     response = client.post(f"/api/v1/plans/{plan_id}/validate")
 
     assert response.status_code == 200
-    body = response.json()
+    body = response.json()["data"]
     assert body["llm_recommendations"].startswith("LLM summary")
     assert len(body["results"]) > 0

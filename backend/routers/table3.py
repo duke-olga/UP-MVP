@@ -42,15 +42,20 @@ def _get_latest_report(plan_id: int, db: Session) -> CheckReport | None:
 
 
 def _build_aggregates(elements: list[PlanElement]) -> dict[str, object]:
-    total_credits = sum(element.credits for element in elements)
-    total_hours = sum(element.hours for element in elements)
+    countable_elements = [element for element in elements if str(element.block) != "fac"]
+    total_credits = sum(element.credits for element in countable_elements)
+    total_hours = sum(element.hours + float(element.extra_hours or 0) for element in elements)
+    total_base_hours = sum(element.hours for element in elements)
+    total_extra_hours = sum(float(element.extra_hours or 0) for element in elements)
     return {
         "total_credits": total_credits,
         "total_hours": total_hours,
-        "by_block": aggregate_by_block(elements),
-        "by_year": aggregate_by_year(elements),
-        "by_semester": aggregate_by_semester(elements),
-        "mandatory_percent": aggregate_mandatory_percent(elements),
+        "total_base_hours": total_base_hours,
+        "total_extra_hours": total_extra_hours,
+        "by_block": aggregate_by_block(countable_elements),
+        "by_year": aggregate_by_year(countable_elements),
+        "by_semester": aggregate_by_semester(countable_elements),
+        "mandatory_percent": aggregate_mandatory_percent(countable_elements),
     }
 
 

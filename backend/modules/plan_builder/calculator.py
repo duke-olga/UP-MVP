@@ -19,6 +19,10 @@ def _normalize_block(block: Any) -> str:
     return str(block)
 
 
+def _is_countable_for_norms(item: Any) -> bool:
+    return _normalize_block(_get_value(item, "block")) != "fac"
+
+
 def _normalize_semesters(raw_semesters: Any) -> list[int]:
     if raw_semesters is None:
         return []
@@ -62,6 +66,8 @@ def aggregate_by_block(elements: Iterable[Any]) -> dict[str, float]:
 def aggregate_by_year(elements: Iterable[Any]) -> dict[int, float]:
     totals: dict[int, float] = {}
     for element in elements:
+        if not _is_countable_for_norms(element):
+            continue
         credits = float(_get_value(element, "credits", 0) or 0)
         semesters = _normalize_semesters(_get_value(element, "semesters", []))
         for semester, share in _split_credits(credits, semesters).items():
@@ -75,6 +81,8 @@ def aggregate_by_year(elements: Iterable[Any]) -> dict[int, float]:
 def aggregate_by_semester(elements: Iterable[Any]) -> dict[int, float]:
     totals: dict[int, float] = {}
     for element in elements:
+        if not _is_countable_for_norms(element):
+            continue
         credits = float(_get_value(element, "credits", 0) or 0)
         semesters = _normalize_semesters(_get_value(element, "semesters", []))
         for semester, share in _split_credits(credits, semesters).items():
@@ -87,6 +95,8 @@ def aggregate_mandatory_percent(elements: Iterable[Any]) -> float:
     mandatory_credits = 0.0
 
     for element in elements:
+        if not _is_countable_for_norms(element):
+            continue
         credits = float(_get_value(element, "credits", 0) or 0)
         total_credits += credits
         if _get_value(element, "part") == "mandatory":
@@ -101,6 +111,8 @@ def aggregate_mandatory_percent(elements: Iterable[Any]) -> float:
 def get_competency_coverage(elements: Iterable[Any], competencies: Iterable[Any]) -> dict[str, bool]:
     covered_ids: set[int] = set()
     for element in elements:
+        if not _is_countable_for_norms(element):
+            continue
         competency_ids = _get_value(element, "competency_ids", []) or []
         covered_ids.update(int(comp_id) for comp_id in competency_ids)
 
@@ -124,4 +136,5 @@ def _get_credit_hour_ratio(connection) -> float:
 def set_plan_element_hours(_, connection, target: PlanElement) -> None:
     ratio = _get_credit_hour_ratio(connection)
     target.semesters = _normalize_semesters(target.semesters)
+    target.extra_hours = float(target.extra_hours or 0)
     target.hours = compute_hours(target.credits, ratio)

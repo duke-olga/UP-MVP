@@ -8,45 +8,139 @@ import StatusBadge from "../components/StatusBadge";
 
 function formatSemesters(semesters) {
   if (!semesters?.length) {
-    return "семестры не указаны";
+    return "Семестры не указаны";
   }
-  return `семестры ${semesters.join(", ")}`;
+  return `Семестры ${semesters.join(", ")}`;
 }
 
-function RecommendationList({ items, selectable = false, selections, onToggle, emptyText }) {
-  if (!items.length) {
-    return <p className="status-muted">{emptyText}</p>;
+function RecommendationCard({
+  item,
+  checked,
+  inputType = "checkbox",
+  name,
+  onChange,
+}) {
+  return (
+    <label className={`recommendation ${inputType === "checkbox" ? "checkbox" : "radio"}`}>
+      <input type={inputType} name={name} checked={checked} onChange={(event) => onChange(item.id, event.target.checked)} />
+      <div>
+        <strong>{item.name}</strong>
+        <span>
+          {item.credits ?? 0} з.е. · {formatSemesters(item.semesters)}
+          {item.extra_hours ? ` · доп. часы: ${item.extra_hours}` : ""}
+        </span>
+        <div className="recommendation-meta">
+          <SourceBadge source={item.source_label || item.source} />
+          {item.practice_type ? <small>{item.practice_type === "educational" ? "Учебная практика" : "Производственная практика"}</small> : null}
+        </div>
+        {item.competency_codes?.length ? <small>{item.competency_codes.join(", ")}</small> : null}
+      </div>
+    </label>
+  );
+}
+
+function GroupSelection({ title, groups, selections, onSingleSelect, onToggle, helperText }) {
+  return (
+    <div className="content-block">
+      <div className="inline-hint">
+        <h4>{title}</h4>
+        <HelpTooltip text={helperText} />
+      </div>
+      {!groups.length ? <p className="status-muted">Нет доступных вариантов.</p> : null}
+      {groups.map((group) => (
+        <div key={group.requirement} className="fgos-group">
+          <div className="section-header">
+            <div>
+              <strong>{group.title}</strong>
+              <p className="status-muted">
+                {group.is_complete ? "Выбор выполнен" : "Выбор пока не выполнен"}
+              </p>
+            </div>
+            <StatusBadge value={group.is_complete ? "checked" : "warning"} />
+          </div>
+          {!group.items.length ? (
+            <p className="status-muted">Варианты не найдены. Элемент можно будет добавить вручную в Таблице 2.</p>
+          ) : (
+            <div className="recommendation-list">
+              {group.items.map((item) => (
+                <RecommendationCard
+                  key={item.id}
+                  item={item}
+                  checked={Boolean(selections[item.id])}
+                  inputType={group.selection_mode === "single" ? "radio" : "checkbox"}
+                  name={group.requirement}
+                  onChange={(itemId, checked) => {
+                    if (group.selection_mode === "single") {
+                      onSingleSelect(group, itemId, checked);
+                    } else {
+                      onToggle(itemId, checked);
+                    }
+                  }}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function CompetencySection({ section, selections, onToggle }) {
+  if (section.mode === "manual_only") {
+    return (
+      <div className="manual-note">
+        <div className="inline-hint">
+          <strong>Для этой компетенции действует ручной режим.</strong>
+          <HelpTooltip text="Для ПКС автоматические рекомендации не формируются. Связь дисциплин и практик с ПКС задаётся вручную в Таблице 2." />
+        </div>
+        <p>Автоматический подбор не применяется. Добавьте элементы и свяжите их с компетенцией вручную в Таблице 2.</p>
+      </div>
+    );
   }
 
+  const groups = [
+    {
+      title: "Дисциплины обязательной части",
+      items: section.mandatory_disciplines,
+      emptyText: "Рекомендации не найдены.",
+    },
+    {
+      title: "Дисциплины вариативной части",
+      items: section.variative_disciplines,
+      emptyText: "Рекомендации не найдены.",
+    },
+    {
+      title: "Практики обязательной части",
+      items: section.mandatory_practices,
+      emptyText: "Рекомендации не найдены.",
+    },
+  ];
+
   return (
-    <div className="recommendation-list">
-      {items.map((item) => (
-        <label key={item.id} className={selectable ? "recommendation checkbox" : "recommendation"}>
-          {selectable ? (
-            <input
-              type="checkbox"
-              checked={Boolean(selections[item.id])}
-              onChange={(event) => onToggle(item.id, event.target.checked)}
-            />
-          ) : null}
-          <div>
-            <strong>{item.name}</strong>
-            <span>
-              {item.credits ?? 0} з.е. · {formatSemesters(item.semesters)}
-            </span>
-            <div className="recommendation-meta">
-              <SourceBadge source={item.source_label || item.source} />
-            </div>
-            {item.competency_codes?.length ? <small>{item.competency_codes.join(", ")}</small> : null}
+    <div className="three-columns">
+      {groups.map((group) => (
+        <div key={group.title} className="content-block">
+          <h4>{group.title}</h4>
+          {!group.items.length ? <p className="status-muted">{group.emptyText}</p> : null}
+          <div className="recommendation-list">
+            {group.items.map((item) => (
+              <RecommendationCard
+                key={item.id}
+                item={item}
+                checked={Boolean(selections[item.id])}
+                onChange={onToggle}
+              />
+            ))}
           </div>
-        </label>
+        </div>
       ))}
     </div>
   );
 }
 
 export default function Table1({ plan, planId, refreshToken, onNavigate, onRefresh, setGlobalNotice }) {
-  const [sections, setSections] = useState([]);
+  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [selections, setSelections] = useState({});
@@ -54,7 +148,7 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
 
   useEffect(() => {
     if (!planId) {
-      setSections([]);
+      setData(null);
       setSelections({});
       return;
     }
@@ -65,16 +159,25 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
       setLoading(true);
       setError("");
       try {
-        const data = await getTable1(planId);
+        const nextData = await getTable1(planId);
         if (cancelled) {
           return;
         }
-        setSections(data);
+
+        setData(nextData);
         const nextSelections = {};
-        data.forEach((section) => {
-          section.variative_disciplines.forEach((item) => {
+        const collect = (items) => {
+          items.forEach((item) => {
             nextSelections[item.id] = item.selected;
           });
+        };
+
+        nextData.fgos_disciplines.forEach((group) => collect(group.items));
+        nextData.fgos_practices.forEach((group) => collect(group.items));
+        nextData.competencies.forEach((section) => {
+          collect(section.mandatory_disciplines);
+          collect(section.variative_disciplines);
+          collect(section.mandatory_practices);
         });
         setSelections(nextSelections);
       } catch (loadError) {
@@ -94,23 +197,31 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
     };
   }, [planId, refreshToken]);
 
-  const selectedVariativeCount = useMemo(
+  const selectedCount = useMemo(
     () => Object.values(selections).filter(Boolean).length,
     [selections],
   );
 
-  const recommendationSectionCount = useMemo(
-    () => sections.filter((section) => section.mode === "recommendation").length,
-    [sections],
-  );
-
   const manualSectionCount = useMemo(
-    () => sections.filter((section) => section.mode === "manual_only").length,
-    [sections],
+    () => data?.competencies?.filter((section) => section.mode === "manual_only").length || 0,
+    [data],
   );
 
   const handleToggle = (elementId, checked) => {
     setSelections((current) => ({ ...current, [elementId]: checked }));
+  };
+
+  const handleSingleSelect = (group, itemId, checked) => {
+    setSelections((current) => {
+      const next = { ...current };
+      group.items.forEach((item) => {
+        next[item.id] = false;
+      });
+      if (checked) {
+        next[itemId] = true;
+      }
+      return next;
+    });
   };
 
   const handleTransfer = async () => {
@@ -129,7 +240,7 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
       onRefresh();
       onNavigate("table2");
     } catch (transferError) {
-      setGlobalNotice(getErrorMessage(transferError, "Не удалось перенести элементы в структуру плана."));
+      setGlobalNotice(getErrorMessage(transferError, "Не удалось перенести выбранные элементы в Таблицу 2."));
     } finally {
       setTransferring(false);
     }
@@ -138,7 +249,7 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
   if (!plan) {
     return (
       <section className="card">
-        <h2>Рекомендации</h2>
+        <h2>Таблица 1</h2>
         <p>Сначала выберите учебный план на стартовом экране.</p>
       </section>
     );
@@ -149,48 +260,107 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
       <div className="card">
         <div className="section-header">
           <div>
-            <p className="card-kicker">Рекомендации</p>
-            <h2>Рекомендации по компетенциям</h2>
+            <p className="card-kicker">Таблица 1</p>
+            <h2>Рекомендации и обязательные элементы ФГОС</h2>
           </div>
           <button className="primary-button" type="button" onClick={handleTransfer} disabled={transferring}>
-            {transferring ? "Перенос..." : "Перенести в структуру плана"}
+            {transferring ? "Перенос..." : "Перенести выбранное в Таблицу 2"}
           </button>
         </div>
         <p className="status-muted">
-          Здесь показаны рекомендуемые элементы для формирования учебного плана. Каждый элемент
-          хранится как единый объект с полным списком семестров и компетенций.
+          Таблица 1 не участвует в расчётах. Здесь выбираются конкретные дисциплины и практики, которые будут перенесены в рабочую структуру учебного плана.
         </p>
         {loading ? <p className="status-muted">Загрузка рекомендаций...</p> : null}
         {error ? <p className="status-message status-error">{error}</p> : null}
       </div>
 
-      <div className="card totals-grid">
-        <div className="metric-tile">
-          <span>Компетенций</span>
-          <strong>{sections.length}</strong>
+      {data ? (
+        <div className="card totals-grid">
+          <div className="metric-tile">
+            <span>Выбрано элементов</span>
+            <strong>{selectedCount}</strong>
+          </div>
+          <div className="metric-tile">
+            <span>Компетенций</span>
+            <strong>{data.competencies.length}</strong>
+          </div>
+          <div className="metric-tile">
+            <span>ПКС в ручном режиме</span>
+            <strong>{manualSectionCount}</strong>
+          </div>
+          <div className="metric-tile">
+            <span>Полнота выбора ФГОС</span>
+            <strong>
+              {data.selection_summary.required_disciplines_complete && data.selection_summary.required_practices_complete
+                ? "Полная"
+                : "Есть пропуски"}
+            </strong>
+          </div>
         </div>
-        <div className="metric-tile">
-          <span>Компетенции с рекомендациями</span>
-          <strong>{recommendationSectionCount}</strong>
-        </div>
-        <div className="metric-tile">
-          <span>Ручной режим</span>
-          <strong>{manualSectionCount}</strong>
-        </div>
-        <div className="metric-tile">
-          <span>Выбрано вариативных дисциплин</span>
-          <strong>{selectedVariativeCount}</strong>
-        </div>
-      </div>
+      ) : null}
 
-      {!loading && !error && sections.length === 0 ? (
+      {data ? (
+        <div className="card">
+          <div className="section-header">
+            <div>
+              <p className="card-kicker">ФГОС</p>
+              <h3>Статус обязательных элементов</h3>
+            </div>
+          </div>
+          <div className="inline-hint">
+            <span>
+              {data.selection_summary.required_disciplines_complete
+                ? "Все обязательные дисциплины ФГОС выбраны."
+                : `Не выбраны дисциплины: ${data.selection_summary.missing_discipline_requirements.join(", ") || "нет данных"}.`}
+            </span>
+          </div>
+          <div className="inline-hint">
+            <span>
+              {data.selection_summary.required_practices_complete
+                ? "Обязательные категории практик выбраны."
+                : `Не выбраны практики: ${data.selection_summary.missing_practice_requirements.join(", ") || "нет данных"}.`}
+            </span>
+          </div>
+        </div>
+      ) : null}
+
+      {data ? (
+        <div className="card">
+          <div className="section-header">
+            <div>
+              <p className="card-kicker">ФГОС</p>
+              <h3>Нормативно обязательные элементы</h3>
+            </div>
+          </div>
+          <div className="two-columns">
+            <GroupSelection
+              title="Обязательные дисциплины (ФГОС)"
+              groups={data.fgos_disciplines}
+              selections={selections}
+              onSingleSelect={handleSingleSelect}
+              onToggle={handleToggle}
+              helperText="Для каждой нормативной дисциплины выберите один вариант реализации или оставьте выбор пустым и добавьте элемент вручную в Таблице 2."
+            />
+            <GroupSelection
+              title="Обязательные категории практик (ФГОС)"
+              groups={data.fgos_practices}
+              selections={selections}
+              onSingleSelect={handleSingleSelect}
+              onToggle={handleToggle}
+              helperText="Для каждой обязательной категории практик можно выбрать один или несколько вариантов."
+            />
+          </div>
+        </div>
+      ) : null}
+
+      {!loading && !error && data && data.competencies.length === 0 ? (
         <EmptyState
-          title="Рекомендации пока не найдены"
-          description="Для выбранного плана система пока не подготовила рекомендации по компетенциям."
+          title="Компетенции не найдены"
+          description="Для выбранного плана в системе пока нет доступных компетенций."
         />
       ) : null}
 
-      {sections.map((section) => (
+      {data?.competencies.map((section) => (
         <article key={section.competency.id} className="card competency-card">
           <div className="section-header">
             <div>
@@ -201,59 +371,8 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
             </div>
             {section.mode === "manual_only" ? <StatusBadge value="manual" /> : null}
           </div>
-
           <p className="status-muted">{section.competency.description}</p>
-
-          {section.mode === "manual_only" ? (
-            <div className="manual-note">
-              <div className="inline-hint">
-                <strong>Для этой компетенции действует ручной режим.</strong>
-                <HelpTooltip text="Для ПКС автоматический подбор не применяется. Добавьте дисциплины и практики вручную в разделе «Структура плана»." />
-              </div>
-              <p>
-                Автоматический подбор не применяется. Добавьте дисциплины и практики вручную в
-                разделе «Структура плана».
-              </p>
-            </div>
-          ) : (
-            <div className="three-columns">
-              <div className="content-block">
-                <div className="inline-hint">
-                  <h4>Обязательные дисциплины</h4>
-                  <HelpTooltip text="Эти элементы переносятся в структуру плана автоматически." />
-                </div>
-                <RecommendationList
-                  items={section.mandatory_disciplines}
-                  selections={selections}
-                  emptyText="Обязательные дисциплины не заданы."
-                />
-              </div>
-              <div className="content-block">
-                <div className="inline-hint">
-                  <h4>Рекомендуемые дисциплины</h4>
-                  <HelpTooltip text="Отметьте только те вариативные дисциплины, которые нужно включить в структуру плана." />
-                </div>
-                <RecommendationList
-                  items={section.variative_disciplines}
-                  selectable
-                  selections={selections}
-                  onToggle={handleToggle}
-                  emptyText="Рекомендуемые вариативные дисциплины не найдены."
-                />
-              </div>
-              <div className="content-block">
-                <div className="inline-hint">
-                  <h4>Обязательные практики</h4>
-                  <HelpTooltip text="Вариативные практики в MVP не предлагаются автоматически и добавляются вручную в структуру плана." />
-                </div>
-                <RecommendationList
-                  items={section.mandatory_practices}
-                  selections={selections}
-                  emptyText="Обязательные практики не заданы."
-                />
-              </div>
-            </div>
-          )}
+          <CompetencySection section={section} selections={selections} onToggle={handleToggle} />
         </article>
       ))}
     </section>

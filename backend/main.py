@@ -7,6 +7,22 @@ from backend.database import Base, SessionLocal, engine
 from backend.modules.plan_builder import calculator as _calculator  # noqa: F401
 from backend.modules.seed_ingest.loader import load_seed_data
 from backend.routers import competencies, export, table1, table2, table3, validation
+from backend.schemas import HealthResponse, HealthResponseWrapper
+
+
+def _ensure_column(table_name: str, column_name: str, ddl: str, default_sql: str | None = None) -> None:
+    inspector = inspect(engine)
+    if table_name not in inspector.get_table_names():
+        return
+
+    columns = {column["name"] for column in inspector.get_columns(table_name)}
+    if column_name in columns:
+        return
+
+    with engine.begin() as connection:
+        connection.execute(text(f"ALTER TABLE {table_name} ADD COLUMN {column_name} {ddl}"))
+        if default_sql:
+            connection.execute(text(f"UPDATE {table_name} SET {column_name} = {default_sql}"))
 
 
 def _migrate_recommended_elements_semesters() -> None:
@@ -55,11 +71,23 @@ def _migrate_plan_elements_semesters() -> None:
             connection.execute(text("UPDATE plan_elements SET semesters = '[]'"))
 
 
+def _migrate_extended_fields() -> None:
+    _ensure_column("recommended_elements", "extra_hours", "FLOAT", "0")
+    _ensure_column("recommended_elements", "practice_type", "VARCHAR(30)")
+    _ensure_column("recommended_elements", "is_fgos_mandatory", "INTEGER", "0")
+    _ensure_column("recommended_elements", "fgos_requirement", "VARCHAR(100)")
+
+    _ensure_column("plan_elements", "extra_hours", "FLOAT", "0")
+    _ensure_column("plan_elements", "practice_type", "VARCHAR(30)")
+    _ensure_column("plan_elements", "fgos_requirement", "VARCHAR(100)")
+
+
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     Base.metadata.create_all(bind=engine)
     _migrate_recommended_elements_semesters()
     _migrate_plan_elements_semesters()
+    _migrate_extended_fields()
     db = SessionLocal()
     try:
         load_seed_data(db)
@@ -77,6 +105,6 @@ app.include_router(validation.router)
 app.include_router(export.router)
 
 
-@app.get("/api/v1/health")
-def healthcheck() -> dict[str, str]:
-    return {"status": "ok"}
+@app.get("/api/v1/health", response_model=HealthResponseWrapper)
+def healthcheck() -> HealthResponseWrapper:
+    return HealthResponseWrapper(data=HealthResponse(status="ok"))

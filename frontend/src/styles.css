@@ -466,6 +466,7 @@ textarea:focus {
 }
 
 .three-columns,
+.two-columns,
 .form-grid,
 .totals-grid {
   display: grid;
@@ -474,6 +475,10 @@ textarea:focus {
 
 .three-columns {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.two-columns {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .content-block {
@@ -490,8 +495,22 @@ textarea:focus {
   gap: 16px;
 }
 
+.fgos-group {
+  display: grid;
+  gap: 12px;
+  border: 1px solid rgba(18, 33, 44, 0.08);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.74);
+  padding: 14px;
+}
+
+.recommendation.radio {
+  grid-template-columns: 18px minmax(0, 1fr);
+  align-items: start;
+}
+
 .form-grid {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .totals-grid {
@@ -663,6 +682,7 @@ textarea:focus {
 @media (max-width: 1100px) {
   .hero,
   .three-columns,
+  .two-columns,
   .form-grid {
     grid-template-columns: 1fr;
   }

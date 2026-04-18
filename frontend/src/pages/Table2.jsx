@@ -18,8 +18,11 @@ const defaultNewElement = {
   block: "1",
   part: "mandatory",
   credits: "3",
+  extra_hours: "0",
   semesters: "1",
   competency_ids: [],
+  practice_type: "",
+  fgos_requirement: "",
 };
 
 const partLabels = {
@@ -32,6 +35,11 @@ const blockLabels = {
   "2": "Блок 2. Практики",
   "3": "Блок 3. ГИА",
   fac: "Факультативы",
+};
+
+const practiceTypeLabels = {
+  educational: "Учебная",
+  industrial: "Производственная",
 };
 
 function buildCompetencyMap(groupedCompetencies) {
@@ -74,9 +82,76 @@ function toDraft(element) {
     block: element.block,
     part: element.part,
     credits: String(element.credits),
+    extra_hours: String(element.extra_hours || 0),
     semesters: formatSemesters(element.semesters || []),
     competency_ids: element.competency_ids,
+    practice_type: element.practice_type || "",
+    fgos_requirement: element.fgos_requirement || "",
   };
+}
+
+function ElementFormFields({ value, onChange }) {
+  return (
+    <>
+      <div className="form-grid">
+        <label className="field">
+          <span>Наименование</span>
+          <input value={value.name} onChange={(event) => onChange("name", event.target.value)} required />
+        </label>
+        <label className="field">
+          <span>Блок</span>
+          <select value={value.block} onChange={(event) => onChange("block", event.target.value)}>
+            <option value="1">Блок 1</option>
+            <option value="2">Блок 2</option>
+            <option value="3">Блок 3</option>
+            <option value="fac">Факультативы</option>
+          </select>
+        </label>
+        <label className="field">
+          <div className="field-label-row">
+            <span>Часть плана</span>
+            <HelpTooltip text="Определяет принадлежность элемента к обязательной или вариативной части. Для ГИА используйте обязательную часть." />
+          </div>
+          <select value={value.part} onChange={(event) => onChange("part", event.target.value)}>
+            <option value="mandatory">Обязательная часть</option>
+            <option value="variative">Вариативная часть</option>
+          </select>
+        </label>
+        <label className="field">
+          <span>З.е.</span>
+          <input type="number" min="0" step="0.5" value={value.credits} onChange={(event) => onChange("credits", event.target.value)} />
+        </label>
+        <label className="field">
+          <div className="field-label-row">
+            <span>Дополнительные часы</span>
+            <HelpTooltip text="Используются, например, для дисциплины «Физическая культура и спорт». Эти часы не переводятся в з.е. и учитываются отдельно." />
+          </div>
+          <input type="number" min="0" step="1" value={value.extra_hours} onChange={(event) => onChange("extra_hours", event.target.value)} />
+        </label>
+        <label className="field">
+          <div className="field-label-row">
+            <span>Семестры</span>
+            <HelpTooltip text="Можно указать один или несколько семестров через запятую." />
+          </div>
+          <input value={value.semesters} onChange={(event) => onChange("semesters", event.target.value)} placeholder="Например: 1, 2, 3" />
+        </label>
+        <label className="field">
+          <div className="field-label-row">
+            <span>Тип практики</span>
+            <HelpTooltip text="Обязательный атрибут для элементов блока 2. Используется в проверках учебной и производственной практики." />
+          </div>
+          <select value={value.practice_type} onChange={(event) => onChange("practice_type", event.target.value)}>
+            <option value="">Не задан</option>
+            <option value="educational">Учебная</option>
+            <option value="industrial">Производственная</option>
+          </select>
+        </label>
+      </div>
+      <div className="form-note">
+        <span>Часы по з.е. рассчитываются автоматически. Итоговая нагрузка элемента = часы по з.е. + дополнительные часы.</span>
+      </div>
+    </>
+  );
 }
 
 export default function Table2({ plan, planId, refreshToken, onRefresh, setGlobalNotice }) {
@@ -113,7 +188,7 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
         setDrafts(nextDrafts);
       } catch (loadError) {
         if (!cancelled) {
-          setError(getErrorMessage(loadError, "Не удалось загрузить структуру плана."));
+          setError(getErrorMessage(loadError, "Не удалось загрузить Таблицу 2."));
         }
       } finally {
         if (!cancelled) {
@@ -162,20 +237,29 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
     }));
   };
 
+  const updateNewElement = (field, value) => {
+    setNewElement((current) => ({ ...current, [field]: value }));
+  };
+
+  const normalizePayload = (draft) => ({
+    name: draft.name,
+    block: draft.block,
+    part: draft.part,
+    credits: Number(draft.credits),
+    extra_hours: Number(draft.extra_hours || 0),
+    semesters: parseSemesters(draft.semesters),
+    competency_ids: draft.competency_ids,
+    practice_type: draft.practice_type || null,
+    fgos_requirement: draft.fgos_requirement || null,
+  });
+
   const handleSaveElement = async (elementId) => {
     const draft = drafts[elementId];
     setSaving(true);
     try {
-      await updateTable2Element(planId, elementId, {
-        name: draft.name,
-        block: draft.block,
-        part: draft.part,
-        credits: Number(draft.credits),
-        semesters: parseSemesters(draft.semesters),
-        competency_ids: draft.competency_ids,
-      });
+      await updateTable2Element(planId, elementId, normalizePayload(draft));
       setEditingId(null);
-      onRefresh("Изменения в структуре плана сохранены.");
+      onRefresh("Изменения в Таблице 2 сохранены.");
     } catch (saveError) {
       setGlobalNotice(getErrorMessage(saveError, "Не удалось сохранить изменения."));
     } finally {
@@ -183,16 +267,18 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
     }
   };
 
-  const handleDeleteElement = async (elementId) => {
-    const currentElement = collectAllElements(data?.grouped_elements).find((element) => element.id === elementId);
-    if (!window.confirm(`Удалить элемент «${currentElement?.name || "без названия"}» из структуры плана?`)) {
+  const handleDeleteElement = async (element) => {
+    const warning = element.fgos_requirement
+      ? " Это нормативно значимый элемент, его удаление может заблокировать утверждение плана."
+      : "";
+    if (!window.confirm(`Удалить элемент «${element.name}» из Таблицы 2?${warning}`)) {
       return;
     }
 
     setSaving(true);
     try {
-      await deleteTable2Element(planId, elementId);
-      onRefresh("Элемент удален из структуры плана.");
+      await deleteTable2Element(planId, element.id);
+      onRefresh("Элемент удалён из Таблицы 2.");
     } catch (deleteError) {
       setGlobalNotice(getErrorMessage(deleteError, "Не удалось удалить элемент."));
     } finally {
@@ -205,16 +291,11 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
     setSaving(true);
     try {
       await createTable2Element(planId, {
-        name: newElement.name,
-        block: newElement.block,
-        part: newElement.part,
-        credits: Number(newElement.credits),
-        semesters: parseSemesters(newElement.semesters),
-        competency_ids: newElement.competency_ids,
+        ...normalizePayload(newElement),
         source_element_id: null,
       });
       setNewElement(defaultNewElement);
-      onRefresh("Новый элемент добавлен в структуру плана.");
+      onRefresh("Новый элемент добавлен в Таблицу 2.");
     } catch (createError) {
       setGlobalNotice(getErrorMessage(createError, "Не удалось добавить элемент."));
     } finally {
@@ -225,7 +306,7 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
   if (!plan) {
     return (
       <section className="card">
-        <h2>Структура плана</h2>
+        <h2>Таблица 2</h2>
         <p>Сначала выберите учебный план на стартовом экране.</p>
       </section>
     );
@@ -236,35 +317,36 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
       <div className="card">
         <div className="section-header">
           <div>
-            <p className="card-kicker">Структура плана</p>
-            <h2>Рабочая структура учебного плана</h2>
+            <p className="card-kicker">Таблица 2</p>
+            <h2>Структура учебного плана</h2>
           </div>
           <StatusBadge value={plan.status} />
         </div>
         <p className="status-muted">
-          Здесь редактируется итоговая структура учебного плана. Часы рассчитываются автоматически по количеству
-          зачетных единиц, а многосеместровые элементы хранятся одной строкой.
+          Здесь фиксируется итоговая структура плана. Все расчёты и нормативные проверки строятся только на данных Таблицы 2.
         </p>
-        {loading ? <p className="status-muted">Загрузка структуры плана...</p> : null}
+        {loading ? <p className="status-muted">Загрузка Таблицы 2...</p> : null}
         {error ? <p className="status-message status-error">{error}</p> : null}
       </div>
 
       {data ? (
         <div className="card totals-grid">
           <div className="metric-tile">
-            <span>Всего з.е.</span>
+            <span>Всего з.е. без факультативов</span>
             <strong>{data.aggregates.total_credits}</strong>
           </div>
           <div className="metric-tile">
-            <span>Всего часов</span>
+            <span>Часы по з.е.</span>
+            <strong>{data.aggregates.total_base_hours}</strong>
+          </div>
+          <div className="metric-tile">
+            <span>Дополнительные часы</span>
+            <strong>{data.aggregates.total_extra_hours}</strong>
+          </div>
+          <div className="metric-tile">
+            <span>Суммарная нагрузка</span>
             <strong>{data.aggregates.total_hours}</strong>
           </div>
-          {Object.entries(data.aggregates.by_block).map(([block, value]) => (
-            <div key={block} className="metric-tile">
-              <span>{blockLabels[block] || `Блок ${block}`}</span>
-              <strong>{value}</strong>
-            </div>
-          ))}
         </div>
       ) : null}
 
@@ -272,76 +354,16 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
         <div className="section-header">
           <div>
             <p className="card-kicker">Ручное добавление</p>
-            <h3>Добавить элемент</h3>
+            <h3>Добавить элемент в Таблицу 2</h3>
           </div>
         </div>
 
-        <div className="form-grid">
-          <label className="field">
-            <span>Наименование</span>
-            <input
-              value={newElement.name}
-              onChange={(event) => setNewElement((current) => ({ ...current, name: event.target.value }))}
-              required
-            />
-          </label>
-          <label className="field">
-            <span>Блок</span>
-            <select
-              value={newElement.block}
-              onChange={(event) => setNewElement((current) => ({ ...current, block: event.target.value }))}
-            >
-              <option value="1">Блок 1</option>
-              <option value="2">Блок 2</option>
-              <option value="3">Блок 3</option>
-              <option value="fac">Факультативы</option>
-            </select>
-          </label>
-          <label className="field">
-            <div className="field-label-row">
-              <span>Часть плана</span>
-              <HelpTooltip text="Определяет, относится элемент к обязательной или вариативной части плана." />
-            </div>
-            <select
-              value={newElement.part}
-              onChange={(event) => setNewElement((current) => ({ ...current, part: event.target.value }))}
-            >
-              <option value="mandatory">Обязательная часть</option>
-              <option value="variative">Вариативная часть</option>
-            </select>
-          </label>
-          <label className="field">
-            <span>З.е.</span>
-            <input
-              type="number"
-              min="0"
-              step="0.5"
-              value={newElement.credits}
-              onChange={(event) => setNewElement((current) => ({ ...current, credits: event.target.value }))}
-            />
-          </label>
-          <label className="field">
-            <div className="field-label-row">
-              <span>Семестры</span>
-              <HelpTooltip text="Укажите один или несколько семестров через запятую, например: 1, 2, 3." />
-            </div>
-            <input
-              value={newElement.semesters}
-              onChange={(event) => setNewElement((current) => ({ ...current, semesters: event.target.value }))}
-              placeholder="Например: 1, 2, 3"
-            />
-          </label>
-        </div>
-
-        <div className="form-note">
-          <span>Часы рассчитываются автоматически по количеству з.е.</span>
-          <HelpTooltip text="Поле часов не редактируется вручную и пересчитывается системой автоматически." />
-        </div>
+        <ElementFormFields value={newElement} onChange={updateNewElement} />
 
         <CompetencyMultiSelect
           groupedCompetencies={competencies}
           selectedIds={newElement.competency_ids}
-          onChange={(value) => setNewElement((current) => ({ ...current, competency_ids: value }))}
+          onChange={(value) => updateNewElement("competency_ids", value)}
         />
 
         <button className="primary-button" type="submit" disabled={saving}>
@@ -361,64 +383,7 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
             </button>
           </div>
 
-          <div className="form-grid">
-            <label className="field">
-              <span>Наименование</span>
-              <input
-                value={drafts[editingId]?.name || ""}
-                onChange={(event) => updateDraft(editingId, "name", event.target.value)}
-              />
-            </label>
-            <label className="field">
-              <span>Блок</span>
-              <select
-                value={drafts[editingId]?.block || "1"}
-                onChange={(event) => updateDraft(editingId, "block", event.target.value)}
-              >
-                <option value="1">Блок 1</option>
-                <option value="2">Блок 2</option>
-                <option value="3">Блок 3</option>
-                <option value="fac">Факультативы</option>
-              </select>
-            </label>
-            <label className="field">
-              <div className="field-label-row">
-                <span>Часть плана</span>
-                <HelpTooltip text="Определяет, относится элемент к обязательной или вариативной части плана." />
-              </div>
-              <select
-                value={drafts[editingId]?.part || "mandatory"}
-                onChange={(event) => updateDraft(editingId, "part", event.target.value)}
-              >
-                <option value="mandatory">Обязательная часть</option>
-                <option value="variative">Вариативная часть</option>
-              </select>
-            </label>
-            <label className="field">
-              <span>З.е.</span>
-              <input
-                type="number"
-                step="0.5"
-                value={drafts[editingId]?.credits || ""}
-                onChange={(event) => updateDraft(editingId, "credits", event.target.value)}
-              />
-            </label>
-            <label className="field">
-              <div className="field-label-row">
-                <span>Семестры</span>
-                <HelpTooltip text="Укажите один или несколько семестров через запятую, например: 1, 2, 3." />
-              </div>
-              <input
-                value={drafts[editingId]?.semesters || ""}
-                onChange={(event) => updateDraft(editingId, "semesters", event.target.value)}
-              />
-            </label>
-          </div>
-
-          <div className="form-note">
-            <span>Часы пересчитываются автоматически после сохранения изменений.</span>
-            <HelpTooltip text="Поле часов вычисляется системой, поэтому отдельно не редактируется." />
-          </div>
+          <ElementFormFields value={drafts[editingId]} onChange={(field, value) => updateDraft(editingId, field, value)} />
 
           <CompetencyMultiSelect
             groupedCompetencies={competencies}
@@ -434,8 +399,8 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
 
       {!loading && !error && data && collectAllElements(data.grouped_elements).length === 0 ? (
         <EmptyState
-          title="Структура плана пока пуста"
-          description="Перенесите рекомендации с предыдущего экрана или добавьте элементы вручную."
+          title="Таблица 2 пока пуста"
+          description="Перенесите элементы из Таблицы 1 или добавьте их вручную."
         />
       ) : null}
 
@@ -452,7 +417,7 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
               {Object.entries(parts).map(([part, elements]) => (
                 <div key={part} className="part-section">
                   <h4>{partLabels[part] || part}</h4>
-                  {elements.length === 0 ? (
+                  {!elements.length ? (
                     <p className="status-muted">В этой части пока нет элементов.</p>
                   ) : (
                     <div className="table-scroll">
@@ -463,6 +428,8 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
                             <th>Семестры</th>
                             <th>З.е.</th>
                             <th>Часы</th>
+                            <th>Доп. часы</th>
+                            <th>Итого часов</th>
                             <th>Компетенции</th>
                             <th>Действия</th>
                           </tr>
@@ -473,14 +440,17 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
                               <td>
                                 <strong>{element.name}</strong>
                                 <div className="table-secondary">
-                                  {(blockLabels[element.block] || `Блок ${element.block}`) +
-                                    " · " +
-                                    (partLabels[element.part] || element.part)}
+                                  {(element.practice_type && practiceTypeLabels[element.practice_type]
+                                    ? `${practiceTypeLabels[element.practice_type]} практика · `
+                                    : "") +
+                                    (element.fgos_requirement ? "Нормативный элемент ФГОС" : "Пользовательский/рекомендованный элемент")}
                                 </div>
                               </td>
                               <td>{formatSemesters(element.semesters)}</td>
                               <td>{element.credits}</td>
                               <td>{element.hours}</td>
+                              <td>{element.extra_hours || 0}</td>
+                              <td>{element.total_hours}</td>
                               <td>
                                 <div className="selected-tags">
                                   {element.competency_ids
@@ -504,7 +474,7 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
                                   <button
                                     className="small-button danger"
                                     type="button"
-                                    onClick={() => handleDeleteElement(element.id)}
+                                    onClick={() => handleDeleteElement(element)}
                                     disabled={saving}
                                   >
                                     Удалить

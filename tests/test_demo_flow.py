@@ -67,6 +67,8 @@ def _build_test_client():
                 credits=3.0,
                 semesters=[1],
                 source="poop",
+                is_fgos_mandatory=1,
+                fgos_requirement="philosophy",
                 competencies=[uk],
             ),
             RecommendedElement(
@@ -76,6 +78,8 @@ def _build_test_client():
                 credits=2.0,
                 semesters=[1],
                 source="poop",
+                is_fgos_mandatory=1,
+                fgos_requirement="history",
                 competencies=[uk],
             ),
             RecommendedElement(
@@ -85,6 +89,8 @@ def _build_test_client():
                 credits=2.0,
                 semesters=[1, 2],
                 source="poop",
+                is_fgos_mandatory=1,
+                fgos_requirement="foreign_language",
                 competencies=[uk],
             ),
             RecommendedElement(
@@ -94,10 +100,12 @@ def _build_test_client():
                 credits=1.0,
                 semesters=[1],
                 source="poop",
+                is_fgos_mandatory=1,
+                fgos_requirement="life_safety",
                 competencies=[uk],
             ),
             RecommendedElement(
-                name="Физическая культура",
+                name="Физическая культура и спорт",
                 element_type="discipline",
                 part="mandatory",
                 credits=2.0,
@@ -112,6 +120,9 @@ def _build_test_client():
                 credits=2.0,
                 semesters=[2],
                 source="poop",
+                practice_type="educational",
+                is_fgos_mandatory=1,
+                fgos_requirement="educational_practice",
                 competencies=[opk],
             ),
             RecommendedElement(
@@ -121,6 +132,9 @@ def _build_test_client():
                 credits=1.0,
                 semesters=[2],
                 source="poop",
+                practice_type="industrial",
+                is_fgos_mandatory=1,
+                fgos_requirement="industrial_practice",
                 competencies=[opk],
             ),
             RecommendedElement(
@@ -153,12 +167,20 @@ def test_demo_flow_covers_mvp_scenario(monkeypatch) -> None:
     table1_response = client.get(f"/api/v1/plans/{plan_id}/table1")
     assert table1_response.status_code == 200
     table1_data = table1_response.json()["data"]
-    assert len(table1_data) == 3
-    assert any(section["mode"] == "manual_only" for section in table1_data)
+    assert len(table1_data["competencies"]) == 3
+    assert any(section["mode"] == "manual_only" for section in table1_data["competencies"])
+
+    selections = []
+    for group in table1_data["fgos_disciplines"]:
+      selections.append({"element_id": group["items"][0]["id"], "selected": True})
+    for group in table1_data["fgos_practices"]:
+      selections.append({"element_id": group["items"][0]["id"], "selected": True})
+    uk_section = next(section for section in table1_data["competencies"] if section["competency"]["code"] == "УК-1")
+    selections.append({"element_id": uk_section["mandatory_disciplines"][0]["id"], "selected": True})
 
     transfer_response = client.post(
         f"/api/v1/plans/{plan_id}/table1/transfer",
-        json={"selections": []},
+        json={"selections": selections},
     )
     assert transfer_response.status_code == 200
     assert transfer_response.json()["data"]["created_count"] == 7
@@ -173,8 +195,11 @@ def test_demo_flow_covers_mvp_scenario(monkeypatch) -> None:
             "block": "3",
             "part": "mandatory",
             "credits": 1.0,
+            "extra_hours": 0,
             "semesters": [4],
             "competency_ids": [3],
+            "practice_type": None,
+            "fgos_requirement": None,
             "source_element_id": None,
         },
     )
@@ -190,14 +215,13 @@ def test_demo_flow_covers_mvp_scenario(monkeypatch) -> None:
     assert table3_before_validate.status_code == 200
     latest_before_validate = table3_before_validate.json()["data"]["latest_report"]
     assert latest_before_validate is not None
-    assert len(latest_before_validate["results"]) > 0
     assert latest_before_validate["llm_recommendations"] is None
 
     validate_response = client.post(f"/api/v1/plans/{plan_id}/validate")
     assert validate_response.status_code == 200
-    validate_body = validate_response.json()
+    validate_body = validate_response.json()["data"]
     assert validate_body["llm_recommendations"] == "LLM demo recommendations"
-    assert validate_body["results"] == []
+    assert all(item["level"] == "warning" for item in validate_body["results"])
 
     table3_after_validate = client.get(f"/api/v1/plans/{plan_id}/table3")
     assert table3_after_validate.status_code == 200

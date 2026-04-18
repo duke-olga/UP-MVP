@@ -41,8 +41,12 @@ class RecommendedElement(Base):
     element_type: Mapped[str] = mapped_column(String(20), nullable=False)
     part: Mapped[str] = mapped_column(String(20), nullable=False)
     credits: Mapped[float | None] = mapped_column(Float, nullable=True)
+    extra_hours: Mapped[float] = mapped_column(Float, default=0.0, nullable=False)
     semesters: Mapped[list[int]] = mapped_column(JSON, default=list, nullable=False)
     source: Mapped[str] = mapped_column(String(50), nullable=False)
+    practice_type: Mapped[str | None] = mapped_column(String(30), nullable=True)
+    is_fgos_mandatory: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    fgos_requirement: Mapped[str | None] = mapped_column(String(100), nullable=True)
     competencies: Mapped[list["Competency"]] = relationship(
         secondary=recommended_element_competencies,
         back_populates="recommended_elements",
@@ -83,14 +87,21 @@ class PlanElement(Base):
     part: Mapped[str] = mapped_column(String(20), nullable=False)
     credits: Mapped[float] = mapped_column(Float, nullable=False)
     hours: Mapped[float] = mapped_column(Float, nullable=False)
+    extra_hours: Mapped[float] = mapped_column(Float, default=0.0, nullable=False)
     semesters: Mapped[list[int]] = mapped_column(JSON, default=list, nullable=False)
     competency_ids: Mapped[list[int]] = mapped_column(JSON, default=list, nullable=False)
+    practice_type: Mapped[str | None] = mapped_column(String(30), nullable=True)
+    fgos_requirement: Mapped[str | None] = mapped_column(String(100), nullable=True)
     source_element_id: Mapped[int | None] = mapped_column(
         ForeignKey("recommended_elements.id"),
         nullable=True,
     )
 
     plan: Mapped["CurriculumPlan"] = relationship(back_populates="elements")
+
+    @property
+    def total_hours(self) -> float:
+        return float(self.hours or 0) + float(self.extra_hours or 0)
 
 
 class NormativeParam(Base):

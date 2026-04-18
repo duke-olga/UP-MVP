@@ -7,6 +7,10 @@ class HealthResponse(BaseModel):
     status: str
 
 
+class HealthResponseWrapper(BaseModel):
+    data: HealthResponse
+
+
 class CompetencyBase(BaseModel):
     code: str
     type: str
@@ -25,8 +29,12 @@ class RecommendedElementBase(BaseModel):
     element_type: str
     part: str
     credits: float | None = None
+    extra_hours: float = 0
     semesters: list[int] = []
     source: str
+    practice_type: str | None = None
+    is_fgos_mandatory: bool = False
+    fgos_requirement: str | None = None
     competency_codes: list[str] = []
 
 
@@ -42,9 +50,12 @@ class Table1RecommendedElement(BaseModel):
     element_type: str
     part: str
     credits: float | None = None
+    extra_hours: float = 0
     semesters: list[int]
     source: str
     source_label: str
+    practice_type: str | None = None
+    fgos_requirement: str | None = None
     competency_codes: list[str]
     selected: bool = False
 
@@ -84,8 +95,11 @@ class PlanElementBase(BaseModel):
     block: str
     part: str
     credits: float
+    extra_hours: float = 0
     semesters: list[int] = []
     competency_ids: list[int]
+    practice_type: str | None = None
+    fgos_requirement: str | None = None
     source_element_id: int | None = None
 
 
@@ -98,8 +112,11 @@ class PlanElementUpdate(BaseModel):
     block: str | None = None
     part: str | None = None
     credits: float | None = None
+    extra_hours: float | None = None
     semesters: list[int] | None = None
     competency_ids: list[int] | None = None
+    practice_type: str | None = None
+    fgos_requirement: str | None = None
     source_element_id: int | None = None
 
 
@@ -107,6 +124,7 @@ class PlanElementRead(PlanElementBase):
     id: int
     plan_id: int
     hours: float
+    total_hours: float
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -135,6 +153,10 @@ class CheckReportRead(BaseModel):
     llm_recommendations: str | None = None
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class CheckReportResponse(BaseModel):
+    data: CheckReportRead
 
 
 class ValidationSummary(BaseModel):
@@ -185,8 +207,31 @@ class Table1CompetencySection(BaseModel):
     mandatory_practices: list[Table1RecommendedElement]
 
 
+class Table1FgosGroup(BaseModel):
+    requirement: str
+    title: str
+    selection_mode: str
+    selected_count: int
+    is_complete: bool
+    items: list[Table1RecommendedElement]
+
+
+class Table1SelectionSummary(BaseModel):
+    required_disciplines_complete: bool
+    required_practices_complete: bool
+    missing_discipline_requirements: list[str]
+    missing_practice_requirements: list[str]
+
+
+class Table1Data(BaseModel):
+    competencies: list[Table1CompetencySection]
+    fgos_disciplines: list[Table1FgosGroup]
+    fgos_practices: list[Table1FgosGroup]
+    selection_summary: Table1SelectionSummary
+
+
 class Table1Response(BaseModel):
-    data: list[Table1CompetencySection]
+    data: Table1Data
 
 
 class Table1TransferItem(BaseModel):

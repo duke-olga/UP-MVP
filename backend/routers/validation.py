@@ -4,14 +4,14 @@ from sqlalchemy.orm import Session
 from backend.database import get_db
 from backend.modules.llm_explainer.service import generate_recommendations
 from backend.modules.validation.engine import run_checks
-from backend.schemas import CheckReportRead
+from backend.schemas import CheckReportRead, CheckReportResponse
 
 
 router = APIRouter(prefix="/api/v1/plans", tags=["validation"])
 
 
-@router.post("/{plan_id}/validate", response_model=CheckReportRead)
-def validate_plan(plan_id: int, db: Session = Depends(get_db)) -> CheckReportRead:
+@router.post("/{plan_id}/validate", response_model=CheckReportResponse)
+def validate_plan(plan_id: int, db: Session = Depends(get_db)) -> CheckReportResponse:
     try:
         report = run_checks(plan_id, db)
     except ValueError as exc:
@@ -21,4 +21,4 @@ def validate_plan(plan_id: int, db: Session = Depends(get_db)) -> CheckReportRea
     db.add(report)
     db.commit()
     db.refresh(report)
-    return CheckReportRead.model_validate(report)
+    return CheckReportResponse(data=CheckReportRead.model_validate(report))

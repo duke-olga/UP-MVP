@@ -89,7 +89,7 @@ export const validatePlan = async (planId) => {
   const { data } = await api.post(`/plans/${planId}/validate`, null, {
     timeout: 180000,
   });
-  return data;
+  return data.data;
 };
 
 export const updatePlanStatus = async (planId, status) => {

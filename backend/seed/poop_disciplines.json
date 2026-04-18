@@ -1,12 +1,101 @@
 [
   {
+    "name": "Философия",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [4],
+    "source": "poop",
+    "is_fgos_mandatory": true,
+    "fgos_requirement": "philosophy",
+    "competency_codes": ["УК-5"]
+  },
+  {
+    "name": "Философия и методология науки",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [4],
+    "source": "best_practice",
+    "is_fgos_mandatory": true,
+    "fgos_requirement": "philosophy",
+    "competency_codes": ["УК-5"]
+  },
+  {
+    "name": "История России",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 4.0,
+    "semesters": [1],
+    "source": "poop",
+    "is_fgos_mandatory": true,
+    "fgos_requirement": "history",
+    "competency_codes": ["УК-5"]
+  },
+  {
+    "name": "Всеобщая история и история России",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 4.0,
+    "semesters": [1],
+    "source": "best_practice",
+    "is_fgos_mandatory": true,
+    "fgos_requirement": "history",
+    "competency_codes": ["УК-5"]
+  },
+  {
     "name": "Иностранный язык",
     "element_type": "discipline",
     "part": "mandatory",
     "credits": 12.0,
-    "semesters": [1, 2, 3, 4, 5, 6],
+    "semesters": [1, 2, 3, 4],
     "source": "poop",
-    "competency_codes": ["УК-3", "УК-4"]
+    "is_fgos_mandatory": true,
+    "fgos_requirement": "foreign_language",
+    "competency_codes": ["УК-4"]
+  },
+  {
+    "name": "Профессиональный иностранный язык",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 10.0,
+    "semesters": [1, 2, 3, 4],
+    "source": "best_practice",
+    "is_fgos_mandatory": true,
+    "fgos_requirement": "foreign_language",
+    "competency_codes": ["УК-4"]
+  },
+  {
+    "name": "Безопасность жизнедеятельности",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [6],
+    "source": "poop",
+    "is_fgos_mandatory": true,
+    "fgos_requirement": "life_safety",
+    "competency_codes": ["УК-8"]
+  },
+  {
+    "name": "Безопасность жизнедеятельности и основы военной подготовки",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [6],
+    "source": "local_requirement",
+    "is_fgos_mandatory": true,
+    "fgos_requirement": "life_safety",
+    "competency_codes": ["УК-8"]
+  },
+  {
+    "name": "Физическая культура и спорт",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 2.0,
+    "extra_hours": 256.0,
+    "semesters": [1, 2, 3, 4, 5, 6],
+    "source": "local_requirement",
+    "competency_codes": ["УК-7"]
   },
   {
     "name": "Программирование",
@@ -15,7 +104,7 @@
     "credits": 18.0,
     "semesters": [1, 2, 3],
     "source": "poop",
-    "competency_codes": ["ОПК-2", "ОПК-5", "ОПК-6", "ПК-7"]
+    "competency_codes": ["ОПК-2", "ОПК-5", "ОПК-6"]
   },
   {
     "name": "Математический анализ",
@@ -36,93 +125,88 @@
     "competency_codes": ["ОПК-1"]
   },
   {
-    "name": "История",
+    "name": "Теория систем и системный анализ",
     "element_type": "discipline",
+    "part": "variative",
+    "credits": 4.0,
+    "semesters": [5],
+    "source": "best_practice",
+    "competency_codes": ["УК-1", "ОПК-7"]
+  },
+  {
+    "name": "Проектная деятельность",
+    "element_type": "discipline",
+    "part": "variative",
+    "credits": 3.0,
+    "semesters": [3],
+    "source": "poop",
+    "competency_codes": ["УК-2", "УК-3"]
+  },
+  {
+    "name": "Управление ИТ-проектами",
+    "element_type": "discipline",
+    "part": "variative",
+    "credits": 4.0,
+    "semesters": [6],
+    "source": "best_practice",
+    "competency_codes": ["УК-2", "ОПК-4"]
+  },
+  {
+    "name": "Ознакомительная практика",
+    "element_type": "practice",
     "part": "mandatory",
     "credits": 3.0,
     "semesters": [2],
     "source": "poop",
-    "competency_codes": ["УК-5"]
+    "practice_type": "educational",
+    "is_fgos_mandatory": true,
+    "fgos_requirement": "educational_practice",
+    "competency_codes": ["ОПК-1", "ОПК-3"]
   },
   {
-    "name": "Философия",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [4],
-    "source": "poop",
-    "competency_codes": ["УК-5"]
-  },
-  {
-    "name": "Экономика",
-    "element_type": "discipline",
+    "name": "Учебная практика по получению первичных профессиональных умений",
+    "element_type": "practice",
     "part": "mandatory",
     "credits": 4.0,
-    "semesters": [6, 7],
-    "source": "poop",
-    "competency_codes": ["ПК-1"]
-  },
-  {
-    "name": "научно-исследовательская работа",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [7],
-    "source": "poop",
-    "competency_codes": ["УК-1", "ОПК-1"]
-  },
-  {
-    "name": "научно-исследовательская работа (получение первичных навыков научно-исследовательской работы)",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [4],
-    "source": "poop",
-    "competency_codes": ["ОПК-1"]
-  },
-  {
-    "name": "ознакомительная практика",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 2.0,
     "semesters": [2],
-    "source": "poop",
-    "competency_codes": ["ПК-10"]
+    "source": "best_practice",
+    "practice_type": "educational",
+    "is_fgos_mandatory": true,
+    "fgos_requirement": "educational_practice",
+    "competency_codes": ["ОПК-1", "ОПК-3"]
   },
   {
-    "name": "технологическая (проектно-технологическая) практика",
+    "name": "Технологическая практика",
     "element_type": "practice",
     "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [4],
-    "source": "poop",
-    "competency_codes": ["ПК-11"]
-  },
-  {
-    "name": "технологическая (проектно-технологическая) практика",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [5],
-    "source": "poop",
-    "competency_codes": ["ПК-11"]
-  },
-  {
-    "name": "эксплуатационная практика",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 3.0,
+    "credits": 6.0,
     "semesters": [6],
     "source": "poop",
-    "competency_codes": ["ПК-12"]
+    "practice_type": "industrial",
+    "is_fgos_mandatory": true,
+    "fgos_requirement": "industrial_practice",
+    "competency_codes": ["ОПК-2", "ОПК-8"]
   },
   {
-    "name": "эксплуатационная практика",
+    "name": "Научно-исследовательская работа",
     "element_type": "practice",
     "part": "mandatory",
-    "credits": 2.0,
+    "credits": 6.0,
     "semesters": [7],
-    "source": "poop",
-    "competency_codes": ["ПК-12"]
+    "source": "best_practice",
+    "practice_type": "industrial",
+    "is_fgos_mandatory": true,
+    "fgos_requirement": "industrial_practice",
+    "competency_codes": ["УК-1", "ОПК-8"]
+  },
+  {
+    "name": "Производственная практика",
+    "element_type": "practice",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [4],
+    "source": "local_requirement",
+    "practice_type": "industrial",
+    "competency_codes": ["ОПК-2", "ОПК-8"]
   }
 ]
