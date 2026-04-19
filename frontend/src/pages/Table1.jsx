@@ -22,7 +22,12 @@ function RecommendationCard({
 }) {
   return (
     <label className={`recommendation ${inputType === "checkbox" ? "checkbox" : "radio"}`}>
-      <input type={inputType} name={name} checked={checked} onChange={(event) => onChange(item.id, event.target.checked)} />
+      <input
+        type={inputType}
+        name={name}
+        checked={checked}
+        onChange={(event) => onChange(item.id, event.target.checked)}
+      />
       <div>
         <strong>{item.name}</strong>
         <span>
@@ -30,8 +35,13 @@ function RecommendationCard({
           {item.extra_hours ? ` · доп. часы: ${item.extra_hours}` : ""}
         </span>
         <div className="recommendation-meta">
-          <SourceBadge source={item.source_label || item.source} />
-          {item.practice_type ? <small>{item.practice_type === "educational" ? "Учебная практика" : "Производственная практика"}</small> : null}
+          <SourceBadge source={item.source_title || item.source_label || item.source} />
+          {item.source_label && item.source_title && item.source_label !== item.source_title ? (
+            <small>{item.source_label}</small>
+          ) : null}
+          {item.practice_type ? (
+            <small>{item.practice_type === "educational" ? "Учебная практика" : "Производственная практика"}</small>
+          ) : null}
         </div>
         {item.competency_codes?.length ? <small>{item.competency_codes.join(", ")}</small> : null}
       </div>
@@ -59,7 +69,9 @@ function GroupSelection({ title, groups, selections, onSingleSelect, onToggle, h
             <StatusBadge value={group.is_complete ? "checked" : "warning"} />
           </div>
           {!group.items.length ? (
-            <p className="status-muted">Варианты не найдены. Элемент можно будет добавить вручную в Таблице 2.</p>
+            <p className="status-muted">
+              Варианты не найдены. Элемент можно будет добавить вручную в Таблице 2.
+            </p>
           ) : (
             <div className="recommendation-list">
               {group.items.map((item) => (
@@ -69,11 +81,11 @@ function GroupSelection({ title, groups, selections, onSingleSelect, onToggle, h
                   checked={Boolean(selections[item.id])}
                   inputType={group.selection_mode === "single" ? "radio" : "checkbox"}
                   name={group.requirement}
-                  onChange={(itemId, checked) => {
+                  onChange={(itemId, nextChecked) => {
                     if (group.selection_mode === "single") {
-                      onSingleSelect(group, itemId, checked);
+                      onSingleSelect(group, itemId, nextChecked);
                     } else {
-                      onToggle(itemId, checked);
+                      onToggle(itemId, nextChecked);
                     }
                   }}
                 />
@@ -262,6 +274,7 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
           <div>
             <p className="card-kicker">Таблица 1</p>
             <h2>Рекомендации и обязательные элементы ФГОС</h2>
+            <p className="status-muted">Направление: {plan.program_code}</p>
           </div>
           <button className="primary-button" type="button" onClick={handleTransfer} disabled={transferring}>
             {transferring ? "Перенос..." : "Перенести выбранное в Таблицу 2"}

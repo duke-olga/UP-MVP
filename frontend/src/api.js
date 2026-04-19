@@ -35,8 +35,13 @@ export const listPlans = async () => {
   return data.data;
 };
 
-export const createPlan = async (name) => {
-  const { data } = await api.post("/plans", { name });
+export const listPrograms = async () => {
+  const { data } = await api.get("/programs");
+  return data.data;
+};
+
+export const createPlan = async (name, programCode) => {
+  const { data } = await api.post("/plans", { name, program_code: programCode });
   return data.data;
 };
 

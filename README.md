@@ -161,16 +161,15 @@ python -m pytest tests -q
 - PDF лучших практик хранятся в `backend/seed/best_practices_pdf/`.
 - Нормализованный JSON сохраняется в `backend/seed/poop_disciplines.json`.
 - Отчет качества импорта сохраняется в `backend/seed/poop_import_report.json`.
-- Импорт использует универсальный pipeline с тремя extractor-слоями: сначала `PyMuPDF`, затем `Docling`, затем `pypdf` как текстовый fallback. Поверх extractor-ов строятся candidate rows, детерминированная нормализация, quality gates и при необходимости fallback через локальную LLM в Ollama.
+- Import manifest сохраняется в `backend/seed/poop_import_manifest.json`.
+- Для файлов с `needs_review=true` сохраняется отдельный review-dump в `backend/seed/poop_review_dump/`.
+- Импорт использует универсальный детерминированный pipeline с тремя extractor-слоями: сначала `PyMuPDF`, затем `Docling`, затем `pypdf` как текстовый fallback.
 - На плохих или агрегированных строках импорт не падает: пишет предупреждение в лог и идет дальше.
-- Доступны три режима:
-  - `deterministic` — только правила и парсинг таблиц;
-  - `hybrid` — сначала правила, потом fallback через локальную LLM в Ollama;
-  - `llm` — только LLM-извлечение по релевантным табличным блокам.
+- Доступен один режим:
+  - `deterministic` — только правила и парсинг таблиц.
 - Для лучших практик `source_type` записывается как `best_practices`.
 - Для ПООП `source_type` записывается как `poop`.
 - В report-файле для каждого PDF сохраняются `extractor_used`, `candidate_row_count`, `record_count`, `quality_score`, `needs_review` и примеры candidate rows.
-- `hybrid` теперь включает LLM не только при `0` записей, но и при слабом качестве детерминированного результата.
 
 Запуск:
 
@@ -181,17 +180,13 @@ python scripts/import_poop_pdf.py
 Или с явными путями:
 
 ```bash
-python -m backend.modules.seed_ingest.poop_pdf_importer --poop-dir backend/seed/poop_pdf --best-practices-dir backend/seed/best_practices_pdf --output backend/seed/poop_disciplines.json --report backend/seed/poop_import_report.json
+python -m backend.modules.seed_ingest.poop_pdf_importer --poop-dir backend/seed/poop_pdf --best-practices-dir backend/seed/best_practices_pdf --output backend/seed/poop_disciplines.json --report backend/seed/poop_import_report.json --manifest backend/seed/poop_import_manifest.json --review-dir backend/seed/poop_review_dump
 ```
 
-Рекомендуемый AI-assisted режим:
+Рекомендуемый режим запуска:
 
 ```bash
-python scripts/import_poop_pdf.py --strategy hybrid
+python scripts/import_poop_pdf.py --strategy deterministic
 ```
 
-Для `hybrid` и `llm` должен быть локально запущен Ollama. Если Ollama недоступен, `hybrid` не падает и оставляет только детерминированный результат.
-
-Практически для разнородных ПООП и учебных планов других вузов лучше использовать `hybrid`.
-Для локального Ollama под эту задачу разумно начинать с моделей класса `qwen2.5:7b-instruct` или сильнее, если хватает памяти.
 Для fallback через `Docling` и `pypdf` библиотеки должны быть установлены локально из `requirements.txt`. Если один из extractor-ов недоступен, pipeline не падает и идет дальше по остальным слоям.

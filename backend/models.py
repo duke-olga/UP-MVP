@@ -37,6 +37,7 @@ class RecommendedElement(Base):
     __tablename__ = "recommended_elements"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    program_code: Mapped[str | None] = mapped_column(String(20), index=True, nullable=True)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     element_type: Mapped[str] = mapped_column(String(20), nullable=False)
     part: Mapped[str] = mapped_column(String(20), nullable=False)
@@ -44,6 +45,7 @@ class RecommendedElement(Base):
     extra_hours: Mapped[float] = mapped_column(Float, default=0.0, nullable=False)
     semesters: Mapped[list[int]] = mapped_column(JSON, default=list, nullable=False)
     source: Mapped[str] = mapped_column(String(50), nullable=False)
+    source_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
     practice_type: Mapped[str | None] = mapped_column(String(30), nullable=True)
     is_fgos_mandatory: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     fgos_requirement: Mapped[str | None] = mapped_column(String(100), nullable=True)
@@ -58,6 +60,7 @@ class CurriculumPlan(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
+    program_code: Mapped[str] = mapped_column(String(20), index=True, nullable=False)
     status: Mapped[str] = mapped_column(String(20), default="draft", nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now, nullable=False)
     updated_at: Mapped[datetime] = mapped_column(

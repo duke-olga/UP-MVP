@@ -61,89 +61,105 @@ def _build_test_client():
 
         recommendations = [
             RecommendedElement(
+                program_code="090304",
                 name="Философия",
                 element_type="discipline",
                 part="mandatory",
                 credits=3.0,
                 semesters=[1],
                 source="poop",
+                source_name="090304_POOP_B.pdf",
                 is_fgos_mandatory=1,
                 fgos_requirement="philosophy",
                 competencies=[uk],
             ),
             RecommendedElement(
+                program_code="090304",
                 name="История",
                 element_type="discipline",
                 part="mandatory",
                 credits=2.0,
                 semesters=[1],
                 source="poop",
+                source_name="090304_POOP_B.pdf",
                 is_fgos_mandatory=1,
                 fgos_requirement="history",
                 competencies=[uk],
             ),
             RecommendedElement(
+                program_code="090304",
                 name="Иностранный язык",
                 element_type="discipline",
                 part="mandatory",
                 credits=2.0,
                 semesters=[1, 2],
                 source="poop",
+                source_name="090304_POOP_B.pdf",
                 is_fgos_mandatory=1,
                 fgos_requirement="foreign_language",
                 competencies=[uk],
             ),
             RecommendedElement(
+                program_code="090304",
                 name="Безопасность жизнедеятельности",
                 element_type="discipline",
                 part="mandatory",
                 credits=1.0,
                 semesters=[1],
                 source="poop",
+                source_name="090304_POOP_B.pdf",
                 is_fgos_mandatory=1,
                 fgos_requirement="life_safety",
                 competencies=[uk],
             ),
             RecommendedElement(
+                program_code="090304",
                 name="Физическая культура и спорт",
                 element_type="discipline",
                 part="mandatory",
                 credits=2.0,
                 semesters=[2],
                 source="poop",
+                source_name="090304_POOP_B.pdf",
                 competencies=[uk],
             ),
             RecommendedElement(
+                program_code="090304",
                 name="Учебная практика",
                 element_type="practice",
                 part="mandatory",
                 credits=2.0,
                 semesters=[2],
                 source="poop",
+                source_name="090304_POOP_B.pdf",
                 practice_type="educational",
                 is_fgos_mandatory=1,
                 fgos_requirement="educational_practice",
                 competencies=[opk],
             ),
             RecommendedElement(
+                program_code="090304",
                 name="Производственная практика",
                 element_type="practice",
                 part="mandatory",
                 credits=1.0,
                 semesters=[2],
                 source="poop",
+                source_name="090304_POOP_B.pdf",
                 practice_type="industrial",
                 is_fgos_mandatory=1,
                 fgos_requirement="industrial_practice",
                 competencies=[opk],
             ),
             RecommendedElement(
+                program_code="090304",
                 name="Правоведение",
                 element_type="discipline",
                 part="variative",
                 credits=2.0,
                 semesters=[3],
                 source="poop",
+                source_name="090304_POOP_B.pdf",
                 competencies=[uk],
             ),
         ]
@@ -160,7 +176,7 @@ def test_demo_flow_covers_mvp_scenario(monkeypatch) -> None:
 
     monkeypatch.setattr(validation, "generate_recommendations", lambda report: "LLM demo recommendations")
 
-    create_plan_response = client.post("/api/v1/plans", json={"name": "Demo plan"})
+    create_plan_response = client.post("/api/v1/plans", json={"name": "Demo plan", "program_code": "090304"})
     assert create_plan_response.status_code == 200
     plan_id = create_plan_response.json()["data"]["id"]
 
@@ -172,9 +188,9 @@ def test_demo_flow_covers_mvp_scenario(monkeypatch) -> None:
 
     selections = []
     for group in table1_data["fgos_disciplines"]:
-      selections.append({"element_id": group["items"][0]["id"], "selected": True})
+        selections.append({"element_id": group["items"][0]["id"], "selected": True})
     for group in table1_data["fgos_practices"]:
-      selections.append({"element_id": group["items"][0]["id"], "selected": True})
+        selections.append({"element_id": group["items"][0]["id"], "selected": True})
     uk_section = next(section for section in table1_data["competencies"] if section["competency"]["code"] == "УК-1")
     selections.append({"element_id": uk_section["mandatory_disciplines"][0]["id"], "selected": True})
 

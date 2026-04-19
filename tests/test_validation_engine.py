@@ -48,7 +48,7 @@ def test_run_checks_returns_expected_violations_for_invalid_plan() -> None:
         _add_normative_params(db)
         competencies = _add_competencies(db)
 
-        plan = CurriculumPlan(name="Invalid plan", status="draft")
+        plan = CurriculumPlan(name="Invalid plan", program_code="090304", status="draft")
         db.add(plan)
         db.flush()
 
@@ -98,7 +98,7 @@ def test_run_checks_detects_invalid_hours_ratio() -> None:
         _add_normative_params(db)
         competencies = _add_competencies(db)
 
-        plan = CurriculumPlan(name="Hours mismatch", status="draft")
+        plan = CurriculumPlan(name="Hours mismatch", program_code="090304", status="draft")
         db.add(plan)
         db.flush()
 
@@ -136,7 +136,7 @@ def test_run_checks_adds_semester_warning_for_overloaded_semester() -> None:
         _add_normative_params(db)
         competencies = _add_competencies(db)
 
-        plan = CurriculumPlan(name="Semester overload", status="draft")
+        plan = CurriculumPlan(name="Semester overload", program_code="090304", status="draft")
         db.add(plan)
         db.flush()
 

@@ -60,7 +60,7 @@ def _build_test_client():
 def test_export_xlsx_returns_downloadable_workbook() -> None:
     client = _build_test_client()
 
-    create_plan_response = client.post("/api/v1/plans", json={"name": "Plan for export"})
+    create_plan_response = client.post("/api/v1/plans", json={"name": "Plan for export", "program_code": "090304"})
     plan_id = create_plan_response.json()["data"]["id"]
 
     client.post(

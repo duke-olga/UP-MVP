@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import { createPlan, deletePlan, getErrorMessage, listPlans } from "./api";
+import { createPlan, deletePlan, getErrorMessage, listPlans, listPrograms } from "./api";
 import EmptyState from "./components/EmptyState";
 import StatusBadge from "./components/StatusBadge";
 import Table1 from "./pages/Table1";
@@ -22,16 +22,55 @@ const labels = {
 export default function App() {
   const [activePage, setActivePage] = useState("table1");
   const [plans, setPlans] = useState([]);
+  const [programs, setPrograms] = useState([]);
   const [selectedPlanId, setSelectedPlanId] = useState(null);
   const [newPlanName, setNewPlanName] = useState("");
+  const [newProgramCode, setNewProgramCode] = useState("");
   const [plansLoading, setPlansLoading] = useState(true);
+  const [programsLoading, setProgramsLoading] = useState(true);
   const [plansError, setPlansError] = useState("");
+  const [programsError, setProgramsError] = useState("");
   const [refreshToken, setRefreshToken] = useState(0);
   const [globalNotice, setGlobalNotice] = useState("");
   const [creatingPlan, setCreatingPlan] = useState(false);
   const [deletingPlanId, setDeletingPlanId] = useState(null);
 
-  const selectedPlan = plans.find((plan) => plan.id === selectedPlanId) || null;
+  const selectedPlan = useMemo(
+    () => plans.find((plan) => plan.id === selectedPlanId) || null,
+    [plans, selectedPlanId],
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadPrograms = async () => {
+      setProgramsLoading(true);
+      setProgramsError("");
+      try {
+        const data = await listPrograms();
+        if (cancelled) {
+          return;
+        }
+        setPrograms(data);
+        if (!newProgramCode && data.length > 0) {
+          setNewProgramCode(data[0].code);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setProgramsError(getErrorMessage(error, "Не удалось загрузить список направлений."));
+        }
+      } finally {
+        if (!cancelled) {
+          setProgramsLoading(false);
+        }
+      }
+    };
+
+    loadPrograms();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -72,13 +111,17 @@ export default function App() {
       setGlobalNotice("Укажите название учебного плана.");
       return;
     }
+    if (!newProgramCode) {
+      setGlobalNotice("Сначала выберите направление подготовки.");
+      return;
+    }
 
     setCreatingPlan(true);
     try {
-      const createdPlan = await createPlan(trimmedName);
+      const createdPlan = await createPlan(trimmedName, newProgramCode);
       setNewPlanName("");
       setSelectedPlanId(createdPlan.id);
-      setGlobalNotice(`Учебный план «${createdPlan.name}» создан.`);
+      setGlobalNotice(`Учебный план «${createdPlan.name}» создан для направления ${createdPlan.program_code}.`);
       setRefreshToken((value) => value + 1);
       setActivePage("table1");
     } catch (error) {
@@ -124,13 +167,13 @@ export default function App() {
           <p className="eyebrow">Интеллектуальный методист</p>
           <h1>Формирование учебного плана</h1>
           <p className="hero-copy">
-            Модуль помогает выбрать обязательные элементы ФГОС, перенести рекомендации в рабочую
-            структуру плана, выполнить детерминированную проверку и подготовить итоговую выгрузку.
+            Модуль помогает выбрать обязательные элементы ФГОС, перенести рекомендации по выбранному направлению в рабочую структуру плана, выполнить детерминированную проверку и подготовить итоговую выгрузку.
           </p>
         </div>
         <div className="hero-side card">
           <p className="card-kicker">Логика MVP</p>
           <ul className="simple-list compact">
+            <li>На старте выбирается конкретное направление подготовки, а не общий набор всех данных.</li>
             <li>Таблица 1 нужна для выбора вариантов, а не для расчётов.</li>
             <li>Все нормативные суммы и проверки считаются только по Таблице 2.</li>
             <li>Пояснения ИИ появляются только после детерминированной проверки.</li>
@@ -146,11 +189,35 @@ export default function App() {
             <div className="section-header">
               <div>
                 <p className="card-kicker">Учебные планы</p>
-                <h2>Список учебных планов</h2>
+                <h2>Создание плана</h2>
               </div>
             </div>
 
             <form className="stacked-form create-plan-form" onSubmit={handleCreatePlan}>
+              <label className="field">
+                <span>Направление подготовки</span>
+                <select
+                  value={newProgramCode}
+                  onChange={(event) => setNewProgramCode(event.target.value)}
+                  disabled={programsLoading || programs.length === 0}
+                >
+                  {programs.map((program) => (
+                    <option key={program.code} value={program.code}>
+                      {program.title}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              {programsLoading ? <p className="status-muted">Загрузка направлений...</p> : null}
+              {programsError ? <p className="status-message status-error">{programsError}</p> : null}
+              {!programsLoading && !programsError && newProgramCode ? (
+                <div className="status-muted">
+                  Источники:{" "}
+                  {programs.find((program) => program.code === newProgramCode)?.sources.join(", ") || "не указаны"}.
+                </div>
+              ) : null}
+
               <label className="field">
                 <span>Название нового плана</span>
                 <input
@@ -159,7 +226,7 @@ export default function App() {
                   placeholder="Например, Бакалавриат 2026"
                 />
               </label>
-              <button className="primary-button" type="submit" disabled={creatingPlan}>
+              <button className="primary-button" type="submit" disabled={creatingPlan || !newProgramCode}>
                 {creatingPlan ? "Создание..." : "Создать учебный план"}
               </button>
             </form>
@@ -188,6 +255,7 @@ export default function App() {
                   </div>
                   <StatusBadge value={plan.status} />
                 </div>
+                <p className="status-muted">Направление: {plan.program_code}</p>
                 <p className="status-muted">
                   Последнее изменение: {new Date(plan.updated_at).toLocaleString("ru-RU")}
                 </p>
@@ -215,6 +283,7 @@ export default function App() {
               <div>
                 <p className="card-kicker">Учебный план</p>
                 <h2>{selectedPlan.name}</h2>
+                <p className="status-muted">Направление: {selectedPlan.program_code}</p>
               </div>
 
               <div className="workspace-header-actions">

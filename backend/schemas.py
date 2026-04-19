@@ -24,7 +24,19 @@ class CompetencyRead(CompetencyBase):
     model_config = ConfigDict(from_attributes=True)
 
 
+class ProgramOption(BaseModel):
+    code: str
+    title: str
+    recommendation_count: int
+    sources: list[str]
+
+
+class ProgramListResponse(BaseModel):
+    data: list[ProgramOption]
+
+
 class RecommendedElementBase(BaseModel):
+    program_code: str | None = None
     name: str
     element_type: str
     part: str
@@ -32,6 +44,7 @@ class RecommendedElementBase(BaseModel):
     extra_hours: float = 0
     semesters: list[int] = []
     source: str
+    source_name: str | None = None
     practice_type: str | None = None
     is_fgos_mandatory: bool = False
     fgos_requirement: str | None = None
@@ -46,6 +59,7 @@ class RecommendedElementRead(RecommendedElementBase):
 
 class Table1RecommendedElement(BaseModel):
     id: int
+    program_code: str | None = None
     name: str
     element_type: str
     part: str
@@ -54,6 +68,8 @@ class Table1RecommendedElement(BaseModel):
     semesters: list[int]
     source: str
     source_label: str
+    source_title: str
+    source_name: str | None = None
     practice_type: str | None = None
     fgos_requirement: str | None = None
     competency_codes: list[str]
@@ -62,11 +78,13 @@ class Table1RecommendedElement(BaseModel):
 
 class CurriculumPlanBase(BaseModel):
     name: str
+    program_code: str
     status: str
 
 
 class CurriculumPlanCreate(BaseModel):
     name: str
+    program_code: str
 
 
 class CurriculumPlanStatusUpdate(BaseModel):

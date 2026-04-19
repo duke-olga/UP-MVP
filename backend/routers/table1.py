@@ -1,4 +1,5 @@
 from collections import defaultdict
+from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session, selectinload
@@ -52,6 +53,19 @@ def _get_source_label(source: str) -> str:
     return SOURCE_LABELS.get(source, "Источник не указан")
 
 
+def _get_source_title(source: str, source_name: str | None) -> str:
+    if source == "poop":
+        return "ПООП"
+    if source in {"local", "local_requirement"}:
+        return "Локальные требования вуза"
+    if not source_name:
+        return _get_source_label(source)
+    stem = Path(source_name).stem
+    if "_" in stem:
+        return stem.split("_", maxsplit=1)[1]
+    return stem
+
+
 def _get_selected_source_ids(plan_id: int, db: Session) -> set[int]:
     rows = (
         db.query(PlanElement.source_element_id)
@@ -67,6 +81,7 @@ def _build_recommendation_payload(
 ) -> Table1RecommendedElement:
     return Table1RecommendedElement(
         id=element.id,
+        program_code=element.program_code,
         name=element.name,
         element_type=element.element_type,
         part=element.part,
@@ -75,6 +90,8 @@ def _build_recommendation_payload(
         semesters=sorted(element.semesters or []),
         source=element.source,
         source_label=_get_source_label(element.source),
+        source_title=_get_source_title(element.source, element.source_name),
+        source_name=element.source_name,
         practice_type=element.practice_type,
         fgos_requirement=element.fgos_requirement,
         competency_codes=[competency.code for competency in sorted(element.competencies, key=lambda item: item.code)],
@@ -91,12 +108,16 @@ def _sort_key(item: RecommendedElement) -> tuple[int, str, int]:
 def _classify_competency_recommendations(
     competency: Competency,
     selected_source_ids: set[int],
+    program_code: str,
 ) -> tuple[list[Table1RecommendedElement], list[Table1RecommendedElement], list[Table1RecommendedElement]]:
     mandatory_disciplines: list[Table1RecommendedElement] = []
     variative_disciplines: list[Table1RecommendedElement] = []
     mandatory_practices: list[Table1RecommendedElement] = []
 
-    for element in sorted(competency.recommended_elements, key=_sort_key):
+    filtered_recommendations = [
+        item for item in competency.recommended_elements if item.program_code == program_code
+    ]
+    for element in sorted(filtered_recommendations, key=_sort_key):
         if element.is_fgos_mandatory:
             continue
 
@@ -236,7 +257,7 @@ def _upsert_plan_element_from_recommendation(
 
 @router.get("/{plan_id}/table1", response_model=Table1Response)
 def get_table1(plan_id: int, db: Session = Depends(get_db)) -> Table1Response:
-    _get_plan_or_404(plan_id, db)
+    plan = _get_plan_or_404(plan_id, db)
     competencies = (
         db.query(Competency)
         .options(selectinload(Competency.recommended_elements).selectinload(RecommendedElement.competencies))
@@ -246,6 +267,7 @@ def get_table1(plan_id: int, db: Session = Depends(get_db)) -> Table1Response:
     recommendations = (
         db.query(RecommendedElement)
         .options(selectinload(RecommendedElement.competencies))
+        .filter(RecommendedElement.program_code == plan.program_code)
         .order_by(RecommendedElement.name, RecommendedElement.id)
         .all()
     )
@@ -268,6 +290,7 @@ def get_table1(plan_id: int, db: Session = Depends(get_db)) -> Table1Response:
         mandatory_disciplines, variative_disciplines, mandatory_practices = _classify_competency_recommendations(
             competency,
             selected_source_ids,
+            plan.program_code,
         )
         competency_sections.append(
             Table1CompetencySection(
@@ -308,12 +331,13 @@ def transfer_table1_to_table2(
     payload: Table1TransferRequest,
     db: Session = Depends(get_db),
 ) -> Table1TransferResponse:
-    _get_plan_or_404(plan_id, db)
+    plan = _get_plan_or_404(plan_id, db)
 
     selected_ids = {item.element_id for item in payload.selections if item.selected}
     all_recommendations = (
         db.query(RecommendedElement)
         .options(selectinload(RecommendedElement.competencies))
+        .filter(RecommendedElement.program_code == plan.program_code)
         .all()
     )
     recommendations = [item for item in all_recommendations if _is_auto_transferable(item)]

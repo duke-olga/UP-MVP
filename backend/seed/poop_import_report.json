@@ -1,27 +1,650 @@
 [
   {
-    "direction_code": "010302",
-    "source_name": "010302_POOP_B.pdf",
+    "direction_code": "090301",
+    "source_name": "090301_POOP_B.pdf",
     "source_type": "poop",
-    "strategy_used": "hybrid",
-    "extractor_used": "llm",
-    "candidate_row_count": 0,
-    "record_count": 1,
-    "quality_score": 0.85,
-    "needs_review": true,
-    "warnings": [
-      "docling_convert_failed: [Errno 13] Permission denied: 'C:\\\\Users\\\\USER\\\\AppData\\\\Roaming\\\\Python\\\\Python313\\\\site-packages\\\\rapidocr\\\\models\\\\ch_PP-OCRv4_det_mobile.onnx'",
-      "pypdf_no_plan_text",
-      "no_records_extracted",
-      "used_llm_fallback"
-    ],
-    "candidate_samples": []
+    "strategy_used": "deterministic",
+    "extractor_used": "pymupdf",
+    "candidate_row_count": 26,
+    "record_count": 26,
+    "quality_score": 1.0,
+    "needs_review": false,
+    "warnings": [],
+    "candidate_samples": [
+      {
+        "page_number": 31,
+        "extractor": "pymupdf",
+        "source_name": "090301_POOP_B.pdf",
+        "source_type": "poop",
+        "row_id": "Б1.Б.Д1",
+        "name": "Иностранный язык",
+        "cells": [
+          "Б1.Б.Д1",
+          "Иностранный язык",
+          "зачет, экзамен",
+          "12",
+          "✔",
+          "✔",
+          "✔",
+          "✔",
+          "✔",
+          "✔",
+          "УК-4."
+        ],
+        "row_text": "Б1.Б.Д1 Иностранный язык зачет, экзамен 12 ✔ ✔ ✔ ✔ ✔ ✔ УК-4.",
+        "credits_candidate": 12.0,
+        "semesters_candidate": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "competency_codes_candidate": [
+          "УК-4"
+        ],
+        "part_candidate": "mandatory",
+        "kind_cell": null
+      },
+      {
+        "page_number": 31,
+        "extractor": "pymupdf",
+        "source_name": "090301_POOP_B.pdf",
+        "source_type": "poop",
+        "row_id": "Б1.Б.Д2",
+        "name": "История",
+        "cells": [
+          "Б1.Б.Д2",
+          "История",
+          "зачет",
+          "3",
+          "✔",
+          "УК-5."
+        ],
+        "row_text": "Б1.Б.Д2 История зачет 3 ✔ УК-5.",
+        "credits_candidate": 3.0,
+        "semesters_candidate": [
+          2
+        ],
+        "competency_codes_candidate": [
+          "УК-5"
+        ],
+        "part_candidate": "mandatory",
+        "kind_cell": null
+      },
+      {
+        "page_number": 31,
+        "extractor": "pymupdf",
+        "source_name": "090301_POOP_B.pdf",
+        "source_type": "poop",
+        "row_id": "Б1.Б.Д3",
+        "name": "Философия",
+        "cells": [
+          "Б1.Б.Д3",
+          "Философия",
+          "зачет",
+          "3",
+          "✔",
+          "УК-5."
+        ],
+        "row_text": "Б1.Б.Д3 Философия зачет 3 ✔ УК-5.",
+        "credits_candidate": 3.0,
+        "semesters_candidate": [
+          6
+        ],
+        "competency_codes_candidate": [
+          "УК-5"
+        ],
+        "part_candidate": "mandatory",
+        "kind_cell": null
+      },
+      {
+        "page_number": 31,
+        "extractor": "pymupdf",
+        "source_name": "090301_POOP_B.pdf",
+        "source_type": "poop",
+        "row_id": "Б1.Б.Д4",
+        "name": "Экономика",
+        "cells": [
+          "Б1.Б.Д4",
+          "Экономика",
+          "зачет",
+          "4",
+          "✔",
+          "✔",
+          "УК-2. ОПК-6."
+        ],
+        "row_text": "Б1.Б.Д4 Экономика зачет 4 ✔ ✔ УК-2. ОПК-6.",
+        "credits_candidate": 4.0,
+        "semesters_candidate": [
+          7,
+          8
+        ],
+        "competency_codes_candidate": [
+          "УК-2",
+          "ОПК-6"
+        ],
+        "part_candidate": "mandatory",
+        "kind_cell": null
+      },
+      {
+        "page_number": 31,
+        "extractor": "pymupdf",
+        "source_name": "090301_POOP_B.pdf",
+        "source_type": "poop",
+        "row_id": "Б1.Б.Д5",
+        "name": "Безопасность жизнедеятельности",
+        "cells": [
+          "Б1.Б.Д5",
+          "Безопасность жизнедеятельности",
+          "зачет",
+          "3",
+          "✔",
+          "УК-8."
+        ],
+        "row_text": "Б1.Б.Д5 Безопасность жизнедеятельности зачет 3 ✔ УК-8.",
+        "credits_candidate": 3.0,
+        "semesters_candidate": [
+          8
+        ],
+        "competency_codes_candidate": [
+          "УК-8"
+        ],
+        "part_candidate": "mandatory",
+        "kind_cell": null
+      }
+    ]
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "strategy_used": "deterministic",
+    "extractor_used": "pymupdf",
+    "candidate_row_count": 48,
+    "record_count": 48,
+    "quality_score": 0.985,
+    "needs_review": false,
+    "warnings": [],
+    "candidate_samples": [
+      {
+        "page_number": 32,
+        "extractor": "pymupdf",
+        "source_name": "090304_POOP_B.pdf",
+        "source_type": "poop",
+        "row_id": "Б1.Б.Д1",
+        "name": "Иностранный язык",
+        "cells": [
+          "Б1.Б.Д1",
+          "Иностранный язык",
+          "зачет",
+          "12",
+          "✔",
+          "✔",
+          "✔",
+          "✔",
+          "✔",
+          "✔",
+          "УК-3. УК-4."
+        ],
+        "row_text": "Б1.Б.Д1 Иностранный язык зачет 12 ✔ ✔ ✔ ✔ ✔ ✔ УК-3. УК-4.",
+        "credits_candidate": 12.0,
+        "semesters_candidate": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "competency_codes_candidate": [
+          "УК-3",
+          "УК-4"
+        ],
+        "part_candidate": "mandatory",
+        "kind_cell": null
+      },
+      {
+        "page_number": 32,
+        "extractor": "pymupdf",
+        "source_name": "090304_POOP_B.pdf",
+        "source_type": "poop",
+        "row_id": "Б1.Б.Д2",
+        "name": "Программирование",
+        "cells": [
+          "Б1.Б.Д2",
+          "Программирование",
+          "экзамен",
+          "18",
+          "✔",
+          "✔",
+          "✔",
+          "ОПК-2. ОПК-5. ОПК-6. ПК-7."
+        ],
+        "row_text": "Б1.Б.Д2 Программирование экзамен 18 ✔ ✔ ✔ ОПК-2. ОПК-5. ОПК-6. ПК-7.",
+        "credits_candidate": 18.0,
+        "semesters_candidate": [
+          1,
+          2,
+          3
+        ],
+        "competency_codes_candidate": [
+          "ОПК-2",
+          "ОПК-5",
+          "ОПК-6",
+          "ПК-7"
+        ],
+        "part_candidate": "mandatory",
+        "kind_cell": null
+      },
+      {
+        "page_number": 32,
+        "extractor": "pymupdf",
+        "source_name": "090304_POOP_B.pdf",
+        "source_type": "poop",
+        "row_id": "Б1.Б.Д3",
+        "name": "Математический анализ",
+        "cells": [
+          "Б1.Б.Д3",
+          "Математический анализ",
+          "экзамен",
+          "5",
+          "✔",
+          "ОПК-1."
+        ],
+        "row_text": "Б1.Б.Д3 Математический анализ экзамен 5 ✔ ОПК-1.",
+        "credits_candidate": 5.0,
+        "semesters_candidate": [
+          1
+        ],
+        "competency_codes_candidate": [
+          "ОПК-1"
+        ],
+        "part_candidate": "mandatory",
+        "kind_cell": null
+      },
+      {
+        "page_number": 32,
+        "extractor": "pymupdf",
+        "source_name": "090304_POOP_B.pdf",
+        "source_type": "poop",
+        "row_id": "Б1.Б.Д4",
+        "name": "Аналитическая геометрия",
+        "cells": [
+          "Б1.Б.Д4",
+          "Аналитическая геометрия",
+          "экзамен",
+          "4",
+          "✔",
+          "ОПК-1."
+        ],
+        "row_text": "Б1.Б.Д4 Аналитическая геометрия экзамен 4 ✔ ОПК-1.",
+        "credits_candidate": 4.0,
+        "semesters_candidate": [
+          1
+        ],
+        "competency_codes_candidate": [
+          "ОПК-1"
+        ],
+        "part_candidate": "mandatory",
+        "kind_cell": null
+      },
+      {
+        "page_number": 33,
+        "extractor": "pymupdf",
+        "source_name": "090304_POOP_B.pdf",
+        "source_type": "poop",
+        "row_id": "Б1.Б.Д5",
+        "name": "История",
+        "cells": [
+          "Б1.Б.Д5",
+          "История",
+          "зачет",
+          "3",
+          "✔",
+          "УК-5."
+        ],
+        "row_text": "Б1.Б.Д5 История зачет 3 ✔ УК-5.",
+        "credits_candidate": 3.0,
+        "semesters_candidate": [
+          2
+        ],
+        "competency_codes_candidate": [
+          "УК-5"
+        ],
+        "part_candidate": "mandatory",
+        "kind_cell": null
+      }
+    ]
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "strategy_used": "deterministic",
+    "extractor_used": "pymupdf",
+    "candidate_row_count": 48,
+    "record_count": 48,
+    "quality_score": 0.985,
+    "needs_review": false,
+    "warnings": [],
+    "candidate_samples": [
+      {
+        "page_number": 32,
+        "extractor": "pymupdf",
+        "source_name": "090304_POOP_B_1.pdf",
+        "source_type": "poop",
+        "row_id": "Б1.Б.Д1",
+        "name": "Иностранный язык",
+        "cells": [
+          "Б1.Б.Д1",
+          "Иностранный язык",
+          "зачет",
+          "12",
+          "✔",
+          "✔",
+          "✔",
+          "✔",
+          "✔",
+          "✔",
+          "УК-3. УК-4."
+        ],
+        "row_text": "Б1.Б.Д1 Иностранный язык зачет 12 ✔ ✔ ✔ ✔ ✔ ✔ УК-3. УК-4.",
+        "credits_candidate": 12.0,
+        "semesters_candidate": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "competency_codes_candidate": [
+          "УК-3",
+          "УК-4"
+        ],
+        "part_candidate": "mandatory",
+        "kind_cell": null
+      },
+      {
+        "page_number": 32,
+        "extractor": "pymupdf",
+        "source_name": "090304_POOP_B_1.pdf",
+        "source_type": "poop",
+        "row_id": "Б1.Б.Д2",
+        "name": "Программирование",
+        "cells": [
+          "Б1.Б.Д2",
+          "Программирование",
+          "экзамен",
+          "18",
+          "✔",
+          "✔",
+          "✔",
+          "ОПК-2. ОПК-5. ОПК-6. ПК-7."
+        ],
+        "row_text": "Б1.Б.Д2 Программирование экзамен 18 ✔ ✔ ✔ ОПК-2. ОПК-5. ОПК-6. ПК-7.",
+        "credits_candidate": 18.0,
+        "semesters_candidate": [
+          1,
+          2,
+          3
+        ],
+        "competency_codes_candidate": [
+          "ОПК-2",
+          "ОПК-5",
+          "ОПК-6",
+          "ПК-7"
+        ],
+        "part_candidate": "mandatory",
+        "kind_cell": null
+      },
+      {
+        "page_number": 32,
+        "extractor": "pymupdf",
+        "source_name": "090304_POOP_B_1.pdf",
+        "source_type": "poop",
+        "row_id": "Б1.Б.Д3",
+        "name": "Математический анализ",
+        "cells": [
+          "Б1.Б.Д3",
+          "Математический анализ",
+          "экзамен",
+          "5",
+          "✔",
+          "ОПК-1."
+        ],
+        "row_text": "Б1.Б.Д3 Математический анализ экзамен 5 ✔ ОПК-1.",
+        "credits_candidate": 5.0,
+        "semesters_candidate": [
+          1
+        ],
+        "competency_codes_candidate": [
+          "ОПК-1"
+        ],
+        "part_candidate": "mandatory",
+        "kind_cell": null
+      },
+      {
+        "page_number": 32,
+        "extractor": "pymupdf",
+        "source_name": "090304_POOP_B_1.pdf",
+        "source_type": "poop",
+        "row_id": "Б1.Б.Д4",
+        "name": "Аналитическая геометрия",
+        "cells": [
+          "Б1.Б.Д4",
+          "Аналитическая геометрия",
+          "экзамен",
+          "4",
+          "✔",
+          "ОПК-1."
+        ],
+        "row_text": "Б1.Б.Д4 Аналитическая геометрия экзамен 4 ✔ ОПК-1.",
+        "credits_candidate": 4.0,
+        "semesters_candidate": [
+          1
+        ],
+        "competency_codes_candidate": [
+          "ОПК-1"
+        ],
+        "part_candidate": "mandatory",
+        "kind_cell": null
+      },
+      {
+        "page_number": 33,
+        "extractor": "pymupdf",
+        "source_name": "090304_POOP_B_1.pdf",
+        "source_type": "poop",
+        "row_id": "Б1.Б.Д5",
+        "name": "История",
+        "cells": [
+          "Б1.Б.Д5",
+          "История",
+          "зачет",
+          "3",
+          "✔",
+          "УК-5."
+        ],
+        "row_text": "Б1.Б.Д5 История зачет 3 ✔ УК-5.",
+        "credits_candidate": 3.0,
+        "semesters_candidate": [
+          2
+        ],
+        "competency_codes_candidate": [
+          "УК-5"
+        ],
+        "part_candidate": "mandatory",
+        "kind_cell": null
+      }
+    ]
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "strategy_used": "deterministic",
+    "extractor_used": "pymupdf",
+    "candidate_row_count": 65,
+    "record_count": 65,
+    "quality_score": 0.798,
+    "needs_review": false,
+    "warnings": [],
+    "candidate_samples": [
+      {
+        "page_number": 1,
+        "extractor": "pymupdf",
+        "source_name": "090301_ВШЭ.pdf",
+        "source_type": "best_practices",
+        "row_id": "1",
+        "name": "Математический анализ",
+        "cells": [
+          "1",
+          "Математический анализ",
+          "О",
+          "9,00",
+          "9,00",
+          "ОПК-1, ОПК-2, ПК-1, УК-1"
+        ],
+        "row_text": "1 Математический анализ О 9,00 9,00 ОПК-1, ОПК-2, ПК-1, УК-1",
+        "credits_candidate": 9.0,
+        "semesters_candidate": [],
+        "competency_codes_candidate": [
+          "ОПК-1",
+          "ОПК-2",
+          "ПК-1",
+          "УК-1"
+        ],
+        "part_candidate": "mandatory",
+        "kind_cell": "О"
+      },
+      {
+        "page_number": 1,
+        "extractor": "pymupdf",
+        "source_name": "090301_ВШЭ.pdf",
+        "source_type": "best_practices",
+        "row_id": "2",
+        "name": "Теория помехоустойчивого кодирования",
+        "cells": [
+          "2",
+          "Теория помехоустойчивого кодирования",
+          "О",
+          "4,00",
+          "4,00",
+          "ОПК-1, ОПК-2, ПК-1, ПК-3, ПК-4, УК-1, УК-2"
+        ],
+        "row_text": "2 Теория помехоустойчивого кодирования О 4,00 4,00 ОПК-1, ОПК-2, ПК-1, ПК-3, ПК-4, УК-1, УК-2",
+        "credits_candidate": 4.0,
+        "semesters_candidate": [],
+        "competency_codes_candidate": [
+          "ОПК-1",
+          "ОПК-2",
+          "ПК-1",
+          "ПК-3",
+          "ПК-4",
+          "УК-1",
+          "УК-2"
+        ],
+        "part_candidate": "mandatory",
+        "kind_cell": "О"
+      },
+      {
+        "page_number": 1,
+        "extractor": "pymupdf",
+        "source_name": "090301_ВШЭ.pdf",
+        "source_type": "best_practices",
+        "row_id": "3",
+        "name": "Метрология, стандартизация и сертификация",
+        "cells": [
+          "3",
+          "Метрология, стандартизация и сертификация",
+          "О",
+          "3,00",
+          "3,00",
+          "ОПК-4, ПК-3, УК-2"
+        ],
+        "row_text": "3 Метрология, стандартизация и сертификация О 3,00 3,00 ОПК-4, ПК-3, УК-2",
+        "credits_candidate": 3.0,
+        "semesters_candidate": [],
+        "competency_codes_candidate": [
+          "ОПК-4",
+          "ПК-3",
+          "УК-2"
+        ],
+        "part_candidate": "mandatory",
+        "kind_cell": "О"
+      },
+      {
+        "page_number": 1,
+        "extractor": "pymupdf",
+        "source_name": "090301_ВШЭ.pdf",
+        "source_type": "best_practices",
+        "row_id": "4",
+        "name": "Сети и системы передачи информации",
+        "cells": [
+          "4",
+          "Сети и системы передачи информации",
+          "О",
+          "7,00",
+          "3,00",
+          "4,00",
+          "ОПК-1, ОПК-2, ОПК-3, ОПК-4, ОПК-5, ПК-1, ПК-3, ПК-4, УК-1, УК-2"
+        ],
+        "row_text": "4 Сети и системы передачи информации О 7,00 3,00 4,00 ОПК-1, ОПК-2, ОПК-3, ОПК-4, ОПК-5, ПК-1, ПК-3, ПК-4, УК-1, УК-2",
+        "credits_candidate": 7.0,
+        "semesters_candidate": [],
+        "competency_codes_candidate": [
+          "ОПК-1",
+          "ОПК-2",
+          "ОПК-3",
+          "ОПК-4",
+          "ОПК-5",
+          "ПК-1",
+          "ПК-3",
+          "ПК-4",
+          "УК-1",
+          "УК-2"
+        ],
+        "part_candidate": "mandatory",
+        "kind_cell": "О"
+      },
+      {
+        "page_number": 1,
+        "extractor": "pymupdf",
+        "source_name": "090301_ВШЭ.pdf",
+        "source_type": "best_practices",
+        "row_id": "5",
+        "name": "Теория массового обслуживания",
+        "cells": [
+          "5",
+          "Теория массового обслуживания",
+          "О",
+          "3,00",
+          "3,00",
+          "ОПК-1, ОПК-3, ПК-1, ПК-3, УК-1, УК-2"
+        ],
+        "row_text": "5 Теория массового обслуживания О 3,00 3,00 ОПК-1, ОПК-3, ПК-1, ПК-3, УК-1, УК-2",
+        "credits_candidate": 3.0,
+        "semesters_candidate": [],
+        "competency_codes_candidate": [
+          "ОПК-1",
+          "ОПК-3",
+          "ПК-1",
+          "ПК-3",
+          "УК-1",
+          "УК-2"
+        ],
+        "part_candidate": "mandatory",
+        "kind_cell": "О"
+      }
+    ]
   },
   {
     "direction_code": "090302",
     "source_name": "090302_ИТМО.pdf",
     "source_type": "best_practices",
-    "strategy_used": "hybrid",
+    "strategy_used": "deterministic",
     "extractor_used": "pymupdf",
     "candidate_row_count": 143,
     "record_count": 110,
@@ -138,6 +761,170 @@
         "competency_codes_candidate": [],
         "part_candidate": "mandatory",
         "kind_cell": null
+      }
+    ]
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "strategy_used": "deterministic",
+    "extractor_used": "pymupdf",
+    "candidate_row_count": 69,
+    "record_count": 69,
+    "quality_score": 0.8,
+    "needs_review": false,
+    "warnings": [],
+    "candidate_samples": [
+      {
+        "page_number": 1,
+        "extractor": "pymupdf",
+        "source_name": "090304_ВШЭ.pdf",
+        "source_type": "best_practices",
+        "row_id": "1",
+        "name": "Математический анализ",
+        "cells": [
+          "1",
+          "Математический анализ",
+          "О",
+          "9,00",
+          "9,00",
+          "ОПК-1, ОПК-3, ПК-1, ПК-3, ПК-5, УК-1, УК-3"
+        ],
+        "row_text": "1 Математический анализ О 9,00 9,00 ОПК-1, ОПК-3, ПК-1, ПК-3, ПК-5, УК-1, УК-3",
+        "credits_candidate": 9.0,
+        "semesters_candidate": [],
+        "competency_codes_candidate": [
+          "ОПК-1",
+          "ОПК-3",
+          "ПК-1",
+          "ПК-3",
+          "ПК-5",
+          "УК-1",
+          "УК-3"
+        ],
+        "part_candidate": "mandatory",
+        "kind_cell": "О"
+      },
+      {
+        "page_number": 1,
+        "extractor": "pymupdf",
+        "source_name": "090304_ВШЭ.pdf",
+        "source_type": "best_practices",
+        "row_id": "2",
+        "name": "Дискретная математика",
+        "cells": [
+          "2",
+          "Дискретная математика",
+          "О",
+          "9,00",
+          "9,00",
+          "ОПК-2, ОПК-4, ПК-2, ПК-4, ПК-6, УК-2, УК-4"
+        ],
+        "row_text": "2 Дискретная математика О 9,00 9,00 ОПК-2, ОПК-4, ПК-2, ПК-4, ПК-6, УК-2, УК-4",
+        "credits_candidate": 9.0,
+        "semesters_candidate": [],
+        "competency_codes_candidate": [
+          "ОПК-2",
+          "ОПК-4",
+          "ПК-2",
+          "ПК-4",
+          "ПК-6",
+          "УК-2",
+          "УК-4"
+        ],
+        "part_candidate": "mandatory",
+        "kind_cell": "О"
+      },
+      {
+        "page_number": 1,
+        "extractor": "pymupdf",
+        "source_name": "090304_ВШЭ.pdf",
+        "source_type": "best_practices",
+        "row_id": "3",
+        "name": "Алгебра",
+        "cells": [
+          "3",
+          "Алгебра",
+          "О",
+          "9,00",
+          "9,00",
+          "ОПК-5, ОПК-7, ПК-11, ПК-7, ПК-9, УК-5, УК-7"
+        ],
+        "row_text": "3 Алгебра О 9,00 9,00 ОПК-5, ОПК-7, ПК-11, ПК-7, ПК-9, УК-5, УК-7",
+        "credits_candidate": 9.0,
+        "semesters_candidate": [],
+        "competency_codes_candidate": [
+          "ОПК-5",
+          "ОПК-7",
+          "ПК-11",
+          "ПК-7",
+          "ПК-9",
+          "УК-5",
+          "УК-7"
+        ],
+        "part_candidate": "mandatory",
+        "kind_cell": "О"
+      },
+      {
+        "page_number": 1,
+        "extractor": "pymupdf",
+        "source_name": "090304_ВШЭ.pdf",
+        "source_type": "best_practices",
+        "row_id": "4",
+        "name": "Введение в программную инженерию",
+        "cells": [
+          "4",
+          "Введение в программную инженерию",
+          "О",
+          "4,00",
+          "4,00",
+          "ОПК-6, ОПК-8, ПК-10, ПК-12, ПК-8, УК-6, УК-8"
+        ],
+        "row_text": "4 Введение в программную инженерию О 4,00 4,00 ОПК-6, ОПК-8, ПК-10, ПК-12, ПК-8, УК-6, УК-8",
+        "credits_candidate": 4.0,
+        "semesters_candidate": [],
+        "competency_codes_candidate": [
+          "ОПК-6",
+          "ОПК-8",
+          "ПК-10",
+          "ПК-12",
+          "ПК-8",
+          "УК-6",
+          "УК-8"
+        ],
+        "part_candidate": "mandatory",
+        "kind_cell": "О"
+      },
+      {
+        "page_number": 1,
+        "extractor": "pymupdf",
+        "source_name": "090304_ВШЭ.pdf",
+        "source_type": "best_practices",
+        "row_id": "5",
+        "name": "Алгоритмы и алгоритмические языки",
+        "cells": [
+          "5",
+          "Алгоритмы и алгоритмические языки",
+          "О",
+          "5,00",
+          "5,00",
+          "ОПК-3, ОПК-6, ПК-14, ПК-7, ПК-8, УК-11, УК-9"
+        ],
+        "row_text": "5 Алгоритмы и алгоритмические языки О 5,00 5,00 ОПК-3, ОПК-6, ПК-14, ПК-7, ПК-8, УК-11, УК-9",
+        "credits_candidate": 5.0,
+        "semesters_candidate": [],
+        "competency_codes_candidate": [
+          "ОПК-3",
+          "ОПК-6",
+          "ПК-14",
+          "ПК-7",
+          "ПК-8",
+          "УК-11",
+          "УК-9"
+        ],
+        "part_candidate": "mandatory",
+        "kind_cell": "О"
       }
     ]
   }

@@ -38,41 +38,59 @@ def _build_test_client():
         db.add_all([uk, opk, pks])
         db.flush()
 
-        mandatory_discipline = RecommendedElement(
-            name="Философия",
-            element_type="discipline",
-            part="mandatory",
-            credits=3.0,
-            semesters=[1],
-            source="poop",
-            is_fgos_mandatory=1,
-            fgos_requirement="philosophy",
-            competencies=[uk],
-        )
-        variative_discipline = RecommendedElement(
-            name="Политология",
-            element_type="discipline",
-            part="variative",
-            credits=2.0,
-            semesters=[2, 3],
-            source="best_practice",
-            competencies=[uk, opk],
-        )
-        mandatory_practice = RecommendedElement(
-            name="Учебная практика",
-            element_type="practice",
-            part="mandatory",
-            credits=3.0,
-            semesters=[4],
-            source="local_requirement",
-            practice_type="educational",
-            is_fgos_mandatory=1,
-            fgos_requirement="educational_practice",
-            competencies=[opk],
-        )
-
-        db.add_all([mandatory_discipline, variative_discipline, mandatory_practice])
-        db.add(CurriculumPlan(name="Test plan", status="draft"))
+        recommendations = [
+            RecommendedElement(
+                program_code="090304",
+                name="Философия",
+                element_type="discipline",
+                part="mandatory",
+                credits=3.0,
+                semesters=[1],
+                source="poop",
+                source_name="090304_POOP_B.pdf",
+                is_fgos_mandatory=1,
+                fgos_requirement="philosophy",
+                competencies=[uk],
+            ),
+            RecommendedElement(
+                program_code="090304",
+                name="Политология",
+                element_type="discipline",
+                part="variative",
+                credits=2.0,
+                semesters=[2, 3],
+                source="best_practice",
+                source_name="090304_ВШЭ.pdf",
+                competencies=[uk, opk],
+            ),
+            RecommendedElement(
+                program_code="090304",
+                name="Учебная практика",
+                element_type="practice",
+                part="mandatory",
+                credits=3.0,
+                semesters=[4],
+                source="local_requirement",
+                source_name="local_rules.xlsx",
+                practice_type="educational",
+                is_fgos_mandatory=1,
+                fgos_requirement="educational_practice",
+                competencies=[opk],
+            ),
+            RecommendedElement(
+                program_code="090301",
+                name="Чужая рекомендация",
+                element_type="discipline",
+                part="variative",
+                credits=5.0,
+                semesters=[5],
+                source="best_practices",
+                source_name="090301_ИТМО.pdf",
+                competencies=[uk],
+            ),
+        ]
+        db.add_all(recommendations)
+        db.add(CurriculumPlan(name="Test plan", program_code="090304", status="draft"))
         db.commit()
     finally:
         db.close()
@@ -94,7 +112,7 @@ def test_table1_returns_manual_mode_for_pks() -> None:
     assert pks_section["mandatory_practices"] == []
 
 
-def test_table1_returns_fgos_groups_and_normalized_labels() -> None:
+def test_table1_filters_recommendations_by_program_and_keeps_source_titles() -> None:
     client = _build_test_client()
 
     response = client.get("/api/v1/plans/1/table1")
@@ -103,22 +121,24 @@ def test_table1_returns_fgos_groups_and_normalized_labels() -> None:
     sections = data["competencies"]
 
     uk_section = next(item for item in sections if item["competency"]["code"] == "УК-1")
-    assert uk_section["mode"] == "recommendation"
-    assert uk_section["mandatory_disciplines"] == []
+    variative_names = [item["name"] for item in uk_section["variative_disciplines"]]
+    assert variative_names == ["Политология"]
     assert uk_section["variative_disciplines"][0]["source_label"] == "Лучшие практики"
+    assert uk_section["variative_disciplines"][0]["source_title"] == "ВШЭ"
     assert uk_section["variative_disciplines"][0]["semesters"] == [2, 3]
 
     philosophy_group = next(item for item in data["fgos_disciplines"] if item["requirement"] == "philosophy")
     assert philosophy_group["items"][0]["source_label"] == "ПООП"
+    assert philosophy_group["items"][0]["source_title"] == "ПООП"
     assert philosophy_group["items"][0]["semesters"] == [1]
 
     educational_practice_group = next(
         item for item in data["fgos_practices"] if item["requirement"] == "educational_practice"
     )
-    assert educational_practice_group["items"][0]["source_label"] == "Локальные требования вуза"
+    assert educational_practice_group["items"][0]["source_title"] == "Локальные требования вуза"
 
 
-def test_table1_transfer_moves_only_selected_elements() -> None:
+def test_table1_transfer_moves_only_selected_program_elements() -> None:
     client = _build_test_client()
 
     table1_response = client.get("/api/v1/plans/1/table1")
@@ -231,12 +251,14 @@ def test_table1_transfer_rejects_multiple_fgos_discipline_variants_in_same_group
         uk = db.query(Competency).order_by(Competency.id).first()
         db.add(
             RecommendedElement(
-                name="Р¤РёР»РѕСЃРѕС„РёСЏ Рё РЅР°СѓРєР°",
+                program_code="090304",
+                name="Философия и наука",
                 element_type="discipline",
                 part="mandatory",
                 credits=3.0,
                 semesters=[2],
                 source="best_practice",
+                source_name="090304_ИТМО.pdf",
                 is_fgos_mandatory=1,
                 fgos_requirement="philosophy",
                 competencies=[uk],

@@ -95,7 +95,7 @@ def test_plan_element_hours_are_computed_by_sqlalchemy_events() -> None:
         db.add(NormativeParam(key="CreditHourRatio", value=36.0))
         db.flush()
 
-        plan = CurriculumPlan(name="Test plan", status="draft")
+        plan = CurriculumPlan(name="Test plan", program_code="090304", status="draft")
         db.add(plan)
         db.flush()
 

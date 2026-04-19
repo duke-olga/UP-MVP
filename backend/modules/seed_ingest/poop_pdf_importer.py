@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import logging
 import re
@@ -11,9 +12,6 @@ from typing import Literal
 import fitz
 from pydantic import BaseModel, Field
 
-from backend.modules.llm_explainer.adapter import LLMAdapterError, OllamaAdapter
-
-
 LOGGER = logging.getLogger(__name__)
 
 SEED_DIR = Path(__file__).resolve().parents[2] / "seed"
@@ -21,7 +19,9 @@ DEFAULT_POOP_DIR = SEED_DIR / "poop_pdf"
 DEFAULT_BEST_PRACTICES_DIR = SEED_DIR / "best_practices_pdf"
 DEFAULT_OUTPUT_PATH = SEED_DIR / "poop_disciplines.json"
 DEFAULT_REPORT_PATH = SEED_DIR / "poop_import_report.json"
-IMPORT_STRATEGIES = ("deterministic", "hybrid", "llm")
+DEFAULT_MANIFEST_PATH = SEED_DIR / "poop_import_manifest.json"
+DEFAULT_REVIEW_DIR = SEED_DIR / "poop_review_dump"
+IMPORT_STRATEGIES = ("deterministic",)
 
 COMPETENCY_CODE_RE = re.compile(r"(?:УК|ОПК|ПКС|ПК)-\d+")
 ROW_ID_CODE_RE = re.compile(r"^(?:Б\d[\w./-]*|B\d[\w./-]*|ФТД[\w./-]*|ГИА[\w./-]*)$", re.IGNORECASE)
@@ -110,8 +110,8 @@ class ImportReportEntry(BaseModel):
     direction_code: str
     source_name: str
     source_type: Literal["poop", "best_practices"]
-    strategy_used: Literal["deterministic", "hybrid", "llm"]
-    extractor_used: Literal["pymupdf", "docling", "pypdf", "text", "llm", "none"]
+    strategy_used: Literal["deterministic"]
+    extractor_used: Literal["pymupdf", "docling", "pypdf", "text", "none"]
     candidate_row_count: int
     record_count: int
     quality_score: float
@@ -120,12 +120,22 @@ class ImportReportEntry(BaseModel):
     candidate_samples: list[dict]
 
 
+class ImportManifestEntry(BaseModel):
+    source_name: str
+    source_type: Literal["poop", "best_practices"]
+    file_size_bytes: int
+    sha256: str
+    strategy_used: Literal["deterministic"]
+    extractor_used: Literal["pymupdf", "docling", "pypdf", "text", "none"]
+    record_count: int
+    quality_score: float
+    needs_review: bool
+
+
 @dataclass(frozen=True)
 class SeedSourceConfig:
     source_type: Literal["poop", "best_practices"]
     input_dir: Path
-    llm_context_label: str
-    llm_prompt_hint: str
 
 
 @dataclass
@@ -165,31 +175,21 @@ class CandidateRow:
 class FileAnalysis:
     records: list[PoopDisciplineSeedRecord]
     candidate_rows: list[CandidateRow]
-    extractor_used: Literal["pymupdf", "docling", "pypdf", "text", "llm", "none"]
+    extractor_used: Literal["pymupdf", "docling", "pypdf", "text", "none"]
     quality_score: float
     needs_review: bool
     warnings: list[str]
-    strategy_used: Literal["deterministic", "hybrid", "llm"]
+    strategy_used: Literal["deterministic"]
 
 
 SOURCE_CONFIGS: tuple[SeedSourceConfig, ...] = (
     SeedSourceConfig(
         source_type="poop",
         input_dir=DEFAULT_POOP_DIR,
-        llm_context_label="ПООП",
-        llm_prompt_hint=(
-            "Извлекай только реальные элементы учебного плана из табличной части документа. "
-            "Игнорируй пояснения, агрегаты по блокам, календарный график и описания компетенций."
-        ),
     ),
     SeedSourceConfig(
         source_type="best_practices",
         input_dir=DEFAULT_BEST_PRACTICES_DIR,
-        llm_context_label="Лучшие практики",
-        llm_prompt_hint=(
-            "Это учебный план другого вуза. Извлекай только дисциплины и практики из таблиц учебного плана. "
-            "Игнорируй подписи, агрегаты и матрицы компетенций."
-        ),
     ),
 )
 SOURCE_CONFIG_MAP = {config.source_type: config for config in SOURCE_CONFIGS}
@@ -198,6 +198,11 @@ SOURCE_CONFIG_MAP = {config.source_type: config for config in SOURCE_CONFIGS}
 LLM_SYSTEM_PROMPT = """
 Ты извлекаешь из текста PDF только элементы учебного плана и возвращаешь только JSON-массив.
 Без Markdown, без пояснений, без дополнительных полей.
+
+Никогда не додумывай значения полей.
+Если в документе нет явных кодов компетенций, верни "competency_codes": [].
+Если семестры не указаны явно, верни "semesters": [].
+Заполняй поля только по прямым данным из документа.
 
 Игнорируй:
 - агрегаты по блокам;
@@ -356,6 +361,18 @@ def _is_summary_name(name: str) -> bool:
     return any(lowered.startswith(marker) for marker in SUMMARY_PREFIX_HINTS)
 
 
+def _is_aggregate_plan_name(name: str) -> bool:
+    lowered = _normalize_name(name).casefold()
+    aggregate_markers = (
+        "\u0434\u0438\u0441\u0446\u0438\u043f\u043b\u0438\u043d\u044b \u043f\u043e \u0432\u044b\u0431\u043e\u0440\u0443",
+        "\u043f\u0440\u0430\u043a\u0442\u0438\u043a\u0438 \u043f\u043e \u0432\u044b\u0431\u043e\u0440\u0443",
+        "\u044d\u043b\u0435\u043a\u0442\u0438\u0432\u043d\u044b\u0435 \u0434\u0438\u0441\u0446\u0438\u043f\u043b\u0438\u043d\u044b",
+        "\u0444\u0430\u043a\u0443\u043b\u044c\u0442\u0430\u0442\u0438\u0432\u043d\u044b\u0435 \u0434\u0438\u0441\u0446\u0438\u043f\u043b\u0438\u043d\u044b",
+        "\u043c\u043e\u0434\u0443\u043b\u0438 \u043f\u043e \u0432\u044b\u0431\u043e\u0440\u0443",
+    )
+    return any(marker in lowered for marker in aggregate_markers)
+
+
 def _find_credit_candidates(cells: list[str]) -> list[float]:
     values: list[float] = []
     for cell in cells:
@@ -474,13 +491,20 @@ def _parse_markdown_table(markdown: str) -> list[list[str]]:
 def _extract_table_blocks_with_docling(pdf_path: Path) -> tuple[list[TableBlock], list[str]]:
     warnings: list[str] = []
     try:
-        from docling.document_converter import DocumentConverter
+        from docling.datamodel.base_models import InputFormat
+        from docling.datamodel.pipeline_options import PdfPipelineOptions
+        from docling.document_converter import DocumentConverter, PdfFormatOption
     except Exception as exc:
         warnings.append(f"docling_unavailable: {exc}")
         return [], warnings
 
     try:
-        converter = DocumentConverter()
+        pipeline_options = PdfPipelineOptions(do_ocr=False, force_backend_text=True)
+        converter = DocumentConverter(
+            format_options={
+                InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options),
+            }
+        )
         result = converter.convert(str(pdf_path))
     except Exception as exc:
         warnings.append(f"docling_convert_failed: {exc}")
@@ -682,15 +706,7 @@ def _candidate_from_text_line(
     if not prefix:
         return None
 
-    semesters_candidate = sorted(
-        {
-            int(num)
-            for num in re.findall(r"\b([1-9]|1[0-2])(?:-\s*й)?\b", remainder)
-            if 1 <= int(num) <= 12
-        }
-    )
-    if len(semesters_candidate) > 8:
-        semesters_candidate = []
+    semesters_candidate = sorted({int(num) for num in re.findall(r"\b([1-9]|1[0-2])-\s*й\b", remainder) if 1 <= int(num) <= 12})
 
     name = re.sub(r"\s+[ОВФ]\s+", " ", prefix)
     kind_cell = None
@@ -700,7 +716,7 @@ def _candidate_from_text_line(
             name = name[:pos]
             break
     name = _normalize_name(name)
-    if not _looks_like_candidate_name(name) or _is_summary_name(name):
+    if not _looks_like_candidate_name(name) or _is_summary_name(name) or _is_aggregate_plan_name(name):
         return None
 
     return CandidateRow(
@@ -839,7 +855,7 @@ def _extract_candidate_rows_from_blocks(
 
             row_id = nonempty[0]
             name, tail_cells, kind_cell = _extract_name_and_tail(row)
-            if not _looks_like_candidate_name(name) or _is_summary_name(name):
+            if not _looks_like_candidate_name(name) or _is_summary_name(name) or _is_aggregate_plan_name(name):
                 continue
             if any(marker in name.casefold() for marker in IGNORE_NAME_HINTS):
                 continue
@@ -925,7 +941,12 @@ def _records_from_candidate_rows(
     return _deduplicate_records(records)
 
 
-def _score_quality(records: list[PoopDisciplineSeedRecord], candidate_rows: list[CandidateRow]) -> tuple[float, bool]:
+def _score_quality(
+    records: list[PoopDisciplineSeedRecord],
+    candidate_rows: list[CandidateRow],
+    *,
+    extractor_used: Literal["pymupdf", "docling", "pypdf", "text", "none"] = "none",
+) -> tuple[float, bool]:
     if not records:
         return 0.0, True
 
@@ -936,6 +957,8 @@ def _score_quality(records: list[PoopDisciplineSeedRecord], candidate_rows: list
     unique_names = len({(record.name, record.credits, tuple(record.semesters)) for record in records})
     duplicates = max(0, len(records) - unique_names)
     candidate_gap = max(0, len(candidate_rows) - len(records))
+    practice_count = sum(1 for record in records if record.element_type == "practice")
+    discipline_count = sum(1 for record in records if record.element_type == "discipline")
 
     semester_penalty = 0.35 if source_type == "poop" else 0.2
     competency_penalty = 0.25 if source_type == "poop" else 0.1
@@ -949,8 +972,24 @@ def _score_quality(records: list[PoopDisciplineSeedRecord], candidate_rows: list
     if len(records) < minimum_records:
         score -= 0.15
 
+    if not practice_count or not discipline_count:
+        score -= 0.05
+
+    if extractor_used == "text":
+        empty_semester_ratio = missing_semesters / max(len(records), 1)
+        if empty_semester_ratio >= 0.8:
+            score -= 0.12
+        if missing_competencies / max(len(records), 1) >= 0.5:
+            score -= 0.08
+    elif extractor_used in {"docling", "pypdf"}:
+        if missing_semesters / max(len(records), 1) >= 0.8:
+            score -= 0.08
+
     score = max(0.0, round(score, 3))
-    needs_review = score < (0.6 if source_type == "poop" else 0.5) or len(records) < 3
+    review_threshold = 0.6 if source_type == "poop" else 0.5
+    if extractor_used == "text":
+        review_threshold += 0.05
+    needs_review = score < review_threshold or len(records) < 3
     return score, needs_review
 
 
@@ -978,42 +1017,18 @@ def _build_candidate_rows_context(candidate_rows: list[CandidateRow]) -> str:
     return "\n".join(lines)
 
 
-def _build_llm_rescue_text(
-    pdf_path: Path,
-    *,
-    source_type: Literal["poop", "best_practices"],
-    candidate_rows: list[CandidateRow],
-) -> str:
-    parts: list[str] = []
-    candidate_context = _build_candidate_rows_context(candidate_rows)
-    if candidate_context:
-        parts.append("Candidate rows:")
-        parts.append(candidate_context)
-
-    blocks = _extract_table_blocks_with_pymupdf(pdf_path)
-    block_text = _blocks_to_text(blocks)
-    if block_text:
-        parts.append("PyMuPDF blocks:")
-        parts.append(block_text[:25000])
-
-    docling_blocks, _ = _extract_table_blocks_with_docling(pdf_path)
-    docling_text = _blocks_to_text(docling_blocks)
-    if docling_text:
-        parts.append("Docling blocks:")
-        parts.append(docling_text[:25000])
-
-    if not parts:
-        pypdf_blocks, _ = _extract_table_blocks_with_pypdf(pdf_path)
-        pypdf_text = _blocks_to_text(pypdf_blocks)
-        if pypdf_text:
-            parts.append("PyPDF text:")
-            parts.append(pypdf_text[:25000])
-
-    if not parts:
-        parts.append("Full document text:")
-        parts.append(_full_document_text(pdf_path)[:40000])
-
-    return "\n\n".join(part for part in parts if part).strip()
+def _plan_sections_to_text(pdf_path: Path) -> str:
+    sections = _extract_plan_section_texts(pdf_path)
+    if not sections:
+        return ""
+    chunks: list[str] = []
+    for page_number, text in sections:
+        normalized = _normalize_cell(text)
+        if not normalized:
+            continue
+        chunks.append(f"[page {page_number}]")
+        chunks.append(normalized[:6000])
+    return "\n\n".join(chunks).strip()
 
 
 def _build_report_entry(
@@ -1039,6 +1054,54 @@ def _build_report_entry(
     )
 
 
+def _build_manifest_entry(
+    *,
+    pdf_path: Path,
+    source_type: Literal["poop", "best_practices"],
+    analysis: FileAnalysis,
+) -> ImportManifestEntry:
+    return ImportManifestEntry(
+        source_name=pdf_path.name,
+        source_type=source_type,
+        file_size_bytes=pdf_path.stat().st_size,
+        sha256=hashlib.sha256(pdf_path.read_bytes()).hexdigest(),
+        strategy_used=analysis.strategy_used,
+        extractor_used=analysis.extractor_used,
+        record_count=len(analysis.records),
+        quality_score=analysis.quality_score,
+        needs_review=analysis.needs_review,
+    )
+
+
+def _write_review_dump(
+    *,
+    pdf_path: Path,
+    source_type: Literal["poop", "best_practices"],
+    analysis: FileAnalysis,
+    review_dir: Path,
+) -> None:
+    review_dir.mkdir(parents=True, exist_ok=True)
+    review_payload = {
+        "source_name": pdf_path.name,
+        "source_type": source_type,
+        "strategy_used": analysis.strategy_used,
+        "extractor_used": analysis.extractor_used,
+        "quality_score": analysis.quality_score,
+        "needs_review": analysis.needs_review,
+        "warnings": analysis.warnings,
+        "candidate_row_count": len(analysis.candidate_rows),
+        "record_count": len(analysis.records),
+        "candidate_rows": [asdict(candidate) for candidate in analysis.candidate_rows],
+        "records": [record.model_dump(mode="json") for record in analysis.records],
+        "plan_sections": [
+            {"page_number": page_number, "text": text[:8000]}
+            for page_number, text in _extract_plan_section_texts(pdf_path)
+        ],
+    }
+    review_path = review_dir / f"{pdf_path.stem}.review.json"
+    review_path.write_text(json.dumps(review_payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
 def _blocks_to_text(blocks: list[TableBlock]) -> str:
     chunks: list[str] = []
     for block in blocks:
@@ -1048,36 +1111,6 @@ def _blocks_to_text(blocks: list[TableBlock]) -> str:
         chunks.append(f"[page {block.page_number}]")
         chunks.append("\n".join(row_lines))
     return "\n\n".join(chunks).strip()
-
-
-def _full_document_text(pdf_path: Path) -> str:
-    with fitz.open(pdf_path) as document:
-        pages = [document.load_page(index).get_text("text") for index in range(document.page_count)]
-    return "\n\n".join(pages).strip()[:60000]
-
-
-def _build_llm_prompt(
-    direction_code: str,
-    source_name: str,
-    source_type: Literal["poop", "best_practices"],
-    relevant_text: str,
-) -> str:
-    source_config = _get_source_config(source_type)
-    return f"""
-Извлеки элементы учебного плана из текста документа.
-
-Контекст:
-- direction_code: {direction_code}
-- source_name: {source_name}
-- source_type: {source_type}
-- document_kind: {source_config.llm_context_label}
-
-Инструкция:
-{source_config.llm_prompt_hint}
-
-Текст:
-{relevant_text}
-""".strip()
 
 
 def _analyze_pdf_deterministically(
@@ -1114,7 +1147,7 @@ def _analyze_pdf_deterministically(
                     extractor_used = "text"
 
     records = _records_from_candidate_rows(candidate_rows, direction_code=direction_code)
-    quality_score, needs_review = _score_quality(records, candidate_rows)
+    quality_score, needs_review = _score_quality(records, candidate_rows, extractor_used=extractor_used)
 
     if not records:
         warnings.append("no_records_extracted")
@@ -1132,59 +1165,6 @@ def _analyze_pdf_deterministically(
     )
 
 
-def extract_records_from_pdf_with_llm(
-    pdf_path: Path,
-    source_type: Literal["poop", "best_practices"] = "poop",
-    adapter: OllamaAdapter | None = None,
-    candidate_rows: list[CandidateRow] | None = None,
-) -> list[PoopDisciplineSeedRecord]:
-    direction_match = re.match(r"^(\d{6})", pdf_path.name)
-    if direction_match is None:
-        raise ValueError(f"Имя файла должно начинаться с 6 цифр: {pdf_path.name}")
-
-    direction_code = direction_match.group(1)
-    relevant_text = _build_llm_rescue_text(pdf_path, source_type=source_type, candidate_rows=candidate_rows or [])
-    if not relevant_text:
-        LOGGER.warning("Для LLM-извлечения не найден пригодный текст: file=%s source_type=%s", pdf_path.name, source_type)
-        return []
-
-    active_adapter = adapter or OllamaAdapter()
-    response = active_adapter.generate(
-        prompt=_build_llm_prompt(direction_code, pdf_path.name, source_type, relevant_text),
-        system_prompt=LLM_SYSTEM_PROMPT,
-    )
-
-    raw_items = _extract_json_array(response)
-    records: list[PoopDisciplineSeedRecord] = []
-    for index, item in enumerate(raw_items, start=1):
-        if not isinstance(item, dict):
-            LOGGER.warning("Пропуск невалидного объекта LLM: file=%s item=%s type=%s", pdf_path.name, index, type(item).__name__)
-            continue
-        try:
-            record = PoopDisciplineSeedRecord(
-                direction_code=direction_code,
-                source_name=pdf_path.name,
-                source_type=source_type,
-                name=_normalize_name(str(item.get("name", ""))),
-                element_type=item.get("element_type"),
-                part=item.get("part"),
-                credits=item.get("credits"),
-                semesters=item.get("semesters") or [],
-                competency_codes=item.get("competency_codes") or [],
-                practice_type=item.get("practice_type"),
-                fgos_mandatory=item.get("fgos_mandatory"),
-            )
-        except Exception as exc:
-            LOGGER.warning("Пропуск строки из LLM из-за ошибки валидации: file=%s item=%s error=%s", pdf_path.name, index, exc)
-            continue
-        if not _looks_like_candidate_name(record.name) or _is_summary_name(record.name):
-            LOGGER.warning("Пропуск агрегированной LLM-строки: file=%s item=%s name=%r", pdf_path.name, index, record.name)
-            continue
-        records.append(record)
-
-    return _deduplicate_records(records)
-
-
 def extract_records_from_pdf(
     pdf_path: Path,
     source_type: Literal["poop", "best_practices"] = "poop",
@@ -1196,89 +1176,22 @@ def _analyze_pdf(
     pdf_path: Path,
     *,
     source_type: Literal["poop", "best_practices"],
-    strategy: Literal["deterministic", "hybrid", "llm"],
-    adapter: OllamaAdapter | None,
+    strategy: Literal["deterministic"],
 ) -> FileAnalysis:
     deterministic = _analyze_pdf_deterministically(pdf_path, source_type=source_type)
-    if strategy == "deterministic":
-        deterministic.strategy_used = "deterministic"
-        return deterministic
-
-    if strategy == "llm":
-        try:
-            records = extract_records_from_pdf_with_llm(
-                pdf_path,
-                source_type=source_type,
-                adapter=adapter,
-                candidate_rows=deterministic.candidate_rows,
-            )
-        except (LLMAdapterError, ValueError, json.JSONDecodeError) as exc:
-            return FileAnalysis(
-                records=[],
-                candidate_rows=[],
-                extractor_used="none",
-                quality_score=0.0,
-                needs_review=True,
-                warnings=[f"llm_failed: {exc}"],
-                strategy_used="llm",
-            )
-        quality_score, needs_review = _score_quality(records, [])
-        return FileAnalysis(
-            records=records,
-            candidate_rows=[],
-            extractor_used="llm" if records else "none",
-            quality_score=quality_score,
-            needs_review=needs_review,
-            warnings=[] if records else ["llm_no_records"],
-            strategy_used="llm",
-        )
-
-    quality_gate = 0.6 if source_type == "poop" else 0.5
-    if deterministic.records and deterministic.quality_score >= quality_gate and not deterministic.needs_review:
-        deterministic.strategy_used = "hybrid"
-        return deterministic
-
-    try:
-        llm_records = extract_records_from_pdf_with_llm(
-            pdf_path,
-            source_type=source_type,
-            adapter=adapter,
-            candidate_rows=deterministic.candidate_rows,
-        )
-    except (LLMAdapterError, ValueError, json.JSONDecodeError) as exc:
-        deterministic.warnings.append(f"llm_failed: {exc}")
-        deterministic.strategy_used = "hybrid"
-        return deterministic
-
-    if llm_records:
-        quality_score, needs_review = _score_quality(llm_records, deterministic.candidate_rows)
-        if deterministic.records and deterministic.quality_score > quality_score:
-            deterministic.warnings.append("llm_lower_quality_than_deterministic")
-            deterministic.strategy_used = "hybrid"
-            return deterministic
-        return FileAnalysis(
-            records=llm_records,
-            candidate_rows=deterministic.candidate_rows,
-            extractor_used="llm",
-            quality_score=quality_score,
-            needs_review=needs_review,
-            warnings=deterministic.warnings + ["used_llm_fallback"],
-            strategy_used="hybrid",
-        )
-
-    deterministic.warnings.append("llm_no_records")
-    deterministic.strategy_used = "hybrid"
+    deterministic.strategy_used = "deterministic"
     return deterministic
 
 
 def import_poops_from_directory(
     input_dir: Path,
     output_path: Path = DEFAULT_OUTPUT_PATH,
-    strategy: Literal["deterministic", "hybrid", "llm"] = "hybrid",
+    strategy: Literal["deterministic"] = "deterministic",
     source_type: Literal["poop", "best_practices"] = "poop",
-    adapter: OllamaAdapter | None = None,
     persist_output: bool = True,
     report_path: Path | None = None,
+    manifest_path: Path | None = DEFAULT_MANIFEST_PATH,
+    review_dir: Path | None = DEFAULT_REVIEW_DIR,
 ) -> list[PoopDisciplineSeedRecord]:
     pdf_files = sorted(input_dir.glob("*.pdf"))
     if not pdf_files:
@@ -1286,15 +1199,19 @@ def import_poops_from_directory(
 
     all_records: list[PoopDisciplineSeedRecord] = []
     reports: list[ImportReportEntry] = []
+    manifests: list[ImportManifestEntry] = []
     for pdf_path in pdf_files:
-        analysis = _analyze_pdf(pdf_path, source_type=source_type, strategy=strategy, adapter=adapter)
+        analysis = _analyze_pdf(pdf_path, source_type=source_type, strategy=strategy)
         if not analysis.records:
             LOGGER.warning("В PDF не найдено пригодных строк учебного плана: %s", pdf_path.name)
         if analysis.needs_review:
             LOGGER.warning("Файл требует проверки: %s quality_score=%s", pdf_path.name, analysis.quality_score)
+            if review_dir is not None:
+                _write_review_dump(pdf_path=pdf_path, source_type=source_type, analysis=analysis, review_dir=review_dir)
         LOGGER.info("Обработан PDF: %s, записей=%s extractor=%s", pdf_path.name, len(analysis.records), analysis.extractor_used)
         all_records.extend(analysis.records)
         reports.append(_build_report_entry(pdf_path=pdf_path, source_type=source_type, analysis=analysis))
+        manifests.append(_build_manifest_entry(pdf_path=pdf_path, source_type=source_type, analysis=analysis))
 
     if persist_output:
         output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -1305,19 +1222,24 @@ def import_poops_from_directory(
         if report_path is not None:
             report_path.parent.mkdir(parents=True, exist_ok=True)
             report_path.write_text(json.dumps([entry.model_dump(mode="json") for entry in reports], ensure_ascii=False, indent=2), encoding="utf-8")
+        if manifest_path is not None:
+            manifest_path.parent.mkdir(parents=True, exist_ok=True)
+            manifest_path.write_text(json.dumps([entry.model_dump(mode="json") for entry in manifests], ensure_ascii=False, indent=2), encoding="utf-8")
     return all_records
 
 
 def import_seed_sources(
     output_path: Path = DEFAULT_OUTPUT_PATH,
-    strategy: Literal["deterministic", "hybrid", "llm"] = "hybrid",
-    adapter: OllamaAdapter | None = None,
+    strategy: Literal["deterministic"] = "deterministic",
     source_types: tuple[Literal["poop", "best_practices"], ...] = ("poop", "best_practices"),
     source_dirs: dict[Literal["poop", "best_practices"], Path] | None = None,
     report_path: Path = DEFAULT_REPORT_PATH,
+    manifest_path: Path = DEFAULT_MANIFEST_PATH,
+    review_dir: Path | None = DEFAULT_REVIEW_DIR,
 ) -> list[PoopDisciplineSeedRecord]:
     all_records: list[PoopDisciplineSeedRecord] = []
     all_reports: list[ImportReportEntry] = []
+    all_manifests: list[ImportManifestEntry] = []
 
     for source_type in source_types:
         source_config = _get_source_config(source_type)
@@ -1328,14 +1250,17 @@ def import_seed_sources(
 
         pdf_files = sorted(input_dir.glob("*.pdf"))
         for pdf_path in pdf_files:
-            analysis = _analyze_pdf(pdf_path, source_type=source_type, strategy=strategy, adapter=adapter)
+            analysis = _analyze_pdf(pdf_path, source_type=source_type, strategy=strategy)
             if not analysis.records:
                 LOGGER.warning("В PDF не найдено пригодных строк учебного плана: %s", pdf_path.name)
             if analysis.needs_review:
                 LOGGER.warning("Файл требует проверки: %s quality_score=%s", pdf_path.name, analysis.quality_score)
+                if review_dir is not None:
+                    _write_review_dump(pdf_path=pdf_path, source_type=source_type, analysis=analysis, review_dir=review_dir)
             LOGGER.info("Обработан PDF: %s, записей=%s extractor=%s", pdf_path.name, len(analysis.records), analysis.extractor_used)
             all_records.extend(analysis.records)
             all_reports.append(_build_report_entry(pdf_path=pdf_path, source_type=source_type, analysis=analysis))
+            all_manifests.append(_build_manifest_entry(pdf_path=pdf_path, source_type=source_type, analysis=analysis))
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(
@@ -1344,10 +1269,11 @@ def import_seed_sources(
     )
     report_path.parent.mkdir(parents=True, exist_ok=True)
     report_path.write_text(json.dumps([entry.model_dump(mode="json") for entry in all_reports], ensure_ascii=False, indent=2), encoding="utf-8")
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    manifest_path.write_text(json.dumps([entry.model_dump(mode="json") for entry in all_manifests], ensure_ascii=False, indent=2), encoding="utf-8")
     LOGGER.info("Сохранен объединенный JSON: %s, записей=%s", output_path, len(all_records))
     LOGGER.info("Сохранен отчет импорта: %s, файлов=%s", report_path, len(all_reports))
     return all_records
-
 
 def build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Универсальный импорт ПООП и лучших практик из PDF в JSON seed-файл.")
@@ -1355,7 +1281,9 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--best-practices-dir", type=Path, default=DEFAULT_BEST_PRACTICES_DIR, help=f"Папка с PDF-файлами лучших практик. По умолчанию: {DEFAULT_BEST_PRACTICES_DIR}")
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT_PATH, help=f"Куда сохранить итоговый JSON. По умолчанию: {DEFAULT_OUTPUT_PATH}")
     parser.add_argument("--report", type=Path, default=DEFAULT_REPORT_PATH, help=f"Куда сохранить отчет импорта. По умолчанию: {DEFAULT_REPORT_PATH}")
-    parser.add_argument("--strategy", default="hybrid", choices=IMPORT_STRATEGIES, help="Режим импорта: deterministic | hybrid | llm.")
+    parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST_PATH, help=f"Куда сохранить import manifest. По умолчанию: {DEFAULT_MANIFEST_PATH}")
+    parser.add_argument("--review-dir", type=Path, default=DEFAULT_REVIEW_DIR, help=f"Папка для review-dump. По умолчанию: {DEFAULT_REVIEW_DIR}")
+    parser.add_argument("--strategy", default="deterministic", choices=IMPORT_STRATEGIES, help="Режим импорта: deterministic.")
     parser.add_argument("--log-level", default="INFO", choices=["DEBUG", "INFO", "WARNING", "ERROR"], help="Уровень логирования.")
     return parser
 
@@ -1369,6 +1297,8 @@ def main() -> int:
         strategy=args.strategy,
         source_dirs={"poop": args.poop_dir, "best_practices": args.best_practices_dir},
         report_path=args.report,
+        manifest_path=args.manifest,
+        review_dir=args.review_dir,
     )
     return 0
 

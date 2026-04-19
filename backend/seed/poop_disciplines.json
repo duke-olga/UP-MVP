@@ -488,80 +488,60 @@
     "fgos_mandatory": null
   },
   {
-    "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
     "source_type": "poop",
     "name": "Иностранный язык",
     "element_type": "discipline",
     "part": "mandatory",
     "credits": 12.0,
     "semesters": [
+      1,
+      2,
+      3,
       4,
       5,
-      12
+      6
     ],
     "competency_codes": [
-      "УК-4",
-      "УК-5"
+      "УК-3",
+      "УК-4"
     ],
     "practice_type": null,
     "fgos_mandatory": "foreign_language"
   },
   {
-    "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
     "source_type": "poop",
-    "name": "Основы программирования",
+    "name": "Программирование",
     "element_type": "discipline",
     "part": "mandatory",
-    "credits": 7.0,
+    "credits": 18.0,
     "semesters": [
       1,
       2,
-      7,
-      8
+      3
     ],
     "competency_codes": [
-      "ОПК-1",
       "ОПК-2",
-      "ОПК-8"
+      "ОПК-5",
+      "ОПК-6",
+      "ПК-7"
     ],
     "practice_type": null,
     "fgos_mandatory": null
   },
   {
-    "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Информатика",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [
-      1,
-      2,
-      4,
-      9
-    ],
-    "competency_codes": [
-      "ОПК-1",
-      "ОПК-2",
-      "ОПК-9"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
     "source_type": "poop",
     "name": "Математический анализ",
     "element_type": "discipline",
     "part": "mandatory",
     "credits": 5.0,
     "semesters": [
-      1,
-      5
+      1
     ],
     "competency_codes": [
       "ОПК-1"
@@ -570,37 +550,118 @@
     "fgos_mandatory": null
   },
   {
-    "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
     "source_type": "poop",
-    "name": "Физическая культура",
+    "name": "Аналитическая геометрия",
     "element_type": "discipline",
     "part": "mandatory",
-    "credits": 2.0,
+    "credits": 4.0,
     "semesters": [
-      2,
-      6,
-      7,
-      8
+      1
     ],
     "competency_codes": [
-      "УК-6",
-      "УК-7",
-      "УК-8"
+      "ОПК-1"
     ],
     "practice_type": null,
     "fgos_mandatory": null
   },
   {
-    "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
     "source_type": "poop",
-    "name": "Начертательная геометрия",
+    "name": "История",
     "element_type": "discipline",
     "part": "mandatory",
     "credits": 3.0,
     "semesters": [
-      1,
+      2
+    ],
+    "competency_codes": [
+      "УК-5"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": "history"
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Философия",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      5
+    ],
+    "competency_codes": [
+      "УК-5"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": "philosophy"
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Экономика",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 4.0,
+    "semesters": [
+      7,
+      8
+    ],
+    "competency_codes": [
+      "ПК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Интегралы и дифференциальные уравнения",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 5.0,
+    "semesters": [
+      2
+    ],
+    "competency_codes": [
+      "ОПК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Линейная алгебра и функции нескольких переменных",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 4.0,
+    "semesters": [
+      2
+    ],
+    "competency_codes": [
+      "ОПК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Физика",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 9.0,
+    "semesters": [
+      2,
       3
     ],
     "competency_codes": [
@@ -610,71 +671,31 @@
     "fgos_mandatory": null
   },
   {
-    "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
     "source_type": "poop",
-    "name": "Аналитическая геометрия",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [
-      1,
-      4
-    ],
-    "competency_codes": [
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Линейная алгебра и функция нескольких переменных",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [
-      1,
-      4
-    ],
-    "competency_codes": [
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "История",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      1,
-      3,
-      5
-    ],
-    "competency_codes": [
-      "УК-1",
-      "УК-5"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": "history"
-  },
-  {
-    "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Интегралы и дифференциальные уравнения",
+    "name": "Дискретная математика",
     "element_type": "discipline",
     "part": "mandatory",
     "credits": 5.0,
     "semesters": [
-      1,
+      4
+    ],
+    "competency_codes": [
+      "ОПК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Теория вероятности",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 4.0,
+    "semesters": [
       5
     ],
     "competency_codes": [
@@ -684,17 +705,251 @@
     "fgos_mandatory": null
   },
   {
-    "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
     "source_type": "poop",
-    "name": "Физика",
+    "name": "Экология",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 2.0,
+    "semesters": [
+      6
+    ],
+    "competency_codes": [
+      "УК-8"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Основы программной инженерии",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 4.0,
+    "semesters": [
+      2
+    ],
+    "competency_codes": [
+      "УК-2",
+      "ОПК-6",
+      "ОПК-4",
+      "ПК-8",
+      "ОПК-7"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Операционные системы",
     "element_type": "discipline",
     "part": "mandatory",
     "credits": 9.0,
     "semesters": [
-      1,
-      9
+      5,
+      6
     ],
+    "competency_codes": [
+      "ПК-9"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Операционнык системы. Курсовая работа",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 2.0,
+    "semesters": [
+      6
+    ],
+    "competency_codes": [
+      "ПК-9"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Базы данных",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 6.0,
+    "semesters": [
+      5
+    ],
+    "competency_codes": [
+      "ПК-10",
+      "ПК-9",
+      "ОПК-8"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Базы данных. Курсовая работа",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 2.0,
+    "semesters": [
+      6
+    ],
+    "competency_codes": [
+      "ПК-9",
+      "ОПК-8"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Архитектура ЭВМ",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 8.0,
+    "semesters": [
+      4,
+      5
+    ],
+    "competency_codes": [
+      "ПК-9"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Компьютерные сети",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      7
+    ],
+    "competency_codes": [
+      "ПК-9",
+      "ПК-10"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Компьютерные сети. Курсовая работа",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 2.0,
+    "semesters": [
+      7
+    ],
+    "competency_codes": [
+      "ПК-9",
+      "ПК-3"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Проектирование программного обеспечения",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      7
+    ],
+    "competency_codes": [
+      "ПК-2",
+      "ПК-4",
+      "ОПК-3"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Тестирование и отладка программного обеспечения",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      8
+    ],
+    "competency_codes": [
+      "ОПК-6",
+      "ПК-2"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Безопасность жизнидеятельности",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      8
+    ],
+    "competency_codes": [
+      "УК-2",
+      "УК-8"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Физическая культура",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 2.0,
+    "semesters": [
+      6
+    ],
+    "competency_codes": [
+      "УК-6",
+      "УК-7"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Теоретическая информатика",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 2.0,
+    "semesters": [],
     "competency_codes": [
       "ОПК-1"
     ],
@@ -702,73 +957,1724 @@
     "fgos_mandatory": null
   },
   {
-    "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
     "source_type": "poop",
     "name": "Инженерная графика",
     "element_type": "discipline",
     "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      1,
-      2,
-      3,
-      4
-    ],
+    "credits": 5.0,
+    "semesters": [],
     "competency_codes": [
-      "ОПК-1",
-      "ОПК-2",
       "ОПК-4"
     ],
     "practice_type": null,
     "fgos_mandatory": null
   },
   {
-    "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
     "source_type": "poop",
-    "name": "Электротехника",
+    "name": "Политология",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      4
+    ],
+    "competency_codes": [
+      "УК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Правоведение",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      3
+    ],
+    "competency_codes": [
+      "УК-1",
+      "УК-2"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Основы межличностных отношений",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      6
+    ],
+    "competency_codes": [
+      "УК-4"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Основы электроники",
     "element_type": "discipline",
     "part": "mandatory",
     "credits": 4.0,
     "semesters": [
+      3
+    ],
+    "competency_codes": [
+      "ОПК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Типы и структуры данных",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 4.0,
+    "semesters": [
+      3
+    ],
+    "competency_codes": [
+      "ПК-9"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Логика и теория алгоритмов",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      4
+    ],
+    "competency_codes": [
+      "УК-1",
+      "ОПК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Вычислительные алгоритмы",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      4
+    ],
+    "competency_codes": [
+      "ПК-4"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Математическая статистика",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 4.0,
+    "semesters": [
+      6
+    ],
+    "competency_codes": [
+      "УК-1",
+      "ОПК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Машинно-зависимые языки программирования",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      4
+    ],
+    "competency_codes": [
+      "ПК-7",
+      "ПК-10"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Объектно-ориентированное программирование",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      4
+    ],
+    "competency_codes": [
+      "ПК-10"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Компьютерная графика",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 4.0,
+    "semesters": [
+      4
+    ],
+    "competency_codes": [
+      "УК-1",
+      "ПК-5"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Защита информации",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      7
+    ],
+    "competency_codes": [
+      "УК-1",
+      "ПК-10"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Моделирование",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 9.0,
+    "semesters": [
+      6,
+      7
+    ],
+    "competency_codes": [
+      "УК-1",
+      "ПК-6"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "Функционально-логическое программирование",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      6
+    ],
+    "competency_codes": [
+      "ПК-10"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "научно-исследовательская работа",
+    "element_type": "practice",
+    "part": "mandatory",
+    "credits": 2.0,
+    "semesters": [
+      7
+    ],
+    "competency_codes": [
+      "УК-1",
+      "ОПК-1"
+    ],
+    "practice_type": "industrial",
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "научно-исследовательская работа (получение первичных навыков научно-исследовательской работы)",
+    "element_type": "practice",
+    "part": "mandatory",
+    "credits": 2.0,
+    "semesters": [
+      4
+    ],
+    "competency_codes": [
+      "ОПК-1"
+    ],
+    "practice_type": "educational",
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "ознакомительная практика",
+    "element_type": "practice",
+    "part": "mandatory",
+    "credits": 2.0,
+    "semesters": [
+      2
+    ],
+    "competency_codes": [
+      "ПК-10"
+    ],
+    "practice_type": "educational",
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "технологическая (проектно-технологическая) практика",
+    "element_type": "practice",
+    "part": "mandatory",
+    "credits": 2.0,
+    "semesters": [
+      4
+    ],
+    "competency_codes": [
+      "ПК-11"
+    ],
+    "practice_type": "educational",
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "технологическая (проектно-технологическая) практика",
+    "element_type": "practice",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      5
+    ],
+    "competency_codes": [
+      "ПК-11"
+    ],
+    "practice_type": "industrial",
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "эксплуатационная практика",
+    "element_type": "practice",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      6
+    ],
+    "competency_codes": [
+      "ПК-12"
+    ],
+    "practice_type": "educational",
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "name": "эксплуатационная практика",
+    "element_type": "practice",
+    "part": "mandatory",
+    "credits": 2.0,
+    "semesters": [
+      7
+    ],
+    "competency_codes": [
+      "ПК-12"
+    ],
+    "practice_type": "industrial",
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Иностранный язык",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 12.0,
+    "semesters": [
       1,
       2,
+      3,
       4,
-      9
+      5,
+      6
     ],
+    "competency_codes": [
+      "УК-3",
+      "УК-4"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": "foreign_language"
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Программирование",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 18.0,
+    "semesters": [
+      1,
+      2,
+      3
+    ],
+    "competency_codes": [
+      "ОПК-2",
+      "ОПК-5",
+      "ОПК-6",
+      "ПК-7"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Математический анализ",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 5.0,
+    "semesters": [
+      1
+    ],
+    "competency_codes": [
+      "ОПК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Аналитическая геометрия",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 4.0,
+    "semesters": [
+      1
+    ],
+    "competency_codes": [
+      "ОПК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "История",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      2
+    ],
+    "competency_codes": [
+      "УК-5"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": "history"
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Философия",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      5
+    ],
+    "competency_codes": [
+      "УК-5"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": "philosophy"
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Экономика",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 4.0,
+    "semesters": [
+      7,
+      8
+    ],
+    "competency_codes": [
+      "ПК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Интегралы и дифференциальные уравнения",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 5.0,
+    "semesters": [
+      2
+    ],
+    "competency_codes": [
+      "ОПК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Линейная алгебра и функции нескольких переменных",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 4.0,
+    "semesters": [
+      2
+    ],
+    "competency_codes": [
+      "ОПК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Физика",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 9.0,
+    "semesters": [
+      2,
+      3
+    ],
+    "competency_codes": [
+      "ОПК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Дискретная математика",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 5.0,
+    "semesters": [
+      4
+    ],
+    "competency_codes": [
+      "ОПК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Теория вероятности",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 4.0,
+    "semesters": [
+      5
+    ],
+    "competency_codes": [
+      "ОПК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Экология",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 2.0,
+    "semesters": [
+      6
+    ],
+    "competency_codes": [
+      "УК-8"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Основы программной инженерии",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 4.0,
+    "semesters": [
+      2
+    ],
+    "competency_codes": [
+      "УК-2",
+      "ОПК-6",
+      "ОПК-4",
+      "ПК-8",
+      "ОПК-7"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Операционные системы",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 9.0,
+    "semesters": [
+      5,
+      6
+    ],
+    "competency_codes": [
+      "ПК-9"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Операционнык системы. Курсовая работа",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 2.0,
+    "semesters": [
+      6
+    ],
+    "competency_codes": [
+      "ПК-9"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Базы данных",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 6.0,
+    "semesters": [
+      5
+    ],
+    "competency_codes": [
+      "ПК-10",
+      "ПК-9",
+      "ОПК-8"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Базы данных. Курсовая работа",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 2.0,
+    "semesters": [
+      6
+    ],
+    "competency_codes": [
+      "ПК-9",
+      "ОПК-8"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Архитектура ЭВМ",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 8.0,
+    "semesters": [
+      4,
+      5
+    ],
+    "competency_codes": [
+      "ПК-9"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Компьютерные сети",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      7
+    ],
+    "competency_codes": [
+      "ПК-9",
+      "ПК-10"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Компьютерные сети. Курсовая работа",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 2.0,
+    "semesters": [
+      7
+    ],
+    "competency_codes": [
+      "ПК-9",
+      "ПК-3"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Проектирование программного обеспечения",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      7
+    ],
+    "competency_codes": [
+      "ПК-2",
+      "ПК-4",
+      "ОПК-3"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Тестирование и отладка программного обеспечения",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      8
+    ],
+    "competency_codes": [
+      "ОПК-6",
+      "ПК-2"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Безопасность жизнидеятельности",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      8
+    ],
+    "competency_codes": [
+      "УК-2",
+      "УК-8"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Физическая культура",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 2.0,
+    "semesters": [
+      6
+    ],
+    "competency_codes": [
+      "УК-6",
+      "УК-7"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Теоретическая информатика",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 2.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Инженерная графика",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 5.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-4"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Политология",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      4
+    ],
+    "competency_codes": [
+      "УК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Правоведение",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      3
+    ],
+    "competency_codes": [
+      "УК-1",
+      "УК-2"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Основы межличностных отношений",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      6
+    ],
+    "competency_codes": [
+      "УК-4"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Основы электроники",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 4.0,
+    "semesters": [
+      3
+    ],
+    "competency_codes": [
+      "ОПК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Типы и структуры данных",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 4.0,
+    "semesters": [
+      3
+    ],
+    "competency_codes": [
+      "ПК-9"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Логика и теория алгоритмов",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      4
+    ],
+    "competency_codes": [
+      "УК-1",
+      "ОПК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Вычислительные алгоритмы",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      4
+    ],
+    "competency_codes": [
+      "ПК-4"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Математическая статистика",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 4.0,
+    "semesters": [
+      6
+    ],
+    "competency_codes": [
+      "УК-1",
+      "ОПК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Машинно-зависимые языки программирования",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      4
+    ],
+    "competency_codes": [
+      "ПК-7",
+      "ПК-10"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Объектно-ориентированное программирование",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      4
+    ],
+    "competency_codes": [
+      "ПК-10"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Компьютерная графика",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 4.0,
+    "semesters": [
+      4
+    ],
+    "competency_codes": [
+      "УК-1",
+      "ПК-5"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Защита информации",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      7
+    ],
+    "competency_codes": [
+      "УК-1",
+      "ПК-10"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Моделирование",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 9.0,
+    "semesters": [
+      6,
+      7
+    ],
+    "competency_codes": [
+      "УК-1",
+      "ПК-6"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "Функционально-логическое программирование",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      6
+    ],
+    "competency_codes": [
+      "ПК-10"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "научно-исследовательская работа",
+    "element_type": "practice",
+    "part": "mandatory",
+    "credits": 2.0,
+    "semesters": [
+      7
+    ],
+    "competency_codes": [
+      "УК-1",
+      "ОПК-1"
+    ],
+    "practice_type": "industrial",
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "научно-исследовательская работа (получение первичных навыков научно-исследовательской работы)",
+    "element_type": "practice",
+    "part": "mandatory",
+    "credits": 2.0,
+    "semesters": [
+      4
+    ],
+    "competency_codes": [
+      "ОПК-1"
+    ],
+    "practice_type": "educational",
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "ознакомительная практика",
+    "element_type": "practice",
+    "part": "mandatory",
+    "credits": 2.0,
+    "semesters": [
+      2
+    ],
+    "competency_codes": [
+      "ПК-10"
+    ],
+    "practice_type": "educational",
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "технологическая (проектно-технологическая) практика",
+    "element_type": "practice",
+    "part": "mandatory",
+    "credits": 2.0,
+    "semesters": [
+      4
+    ],
+    "competency_codes": [
+      "ПК-11"
+    ],
+    "practice_type": "educational",
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "технологическая (проектно-технологическая) практика",
+    "element_type": "practice",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      5
+    ],
+    "competency_codes": [
+      "ПК-11"
+    ],
+    "practice_type": "industrial",
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "эксплуатационная практика",
+    "element_type": "practice",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [
+      6
+    ],
+    "competency_codes": [
+      "ПК-12"
+    ],
+    "practice_type": "educational",
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090304",
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "name": "эксплуатационная практика",
+    "element_type": "practice",
+    "part": "mandatory",
+    "credits": 2.0,
+    "semesters": [
+      7
+    ],
+    "competency_codes": [
+      "ПК-12"
+    ],
+    "practice_type": "industrial",
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Математический анализ",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 9.0,
+    "semesters": [],
     "competency_codes": [
       "ОПК-1",
       "ОПК-2",
-      "ОПК-9"
+      "ПК-1",
+      "УК-1"
     ],
     "practice_type": null,
     "fgos_mandatory": null
   },
   {
     "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Базы данных курсовая работа,",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Теория помехоустойчивого кодирования",
     "element_type": "discipline",
     "part": "mandatory",
-    "credits": 5.0,
-    "semesters": [
-      1,
-      2,
-      5,
-      8,
-      9
-    ],
+    "credits": 4.0,
+    "semesters": [],
     "competency_codes": [
       "ОПК-1",
       "ОПК-2",
+      "ПК-1",
+      "ПК-3",
+      "ПК-4",
+      "УК-1",
+      "УК-2"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Метрология, стандартизация и сертификация",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-4",
+      "ПК-3",
+      "УК-2"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Сети и системы передачи информации",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 7.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ОПК-2",
+      "ОПК-3",
+      "ОПК-4",
+      "ОПК-5",
+      "ПК-1",
+      "ПК-3",
+      "ПК-4",
+      "УК-1",
+      "УК-2"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Теория массового обслуживания",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ОПК-3",
+      "ПК-1",
+      "ПК-3",
+      "УК-1",
+      "УК-2"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Методы и средства защиты информации",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 4.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ОПК-2",
+      "ПК-3",
+      "ПК-5",
+      "УК-1",
+      "УК-2"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Общая теория связи",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 4.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ОПК-2",
+      "ПК-1",
+      "ПК-4",
+      "УК-1",
+      "УК-2"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Цифровая обработка сигналов",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 4.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ОПК-2",
+      "ПК-1",
+      "ПК-3",
+      "УК-1",
+      "УК-2"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Методы моделирования и оптимизации",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ОПК-2",
+      "ПК-3",
+      "УК-1",
+      "УК-2"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Базы Данных",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-3",
+      "ОПК-5",
+      "ПК-2",
+      "УК-2"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Схемотехника",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 4.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ОПК-2",
+      "ПК-1",
+      "УК-1",
+      "УК-2"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Электротехника и электроника",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 5.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ОПК-2",
+      "ПК-1",
+      "ПК-3",
+      "ПК-4",
+      "УК-1",
+      "УК-2"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Архитектура компьютера",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 5.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ОПК-2",
+      "ПК-1",
+      "УК-1",
+      "УК-2"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Операционные системы",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 6.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-2",
+      "ОПК-5",
+      "ОПК-7",
+      "ПК-1",
+      "ПК-2",
+      "УК-1",
+      "УК-2"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Теория автоматов",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 5.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ОПК-2",
+      "ПК-1",
+      "УК-1",
+      "УК-2"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Теория вероятностей и математическая статистика",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 6.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ОПК-2",
+      "ПК-1",
+      "УК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Алгебра и геометрия",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 6.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ПК-1",
+      "УК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Дискретная математика",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 6.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ОПК-2",
+      "ПК-1",
+      "УК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Языки программирования",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 5.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-2",
+      "ОПК-3",
+      "ОПК-4",
+      "ОПК-8",
+      "ОПК-9",
+      "ПК-1",
+      "ПК-2",
+      "ПК-3",
+      "УК-1",
+      "УК-2"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Объектно-ориентированное программирование",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 9.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-3",
+      "ОПК-4",
       "ОПК-5",
       "ОПК-8",
       "ОПК-9",
-      "ПК-9",
+      "ПК-1",
+      "ПК-2",
+      "ПК-3",
+      "УК-1",
+      "УК-2"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Алгоритмы и структуры данных",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 6.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ОПК-2",
+      "ОПК-3",
+      "ОПК-4",
+      "ОПК-8",
+      "ПК-1",
+      "ПК-2",
+      "ПК-3",
+      "УК-1",
+      "УК-2"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Теория информации (преподается на иностранном языке)",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 4.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ОПК-2",
+      "ПК-1",
+      "ПК-3",
+      "ПК-4",
+      "УК-1",
+      "УК-2"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": "foreign_language"
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Информатика",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 4.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ОПК-2",
       "ПК-1",
       "УК-1",
+      "УК-2"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Физика",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 7.0,
+    "semesters": [],
+    "competency_codes": [],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Программирование на языке Verilog",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-2",
+      "ОПК-5",
+      "ОПК-8",
+      "ПК-1",
       "ПК-2"
     ],
     "practice_type": null,
@@ -776,191 +2682,481 @@
   },
   {
     "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Электроника",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Интеллектуальные методы обеспечения сетевой безопасности",
     "element_type": "discipline",
     "part": "mandatory",
     "credits": 4.0,
-    "semesters": [
-      1,
-      4,
-      7,
-      9
-    ],
-    "competency_codes": [
-      "ОПК-1",
-      "ОПК-9",
-      "ОПК-7"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Сети и телекоммуникации",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 5.0,
-    "semesters": [
-      1,
-      3,
-      4,
-      5,
-      6,
-      7,
-      11,
-      12
-    ],
-    "competency_codes": [
-      "ОПК-1",
-      "ОПК-3",
-      "ОПК-5",
-      "ОПК-4",
-      "ОПК-7",
-      "ОПК-6",
-      "ПК-11",
-      "ПК-13",
-      "ПК-12"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Операционные системы",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [
-      1,
-      2,
-      4
-    ],
-    "competency_codes": [
-      "ОПК-1",
-      "ОПК-2"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Философия",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      1,
-      3,
-      5,
-      6
-    ],
-    "competency_codes": [
-      "УК-1",
-      "УК-5",
-      "УК-6"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": "philosophy"
-  },
-  {
-    "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Экономика",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [
-      1,
-      2,
-      4,
-      5,
-      6,
-      10
-    ],
-    "competency_codes": [
-      "УК-2",
-      "ОПК-1",
-      "ОПК-6",
-      "ПК-5",
-      "ПК-10"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Экология",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [
-      1,
-      2,
-      7
-    ],
-    "competency_codes": [
-      "УК-2",
-      "УК-7",
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Защита информации",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      1,
-      2,
-      3,
-      8
-    ],
+    "semesters": [],
     "competency_codes": [
       "ОПК-1",
       "ОПК-2",
       "ОПК-3",
-      "ОПК-8"
+      "ПК-1",
+      "ПК-4",
+      "ПК-5"
     ],
     "practice_type": null,
     "fgos_mandatory": null
   },
   {
     "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
-    "source_type": "poop",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Специальные разделы теории кодирования (преподается на иностранном языке)",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 4.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ОПК-2",
+      "ПК-1",
+      "ПК-3",
+      "ПК-4"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": "foreign_language"
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Программирование микросервисных приложений",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 5.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-2",
+      "ОПК-3",
+      "ОПК-4",
+      "ОПК-5",
+      "ОПК-8",
+      "ОПК-9",
+      "ПК-1",
+      "ПК-2",
+      "ПК-3",
+      "УК-1",
+      "УК-2"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Проектный семинар \"Python в науке о данных\"",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 5.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ПК-3",
+      "УК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Основы теории трудноразрешимых задач",
+    "element_type": "discipline",
+    "part": "variative",
+    "credits": 3.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ПК-5"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Алгоритмические проблемы криптографии",
+    "element_type": "discipline",
+    "part": "variative",
+    "credits": 3.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ПК-5"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Надежность инфокоммуникационных систем",
+    "element_type": "discipline",
+    "part": "variative",
+    "credits": 3.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ПК-1"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Антенны и распространение радиоволн",
+    "element_type": "discipline",
+    "part": "variative",
+    "credits": 3.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ПК-1",
+      "ПК-3",
+      "ПК-4"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Разработка мобильных приложений",
+    "element_type": "discipline",
+    "part": "variative",
+    "credits": 3.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-2",
+      "ОПК-3",
+      "ОПК-8",
+      "ПК-1",
+      "ПК-2",
+      "ПК-3"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Мультимедиа технологии в инфокоммуникациях",
+    "element_type": "discipline",
+    "part": "variative",
+    "credits": 3.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ОПК-2",
+      "ОПК-3",
+      "ОПК-4",
+      "ПК-1",
+      "ПК-2",
+      "ПК-3"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Web-программирование",
+    "element_type": "discipline",
+    "part": "variative",
+    "credits": 3.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-2",
+      "ОПК-3",
+      "ОПК-8",
+      "ПК-1",
+      "ПК-2",
+      "ПК-3"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Сети и системы мобильной связи",
+    "element_type": "discipline",
+    "part": "variative",
+    "credits": 5.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ОПК-2",
+      "ОПК-3",
+      "ОПК-4",
+      "ОПК-5",
+      "ПК-1",
+      "ПК-3",
+      "ПК-4"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Криптографические протоколы",
+    "element_type": "discipline",
+    "part": "variative",
+    "credits": 5.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ОПК-2",
+      "ОПК-3",
+      "ПК-1",
+      "ПК-4",
+      "ПК-5"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Безопасность баз данных",
+    "element_type": "discipline",
+    "part": "variative",
+    "credits": 5.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-3",
+      "ПК-1",
+      "ПК-5"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Защита информационных процессов в компьютерных системах",
+    "element_type": "discipline",
+    "part": "variative",
+    "credits": 5.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-3",
+      "ПК-1",
+      "ПК-2",
+      "ПК-5"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Технологии стеганографии в системах инфокоммуникаций",
+    "element_type": "discipline",
+    "part": "variative",
+    "credits": 5.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-3",
+      "ПК-1",
+      "ПК-2",
+      "ПК-5"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Программно-определяемое радио",
+    "element_type": "discipline",
+    "part": "variative",
+    "credits": 5.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ОПК-2",
+      "ОПК-3",
+      "ПК-1",
+      "ПК-2",
+      "ПК-3",
+      "ПК-4"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Производственная практика",
+    "element_type": "practice",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ОПК-2",
+      "ОПК-3",
+      "ОПК-4",
+      "ОПК-5",
+      "ОПК-6",
+      "ОПК-7",
+      "ОПК-8",
+      "ОПК-9",
+      "ПК-1",
+      "ПК-2",
+      "ПК-3",
+      "ПК-4",
+      "ПК-5",
+      "УК-1",
+      "УК-2",
+      "УК-3",
+      "УК-4",
+      "УК-5",
+      "УК-6",
+      "УК-8",
+      "УК-9"
+    ],
+    "practice_type": "industrial",
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Исследовательский или прикладной проект",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 9.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ОПК-3",
+      "ОПК-4",
+      "ОПК-8",
+      "ОПК-9",
+      "ПК-3",
+      "ПК-4",
+      "УК-1",
+      "УК-2",
+      "УК-3",
+      "УК-4",
+      "УК-6",
+      "УК-9"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Преддипломная практика",
+    "element_type": "practice",
+    "part": "mandatory",
+    "credits": 3.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ОПК-2",
+      "ОПК-3",
+      "ОПК-4",
+      "ОПК-5",
+      "ОПК-6",
+      "ОПК-7",
+      "ОПК-8",
+      "ОПК-9",
+      "ПК-1",
+      "ПК-2",
+      "ПК-3",
+      "ПК-4",
+      "ПК-5",
+      "УК-1",
+      "УК-2",
+      "УК-3",
+      "УК-4",
+      "УК-5",
+      "УК-6",
+      "УК-8",
+      "УК-9"
+    ],
+    "practice_type": "industrial",
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Учебная практика",
+    "element_type": "practice",
+    "part": "mandatory",
+    "credits": 2.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-1",
+      "ОПК-2",
+      "ОПК-3",
+      "ОПК-4",
+      "ОПК-8",
+      "ОПК-9",
+      "ПК-1",
+      "ПК-2",
+      "ПК-3",
+      "ПК-4",
+      "УК-1",
+      "УК-2",
+      "УК-4",
+      "УК-6"
+    ],
+    "practice_type": "educational",
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Физическая культура",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 1.0,
+    "semesters": [],
+    "competency_codes": [
+      "УК-7"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": null
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
     "name": "Безопасность жизнедеятельности",
     "element_type": "discipline",
     "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      2,
-      3,
-      5,
-      6,
-      7,
-      8
-    ],
+    "credits": 1.0,
+    "semesters": [],
     "competency_codes": [
-      "УК-2",
-      "УК-5",
-      "УК-6",
-      "УК-7",
+      "УК-11",
       "УК-8"
     ],
     "practice_type": null,
@@ -968,272 +3164,13 @@
   },
   {
     "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "эксплуатационная практика",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [
-      2,
-      3,
-      4,
-      6,
-      8,
-      9
-    ],
-    "competency_codes": [
-      "УК-2",
-      "УК-3",
-      "УК-4",
-      "УК-6",
-      "ОПК-2",
-      "ОПК-8",
-      "ОПК-9"
-    ],
-    "practice_type": "educational",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "технологическая (проектно-технологическая) практика",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "УК-2",
-      "УК-3",
-      "УК-4",
-      "УК-6",
-      "ОПК-1",
-      "ОПК-2",
-      "ОПК-3",
-      "ОПК-4",
-      "ОПК-6",
-      "ОПК-7",
-      "ОПК-8",
-      "ОПК-9",
-      "ПК-1",
-      "ПК-2",
-      "ПК-3",
-      "ПК-4",
-      "ПК-5",
-      "ПК-6",
-      "ПК-7",
-      "ПК-9",
-      "ПК-10",
-      "ПК-11",
-      "ПК-12"
-    ],
-    "practice_type": "industrial",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "эксплуатационная практика",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "УК-2",
-      "УК-3",
-      "УК-4",
-      "УК-6",
-      "ОПК-1",
-      "ОПК-2",
-      "ОПК-3",
-      "ОПК-4",
-      "ОПК-5",
-      "ОПК-6",
-      "ОПК-7",
-      "ОПК-8",
-      "ОПК-9",
-      "ПК-1",
-      "ПК-2",
-      "ПК-3",
-      "ПК-4",
-      "ПК-5",
-      "ПК-6",
-      "ПК-7",
-      "ПК-9",
-      "ПК-10",
-      "ПК-11",
-      "ПК-12",
-      "ПК-13"
-    ],
-    "practice_type": "industrial",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "технологическая (проектно-технологическая) практика",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [
-      2,
-      3,
-      4,
-      6
-    ],
-    "competency_codes": [
-      "УК-2",
-      "УК-3",
-      "УК-4",
-      "УК-6"
-    ],
-    "practice_type": "educational",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "научно-исследовательская работа",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [
-      1,
-      2,
-      3,
-      4,
-      6,
-      8,
-      9
-    ],
-    "competency_codes": [
-      "УК-1",
-      "УК-2",
-      "УК-3",
-      "УК-4",
-      "УК-6",
-      "ОПК-1",
-      "ОПК-2",
-      "ОПК-4",
-      "ОПК-8",
-      "ОПК-9",
-      "ПК-14"
-    ],
-    "practice_type": "industrial",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090301",
-    "source_name": "090301_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "2 выполнение и защита выпускной квалификационной работы",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 9.0,
-    "semesters": [
-      2,
-      9
-    ],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Иностранный язык",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 12.0,
-    "semesters": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
-    "competency_codes": [
-      "УК-3",
-      "УК-4"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": "foreign_language"
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Программирование",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 18.0,
-    "semesters": [
-      1,
-      2,
-      3
-    ],
-    "competency_codes": [
-      "ОПК-2",
-      "ОПК-5",
-      "ОПК-6",
-      "ПК-7"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Математический анализ",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 5.0,
-    "semesters": [
-      1
-    ],
-    "competency_codes": [
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Аналитическая геометрия",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "История России",
     "element_type": "discipline",
     "part": "mandatory",
     "credits": 4.0,
-    "semesters": [
-      1
-    ],
-    "competency_codes": [
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "История",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      2
-    ],
+    "semesters": [],
     "competency_codes": [
       "УК-5"
     ],
@@ -1241,1312 +3178,110 @@
     "fgos_mandatory": "history"
   },
   {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Философия",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      5
-    ],
-    "competency_codes": [
-      "УК-5"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": "philosophy"
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
     "name": "Экономика",
     "element_type": "discipline",
     "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [
-      7,
-      8
-    ],
+    "credits": 3.0,
+    "semesters": [],
     "competency_codes": [
-      "ПК-1"
+      "УК-9"
     ],
     "practice_type": null,
     "fgos_mandatory": null
   },
   {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Интегралы и дифференциальные уравнения",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 5.0,
-    "semesters": [
-      2
-    ],
-    "competency_codes": [
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Линейная алгебра и функции нескольких переменных",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [
-      2
-    ],
-    "competency_codes": [
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Физика",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 9.0,
-    "semesters": [
-      2,
-      3
-    ],
-    "competency_codes": [
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Дискретная математика",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 5.0,
-    "semesters": [
-      4
-    ],
-    "competency_codes": [
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Теория вероятности",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [
-      5
-    ],
-    "competency_codes": [
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Экология",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [
-      6
-    ],
-    "competency_codes": [
-      "УК-8"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Основы программной инженерии",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [
-      2
-    ],
-    "competency_codes": [
-      "УК-2",
-      "ОПК-6",
-      "ОПК-4",
-      "ПК-8",
-      "ОПК-7"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Операционные системы",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 9.0,
-    "semesters": [
-      5,
-      6
-    ],
-    "competency_codes": [
-      "ПК-9"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Операционнык системы. Курсовая работа",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [
-      6
-    ],
-    "competency_codes": [
-      "ПК-9"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Базы данных",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 6.0,
-    "semesters": [
-      5
-    ],
-    "competency_codes": [
-      "ПК-10",
-      "ПК-9",
-      "ОПК-8"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Базы данных. Курсовая работа",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [
-      6
-    ],
-    "competency_codes": [
-      "ПК-9",
-      "ОПК-8"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Архитектура ЭВМ",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 8.0,
-    "semesters": [
-      4,
-      5
-    ],
-    "competency_codes": [
-      "ПК-9"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Компьютерные сети",
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Правовая грамотность",
     "element_type": "discipline",
     "part": "mandatory",
     "credits": 3.0,
-    "semesters": [
-      7
-    ],
+    "semesters": [],
     "competency_codes": [
-      "ПК-9",
-      "ПК-10"
+      "УК-10"
     ],
     "practice_type": null,
     "fgos_mandatory": null
   },
   {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Компьютерные сети. Курсовая работа",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [
-      7
-    ],
-    "competency_codes": [
-      "ПК-9",
-      "ПК-3"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Проектирование программного обеспечения",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      7
-    ],
-    "competency_codes": [
-      "ПК-2",
-      "ПК-4",
-      "ОПК-3"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Тестирование и отладка программного обеспечения",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      8
-    ],
-    "competency_codes": [
-      "ОПК-6",
-      "ПК-2"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Безопасность жизнидеятельности",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      8
-    ],
-    "competency_codes": [
-      "УК-2",
-      "УК-8"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Физическая культура",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [
-      6
-    ],
-    "competency_codes": [
-      "УК-6",
-      "УК-7"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Теоретическая информатика",
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Основы российской государственности",
     "element_type": "discipline",
     "part": "mandatory",
     "credits": 2.0,
     "semesters": [],
     "competency_codes": [
-      "ОПК-1"
+      "УК-10",
+      "УК-5"
     ],
     "practice_type": null,
     "fgos_mandatory": null
   },
   {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Инженерная графика",
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Minor",
     "element_type": "discipline",
     "part": "mandatory",
-    "credits": 5.0,
+    "credits": 20.0,
     "semesters": [],
     "competency_codes": [
-      "ОПК-4"
+      "ОПК-1",
+      "ОПК-2",
+      "ОПК-3",
+      "ОПК-5"
     ],
     "practice_type": null,
     "fgos_mandatory": null
   },
   {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Политология",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      4
-    ],
-    "competency_codes": [
-      "УК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Правоведение",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      3
-    ],
-    "competency_codes": [
-      "УК-1",
-      "УК-2"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Основы межличностных отношений",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      6
-    ],
-    "competency_codes": [
-      "УК-4"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Основы электроники",
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Независимый экзамен по английскому языку (преподается на иностранном языке)",
     "element_type": "discipline",
     "part": "mandatory",
     "credits": 4.0,
-    "semesters": [
-      3
-    ],
+    "semesters": [],
     "competency_codes": [
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Типы и структуры данных",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [
-      3
-    ],
-    "competency_codes": [
-      "ПК-9"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Логика и теория алгоритмов",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      4
-    ],
-    "competency_codes": [
-      "УК-1",
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Вычислительные алгоритмы",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      4
-    ],
-    "competency_codes": [
-      "ПК-4"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Математическая статистика",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [
-      6
-    ],
-    "competency_codes": [
-      "УК-1",
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Машинно-зависимые языки программирования",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      4
-    ],
-    "competency_codes": [
-      "ПК-7",
-      "ПК-10"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Объектно-ориентированное программирование",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      4
-    ],
-    "competency_codes": [
-      "ПК-10"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Компьютерная графика",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [
-      4
-    ],
-    "competency_codes": [
-      "УК-1",
-      "ПК-5"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Защита информации",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      7
-    ],
-    "competency_codes": [
-      "УК-1",
-      "ПК-10"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Моделирование",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 9.0,
-    "semesters": [
-      6,
-      7
-    ],
-    "competency_codes": [
-      "УК-1",
-      "ПК-6"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Функционально-логическое программирование",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      6
-    ],
-    "competency_codes": [
-      "ПК-10"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "Дисциплины по выбору",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 29.0,
-    "semesters": [
-      3,
-      4,
-      5,
-      6,
-      7,
-      8
-    ],
-    "competency_codes": [
-      "ПК-10",
-      "ПК-11"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "научно-исследовательская работа",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [
-      7
-    ],
-    "competency_codes": [
-      "УК-1",
-      "ОПК-1"
-    ],
-    "practice_type": "industrial",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "научно-исследовательская работа (получение первичных навыков научно-исследовательской работы)",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [
-      4
-    ],
-    "competency_codes": [
-      "ОПК-1"
-    ],
-    "practice_type": "educational",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "ознакомительная практика",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [
-      2
-    ],
-    "competency_codes": [
-      "ПК-10"
-    ],
-    "practice_type": "educational",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "технологическая (проектно-технологическая) практика",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [
-      4
-    ],
-    "competency_codes": [
-      "ПК-11"
-    ],
-    "practice_type": "educational",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "технологическая (проектно-технологическая) практика",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      5
-    ],
-    "competency_codes": [
-      "ПК-11"
-    ],
-    "practice_type": "industrial",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "эксплуатационная практика",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      6
-    ],
-    "competency_codes": [
-      "ПК-12"
-    ],
-    "practice_type": "educational",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B.pdf",
-    "source_type": "poop",
-    "name": "эксплуатационная практика",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [
-      7
-    ],
-    "competency_codes": [
-      "ПК-12"
-    ],
-    "practice_type": "industrial",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Иностранный язык",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 12.0,
-    "semesters": [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6
-    ],
-    "competency_codes": [
-      "УК-3",
       "УК-4"
     ],
     "practice_type": null,
     "fgos_mandatory": "foreign_language"
   },
   {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Программирование",
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Подготовка и защита Project Proposal по теме ВКР (преподается на иностранном языке)",
     "element_type": "discipline",
     "part": "mandatory",
-    "credits": 18.0,
-    "semesters": [
-      1,
-      2,
-      3
-    ],
-    "competency_codes": [
-      "ОПК-2",
-      "ОПК-5",
-      "ОПК-6",
-      "ПК-7"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Математический анализ",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 5.0,
-    "semesters": [
-      1
-    ],
-    "competency_codes": [
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Аналитическая геометрия",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [
-      1
-    ],
-    "competency_codes": [
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "История",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      2
-    ],
-    "competency_codes": [
-      "УК-5"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": "history"
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Философия",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      5
-    ],
-    "competency_codes": [
-      "УК-5"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": "philosophy"
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Экономика",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [
-      7,
-      8
-    ],
-    "competency_codes": [
-      "ПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Интегралы и дифференциальные уравнения",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 5.0,
-    "semesters": [
-      2
-    ],
-    "competency_codes": [
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Линейная алгебра и функции нескольких переменных",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [
-      2
-    ],
-    "competency_codes": [
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Физика",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 9.0,
-    "semesters": [
-      2,
-      3
-    ],
-    "competency_codes": [
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Дискретная математика",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 5.0,
-    "semesters": [
-      4
-    ],
-    "competency_codes": [
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Теория вероятности",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [
-      5
-    ],
-    "competency_codes": [
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Экология",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [
-      6
-    ],
-    "competency_codes": [
-      "УК-8"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Основы программной инженерии",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [
-      2
-    ],
-    "competency_codes": [
-      "УК-2",
-      "ОПК-6",
-      "ОПК-4",
-      "ПК-8",
-      "ОПК-7"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Операционные системы",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 9.0,
-    "semesters": [
-      5,
-      6
-    ],
-    "competency_codes": [
-      "ПК-9"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Операционнык системы. Курсовая работа",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [
-      6
-    ],
-    "competency_codes": [
-      "ПК-9"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Базы данных",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 6.0,
-    "semesters": [
-      5
-    ],
-    "competency_codes": [
-      "ПК-10",
-      "ПК-9",
-      "ОПК-8"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Базы данных. Курсовая работа",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [
-      6
-    ],
-    "competency_codes": [
-      "ПК-9",
-      "ОПК-8"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Архитектура ЭВМ",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 8.0,
-    "semesters": [
-      4,
-      5
-    ],
-    "competency_codes": [
-      "ПК-9"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Компьютерные сети",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      7
-    ],
-    "competency_codes": [
-      "ПК-9",
-      "ПК-10"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Компьютерные сети. Курсовая работа",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [
-      7
-    ],
-    "competency_codes": [
-      "ПК-9",
-      "ПК-3"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Проектирование программного обеспечения",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      7
-    ],
-    "competency_codes": [
-      "ПК-2",
-      "ПК-4",
-      "ОПК-3"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Тестирование и отладка программного обеспечения",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      8
-    ],
-    "competency_codes": [
-      "ОПК-6",
-      "ПК-2"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Безопасность жизнидеятельности",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      8
-    ],
-    "competency_codes": [
-      "УК-2",
-      "УК-8"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Физическая культура",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [
-      6
-    ],
-    "competency_codes": [
-      "УК-6",
-      "УК-7"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Теоретическая информатика",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 2.0,
+    "credits": 1.0,
     "semesters": [],
-    "competency_codes": [
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Инженерная графика",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 5.0,
-    "semesters": [],
-    "competency_codes": [
-      "ОПК-4"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Политология",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      4
-    ],
-    "competency_codes": [
-      "УК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Правоведение",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      3
-    ],
     "competency_codes": [
       "УК-1",
-      "УК-2"
+      "УК-2",
+      "УК-4"
     ],
     "practice_type": null,
-    "fgos_mandatory": null
+    "fgos_mandatory": "foreign_language"
   },
   {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Основы межличностных отношений",
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Независимый экзамен по русскому языку",
     "element_type": "discipline",
     "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      6
-    ],
+    "credits": 4.0,
+    "semesters": [],
     "competency_codes": [
       "УК-4"
     ],
@@ -2554,340 +3289,151 @@
     "fgos_mandatory": null
   },
   {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Основы электроники",
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Внутренний экзамен по английскому языку (1 курс) (преподается на иностранном языке)",
     "element_type": "discipline",
     "part": "mandatory",
     "credits": 4.0,
-    "semesters": [
-      3
-    ],
+    "semesters": [],
     "competency_codes": [
-      "ОПК-1"
+      "УК-4"
     ],
     "practice_type": null,
-    "fgos_mandatory": null
+    "fgos_mandatory": "foreign_language"
   },
   {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Типы и структуры данных",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [
-      3
-    ],
-    "competency_codes": [
-      "ПК-9"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Логика и теория алгоритмов",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      4
-    ],
-    "competency_codes": [
-      "УК-1",
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Вычислительные алгоритмы",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      4
-    ],
-    "competency_codes": [
-      "ПК-4"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Математическая статистика",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [
-      6
-    ],
-    "competency_codes": [
-      "УК-1",
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Машинно-зависимые языки программирования",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      4
-    ],
-    "competency_codes": [
-      "ПК-7",
-      "ПК-10"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Объектно-ориентированное программирование",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      4
-    ],
-    "competency_codes": [
-      "ПК-10"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Компьютерная графика",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [
-      4
-    ],
-    "competency_codes": [
-      "УК-1",
-      "ПК-5"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Защита информации",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      7
-    ],
-    "competency_codes": [
-      "УК-1",
-      "ПК-10"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Моделирование",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 9.0,
-    "semesters": [
-      6,
-      7
-    ],
-    "competency_codes": [
-      "УК-1",
-      "ПК-6"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Функционально-логическое программирование",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      6
-    ],
-    "competency_codes": [
-      "ПК-10"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "Дисциплины по выбору",
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Английский язык (преподается на иностранном языке)",
     "element_type": "discipline",
     "part": "variative",
-    "credits": 29.0,
-    "semesters": [
-      3,
-      4,
-      5,
-      6,
-      7,
-      8
-    ],
+    "credits": 14.0,
+    "semesters": [],
     "competency_codes": [
-      "ПК-10",
-      "ПК-11"
+      "УК-4"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": "foreign_language"
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Академическое письмо на английском языке (преподается на иностранном языке)",
+    "element_type": "discipline",
+    "part": "variative",
+    "credits": 2.0,
+    "semesters": [],
+    "competency_codes": [
+      "УК-4"
+    ],
+    "practice_type": null,
+    "fgos_mandatory": "foreign_language"
+  },
+  {
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Независимый экзамен по программированию. Базовый уровень",
+    "element_type": "discipline",
+    "part": "mandatory",
+    "credits": 2.0,
+    "semesters": [],
+    "competency_codes": [
+      "ОПК-2",
+      "ОПК-8",
+      "ОПК-9",
+      "ПК-2",
+      "УК-1"
     ],
     "practice_type": null,
     "fgos_mandatory": null
   },
   {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "научно-исследовательская работа",
-    "element_type": "practice",
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Независимый экзамен по анализу данных, искусственному интеллекту и генеративным моделям. Базовый уровень",
+    "element_type": "discipline",
     "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [
-      7
-    ],
+    "credits": 1.0,
+    "semesters": [],
     "competency_codes": [
-      "УК-1",
-      "ОПК-1"
+      "ОПК-1",
+      "ПК-3",
+      "УК-1"
     ],
-    "practice_type": "industrial",
+    "practice_type": null,
     "fgos_mandatory": null
   },
   {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "научно-исследовательская работа (получение первичных навыков научно-исследовательской работы)",
-    "element_type": "practice",
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Независимый экзамен по цифровой грамотности",
+    "element_type": "discipline",
     "part": "mandatory",
     "credits": 2.0,
-    "semesters": [
-      4
-    ],
+    "semesters": [],
     "competency_codes": [
-      "ОПК-1"
+      "ОПК-2",
+      "ОПК-3"
     ],
-    "practice_type": "educational",
+    "practice_type": null,
     "fgos_mandatory": null
   },
   {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "ознакомительная практика",
-    "element_type": "practice",
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Внешнее измерение цифровых компетенций. Входной контроль",
+    "element_type": "discipline",
     "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [
-      2
-    ],
+    "credits": 1.0,
+    "semesters": [],
     "competency_codes": [
-      "ПК-10"
+      "ОПК-1",
+      "ПК-3",
+      "УК-1"
     ],
-    "practice_type": "educational",
+    "practice_type": null,
     "fgos_mandatory": null
   },
   {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "технологическая (проектно-технологическая) практика",
-    "element_type": "practice",
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Внешнее измерение цифровых компетенций. Промежуточный контроль",
+    "element_type": "discipline",
     "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [
-      4
-    ],
+    "credits": 1.0,
+    "semesters": [],
     "competency_codes": [
-      "ПК-11"
+      "ОПК-1",
+      "ПК-3",
+      "УК-1"
     ],
-    "practice_type": "educational",
+    "practice_type": null,
     "fgos_mandatory": null
   },
   {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "технологическая (проектно-технологическая) практика",
-    "element_type": "practice",
+    "direction_code": "090301",
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "name": "Анализ данных и методы искусственного интеллекта",
+    "element_type": "discipline",
     "part": "mandatory",
     "credits": 3.0,
-    "semesters": [
-      5
-    ],
+    "semesters": [],
     "competency_codes": [
-      "ПК-11"
+      "ОПК-1",
+      "ПК-3",
+      "УК-1"
     ],
-    "practice_type": "industrial",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "эксплуатационная практика",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [
-      6
-    ],
-    "competency_codes": [
-      "ПК-12"
-    ],
-    "practice_type": "educational",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_POOP_B_1.pdf",
-    "source_type": "poop",
-    "name": "эксплуатационная практика",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [
-      7
-    ],
-    "competency_codes": [
-      "ПК-12"
-    ],
-    "practice_type": "industrial",
+    "practice_type": null,
     "fgos_mandatory": null
   },
   {
@@ -4381,799 +4927,6 @@
     "fgos_mandatory": null
   },
   {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "История России",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 1.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": "history"
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Иностранный язык",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 1.2,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": "foreign_language"
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Теория статистических решений",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 5.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Философия",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": "philosophy"
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Введение в алгебру и анализ",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 1.2,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Введение в дискретную математику и математическую логику",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 1.2,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Императивное программирование",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Психология коммуникации",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 5.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Теория вероятностей и математическая статистика",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Правовые основы профессиональной деятельности",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 6.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Основы управления персоналом",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 7.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Экономика производства и инновационная деятельность",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 7.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Операционные системы",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Безопасность жизнедеятельности",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 7.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": "life_safety"
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Основы риторики",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 7.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Теория параллелизма CS",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Цифровые платформы",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 1.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Основы машинного обучения",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 1.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Программирование edge устройств",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 5.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Деловой английский язык",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Системы компьютерного зрения",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 5.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Физическая культура и спорт",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 1.2,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Методы оптимизации",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 5.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Основы объектно- ориентированного",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "MLOps и CI/CD для ИИ-проектов",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Прикладное машинное обучение",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Введение в компьютерные сети",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Методы алгебры и анализа",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Основы технического документирования",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 7.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Управление производственным процессом разработки ПО",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": "industrial",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Основы дефектологии и инклюзивная практика",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 7.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": "industrial",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Физическая культура и спорт (элективная дисциплина)",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 1.2,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Обработка естественных языков",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 5.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Передовые методы глубокого обучения",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 5.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Проектирование программного обеспечения",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 6.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Автоматическое управление",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 6.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Компьютерная инженерная графика",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Шифрование и квантовая информатика",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 7.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Введение в искусственный интеллект",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Системы интернет вещей",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 6.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Методы и алгоритмы вычислительной томографии",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 6.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Представление знаний с помощью Semantic Web",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 7.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Дизайн систем Machine Learning",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 7.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Учебно-научный семинар «Пространство проектных решений в системных разработках»",
-    "element_type": "practice",
-    "part": "variative",
-    "credits": 8.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": "educational",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Учебно-научный семинар «Пространство проектных решений в программно-аппаратных разработках»",
-    "element_type": "practice",
-    "part": "variative",
-    "credits": 8.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": "educational",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Введение в разработку мобильных приложений",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 6.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Разработка программных продуктов на базе ИИ технологий",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 6.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Разработка программно- аппаратного комплекса для решения научных задач (групповой проект)",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 3.4,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Разработка программно- аппаратного комплекса для решения прикладных задач (групповой проект)",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 3.4,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Виртуальная и дополненная реальность",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 8.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Интерфейс \"человек - электронно- вычислительная машина\"",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 8.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Компьютерное моделирование",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 6.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Средства виртуализации и контейнеризации",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 6.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Учебная практика (ознакомительная практика)",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": "educational",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Учебная практика (научно- исследовательская работа (получение первичных навыков научно-исследовательской работы))",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 7.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": "educational",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Производственная практика (технологическая (проектно- технологическая) практика)",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 8.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": "industrial",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Производственная практика (преддипломная практика)",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 8.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": "industrial",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Английский язык",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 5.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Социальное проектирование",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 7.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Основы российской государственности",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 1.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090303",
-    "source_name": "090303_ПИИ.pdf",
-    "source_type": "best_practices",
-    "name": "Введение в проектную деятельность",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 3.0,
-    "semesters": [],
-    "competency_codes": [],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
     "direction_code": "090304",
     "source_name": "090304_ВШЭ.pdf",
     "source_type": "best_practices",
@@ -6412,1349 +6165,5 @@
     ],
     "practice_type": null,
     "fgos_mandatory": "foreign_language"
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "История России",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 12.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-5"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": "history"
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Философия",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-3",
-      "УК-5"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": "philosophy"
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Основы российской государственности",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 1.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-5",
-      "УК-11"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Антропология искусственного интеллекта",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [],
-    "competency_codes": [
-      "ПК-2",
-      "ПК-14"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Нейролингвистика",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 6.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "УК-4"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Психология самопознания и саморазвития",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-3",
-      "УК-6",
-      "УК-9"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Научная мысль в общекультурном контексте: формирование научных программ",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 6.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "УК-4",
-      "УК-5"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Основы коммуникации в академической среде",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 6.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-2",
-      "УК-3"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Основы профессиональной коммуникации на иностранном языке",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 6.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "УК-4"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": "foreign_language"
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Практикум по культуре речевого общения на иностранном языке (профессиональный контекст)",
-    "element_type": "practice",
-    "part": "variative",
-    "credits": 6.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "УК-4"
-    ],
-    "practice_type": "industrial",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Право",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 5.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-2",
-      "УК-11"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Управление интеллектуальной собственностью",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 5.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-2"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Менеджмент и маркетинг",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 5.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-2"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Психология инженерного творчества",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 3.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-3",
-      "УК-6"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Культурология",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 3.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-5"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Русский язык и культура речи",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 4.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "УК-4"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Психология профессионального развития",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 4.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "УК-2"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Иностранный язык",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 4.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "УК-4"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": "foreign_language"
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Иностранный язык (русский)",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 4.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "УК-4"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": "foreign_language"
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Математический анализ",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 1.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Математический анализ в искусственном интеллекте",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 2.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Ряды в искусственном интеллекте",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 3.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Дифференциальные уравнения в искусственном интеллекте",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 3.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Аналитическая геометрия",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 1.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Линейная алгебра и вычислительные модели",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 2.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Теория вероятностей и математическая статистика",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 3.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Численные методы",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 4.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Теория информации и протоколы безопасного обмена данными",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 4.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "ОПК-6",
-      "ОПК-7"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Дискретная математика (математическая логика)",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 1.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Дискретная математика (комбинаторика)",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 2.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Дискретная математика (теория графов)",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 2.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Дискретная математика (автоматы)",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 3.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "ОПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Информатика (полиморфные абстрактные типы данных)",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [],
-    "competency_codes": [
-      "ОПК-1",
-      "ОПК-2"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Информатика (организация и поиск данных)",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [],
-    "competency_codes": [
-      "ОПК-1",
-      "ОПК-2",
-      "ОПК-5",
-      "ОПК-6"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Случайные процессы",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Математическая статистика",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 5.0,
-    "semesters": [],
-    "competency_codes": [
-      "ОПК-1",
-      "ОПК-2",
-      "ОПК-5",
-      "ОПК-6"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Дискретная математика (модели вычислений)",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 5.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "ОПК-1",
-      "ОПК-4",
-      "ОПК-7"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Физика (механика и термодинамика)",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 2.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Физика полей и волн",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Генеративный искусственный интеллект: модели и приложения",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 3.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "ОПК-6",
-      "ОПК-7"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Дискретная математика (математическая лингвистика)",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 4.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "ОПК-6",
-      "ОПК-7",
-      "ПК-2",
-      "ПК-14",
-      "ПК-17"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Дискретная математика (математическая лингвистика и теория автоматов)",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 5.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "ОПК-1",
-      "ОПК-4",
-      "ОПК-7"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Алгоритмы и структуры данных",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 1.0,
-    "semesters": [],
-    "competency_codes": [
-      "ОПК-1",
-      "ОПК-2"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Философия науки и этика",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 1.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-3",
-      "УК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": "philosophy"
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Кибернетика и теория систем",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 1.0,
-    "semesters": [],
-    "competency_codes": [
-      "ПК-11"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Безопасность жизнедеятельности",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 6.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-6",
-      "УК-8"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": "life_safety"
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Проектирование и архитектура программных систем (Design and Architecture of Software Systems)",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 7.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "УК-3",
-      "ОПК-1",
-      "ОПК-4",
-      "ПК-2",
-      "ПК-10",
-      "ПК-13",
-      "ПК-18"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Методы оптимизации",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 5.0,
-    "semesters": [],
-    "competency_codes": [
-      "ПК-8",
-      "ПК-10",
-      "ПК-14"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Экономика программной инженерии",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 7.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-2",
-      "ОПК-4",
-      "ОПК-8",
-      "ПК-4",
-      "ПК-6",
-      "ПК-7",
-      "ПК-9"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Проектная практика в области искусственного интеллекта",
-    "element_type": "practice",
-    "part": "variative",
-    "credits": 4.0,
-    "semesters": [],
-    "competency_codes": [
-      "ОПК-1",
-      "ОПК-8",
-      "ПК-2",
-      "ПК-14",
-      "ПК-17"
-    ],
-    "practice_type": "industrial",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Клеточные автоматы",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 6.0,
-    "semesters": [],
-    "competency_codes": [
-      "ПК-1",
-      "ПК-4",
-      "ПК-5"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Логическое программирование (Logic Programming)",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 4.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "ПК-3",
-      "ПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Функциональное программирование (Functional Programming)",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 4.0,
-    "semesters": [],
-    "competency_codes": [
-      "ПК-3",
-      "ПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Введение в теорию нейронных сетей",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 6.0,
-    "semesters": [],
-    "competency_codes": [
-      "ПК-11"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Разработка высоконагруженных систем",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 5.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "ПК-1"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Семантические технологии в информационных системах",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 6.0,
-    "semesters": [],
-    "competency_codes": [
-      "ПК-4",
-      "ПК-10",
-      "ПК-12",
-      "ПК-15",
-      "ПК-17"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Технология программирования и разработки автоматизированных информационных систем",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 5.0,
-    "semesters": [],
-    "competency_codes": [
-      "ОПК-1",
-      "ОПК-2",
-      "ОПК-4",
-      "ПК-2",
-      "ПК-3",
-      "ПК-8"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Параллельное программирование",
-    "element_type": "discipline",
-    "part": "mandatory",
-    "credits": 5.0,
-    "semesters": [],
-    "competency_codes": [
-      "ОПК-1",
-      "ОПК-2",
-      "ОПК-4",
-      "ПК-2",
-      "ПК-3",
-      "ПК-8"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Практикум по машинному обучению",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 5.0,
-    "semesters": [],
-    "competency_codes": [
-      "ОПК-1",
-      "ОПК-2",
-      "ОПК-4",
-      "ПК-2",
-      "ПК-3",
-      "ПК-8"
-    ],
-    "practice_type": "industrial",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Интеллектуальные технологии в принятии решений",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 7.0,
-    "semesters": [],
-    "competency_codes": [
-      "ОПК-2",
-      "ПК-1",
-      "ПК-2",
-      "ПК-10",
-      "ПК-11",
-      "ПК-14"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Моделирование систем (Systems Modelling in Matlab)",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 7.0,
-    "semesters": [],
-    "competency_codes": [
-      "ОПК-2",
-      "ПК-1",
-      "ПК-2",
-      "ПК-10",
-      "ПК-11",
-      "ПК-14"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Операционные системы и сети",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 4.0,
-    "semesters": [],
-    "competency_codes": [
-      "ПК-2"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Теория игр",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 4.0,
-    "semesters": [],
-    "competency_codes": [
-      "ПК-1",
-      "ПК-7",
-      "ПК-15"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Теория типов и логический вывод в искусственном интеллекте",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 4.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "ПК-1",
-      "ПК-7"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Базы данных (теоретические основы баз данных)",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 5.0,
-    "semesters": [],
-    "competency_codes": [
-      "ПК-6",
-      "ПК-10"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Биологически мотивированные когнитивные архитектуры (Biologically Inspired Cognitive Architectures (BICA))",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 7.0,
-    "semesters": [],
-    "competency_codes": [
-      "ПК-2",
-      "ПК-10",
-      "ПК-14",
-      "ПК-4"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Математические модели физических процессов в ядерных энергетических установках (Mathematical Models of Physical Processes in Nuclear Power Facilities)",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 8.0,
-    "semesters": [],
-    "competency_codes": [
-      "ПК-10",
-      "ПК-4"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Технология программирования кибернетических систем: управление программными проектами (Technology of Programming of Cybernetic Systems: Software Project Management)",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 8.0,
-    "semesters": [],
-    "competency_codes": [
-      "ПК-2",
-      "ПК-18",
-      "ПК-4"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Эволюционное программирование и генетические алгоритмы",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 3.0,
-    "semesters": [],
-    "competency_codes": [
-      "ПК-2",
-      "ПК-18",
-      "ПК-4"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Управление проектами в сфере искусственного интеллекта",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 6.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-2",
-      "УК-3",
-      "ПК-5",
-      "ПК-7",
-      "ПК-8",
-      "ПК-10",
-      "ПК-13",
-      "ПК-16",
-      "ПК-4"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Обработка естественного языка",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 7.0,
-    "semesters": [],
-    "competency_codes": [
-      "ПК-10",
-      "ПК-12",
-      "ПК-4"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Семиотика искусственного интеллекта и риторика",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 7.0,
-    "semesters": [],
-    "competency_codes": [
-      "ПК-10",
-      "ПК-12",
-      "ПК-4"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Распознавание образов",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 7.0,
-    "semesters": [],
-    "competency_codes": [
-      "ПК-10",
-      "ПК-12",
-      "ПК-4"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Производственная практика (научно- исследовательская работа, программная инженерия кибернетических систем)",
-    "element_type": "practice",
-    "part": "variative",
-    "credits": 22.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "УК-2",
-      "УК-3",
-      "ПК-1",
-      "ПК-18",
-      "ПК-4"
-    ],
-    "practice_type": "industrial",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Производственная практика (научно- исследовательская работа, программная инженерия интеллектуальных систем)",
-    "element_type": "practice",
-    "part": "mandatory",
-    "credits": 22.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "УК-2",
-      "УК-3",
-      "ПК-1",
-      "ПК-18",
-      "ПК-4"
-    ],
-    "practice_type": "industrial",
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Основы военной подготовки",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 6.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-3",
-      "УК-7",
-      "УК-8"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Психология саморазвития",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 6.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "УК-3",
-      "УК-6"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Развитие универсальных компетенций",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 2.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-1",
-      "УК-11"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Физическая культура",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 24.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-6",
-      "УК-7"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
-  },
-  {
-    "direction_code": "090304",
-    "source_name": "090304_МИФИ.pdf",
-    "source_type": "best_practices",
-    "name": "Физическая культура (элективная дисциплина)",
-    "element_type": "discipline",
-    "part": "variative",
-    "credits": 7.0,
-    "semesters": [],
-    "competency_codes": [
-      "УК-6",
-      "УК-7"
-    ],
-    "practice_type": null,
-    "fgos_mandatory": null
   }
 ]

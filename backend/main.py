@@ -72,11 +72,14 @@ def _migrate_plan_elements_semesters() -> None:
 
 
 def _migrate_extended_fields() -> None:
+    _ensure_column("recommended_elements", "program_code", "VARCHAR(20)")
     _ensure_column("recommended_elements", "extra_hours", "FLOAT", "0")
     _ensure_column("recommended_elements", "practice_type", "VARCHAR(30)")
     _ensure_column("recommended_elements", "is_fgos_mandatory", "INTEGER", "0")
     _ensure_column("recommended_elements", "fgos_requirement", "VARCHAR(100)")
+    _ensure_column("recommended_elements", "source_name", "VARCHAR(255)")
 
+    _ensure_column("curriculum_plans", "program_code", "VARCHAR(20)", "''")
     _ensure_column("plan_elements", "extra_hours", "FLOAT", "0")
     _ensure_column("plan_elements", "practice_type", "VARCHAR(30)")
     _ensure_column("plan_elements", "fgos_requirement", "VARCHAR(100)")

@@ -64,7 +64,7 @@ def _build_test_client():
 def test_table3_returns_aggregates_deviations_and_summary() -> None:
     client = _build_test_client()
 
-    create_plan_response = client.post("/api/v1/plans", json={"name": "Plan for table3"})
+    create_plan_response = client.post("/api/v1/plans", json={"name": "Plan for table3", "program_code": "090304"})
     plan_id = create_plan_response.json()["data"]["id"]
 
     client.post(
@@ -112,7 +112,7 @@ def test_table3_returns_aggregates_deviations_and_summary() -> None:
 def test_table3_returns_latest_check_report_and_summary_when_present() -> None:
     client = _build_test_client()
 
-    create_plan_response = client.post("/api/v1/plans", json={"name": "Plan with report"})
+    create_plan_response = client.post("/api/v1/plans", json={"name": "Plan with report", "program_code": "090304"})
     plan_id = create_plan_response.json()["data"]["id"]
 
     client.post(

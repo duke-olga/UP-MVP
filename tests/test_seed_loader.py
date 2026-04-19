@@ -90,7 +90,7 @@ def test_load_seed_data_removes_stale_competency_ids_from_plan_elements(monkeypa
         db.add_all([stale_pk, valid_uk])
         db.flush()
 
-        plan = CurriculumPlan(name="Legacy plan", status="draft")
+        plan = CurriculumPlan(name="Legacy plan", program_code="090304", status="draft")
         db.add(plan)
         db.flush()
 

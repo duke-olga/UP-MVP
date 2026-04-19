@@ -63,7 +63,7 @@ def _build_test_client():
 def test_create_plan_and_table2_crud_flow() -> None:
     client = _build_test_client()
 
-    create_plan_response = client.post("/api/v1/plans", json={"name": "Test plan"})
+    create_plan_response = client.post("/api/v1/plans", json={"name": "Test plan", "program_code": "090304"})
     assert create_plan_response.status_code == 200
     plan_id = create_plan_response.json()["data"]["id"]
 
@@ -110,7 +110,7 @@ def test_create_plan_and_table2_crud_flow() -> None:
 def test_delete_plan_removes_plan() -> None:
     client = _build_test_client()
 
-    create_plan_response = client.post("/api/v1/plans", json={"name": "Delete me"})
+    create_plan_response = client.post("/api/v1/plans", json={"name": "Delete me", "program_code": "090304"})
     plan_id = create_plan_response.json()["data"]["id"]
 
     delete_response = client.delete(f"/api/v1/plans/{plan_id}")
@@ -125,7 +125,7 @@ def test_delete_plan_removes_plan() -> None:
 def test_approve_is_blocked_when_validation_has_errors() -> None:
     client = _build_test_client()
 
-    create_plan_response = client.post("/api/v1/plans", json={"name": "Invalid plan"})
+    create_plan_response = client.post("/api/v1/plans", json={"name": "Invalid plan", "program_code": "090304"})
     plan_id = create_plan_response.json()["data"]["id"]
 
     client.post(
@@ -153,7 +153,7 @@ def test_approve_is_blocked_when_validation_has_errors() -> None:
 def test_table2_filters_unknown_competency_ids() -> None:
     client = _build_test_client()
 
-    create_plan_response = client.post("/api/v1/plans", json={"name": "Filtered competencies"})
+    create_plan_response = client.post("/api/v1/plans", json={"name": "Filtered competencies", "program_code": "090304"})
     plan_id = create_plan_response.json()["data"]["id"]
 
     create_element_response = client.post(

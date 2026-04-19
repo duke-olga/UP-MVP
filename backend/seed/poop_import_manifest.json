@@ -1,0 +1,68 @@
+[
+  {
+    "source_name": "090301_POOP_B.pdf",
+    "source_type": "poop",
+    "file_size_bytes": 424781,
+    "sha256": "a1ccc73664067809bcde1d33f3667c444ea163af887179b2a6f54e0cc87aa16f",
+    "strategy_used": "deterministic",
+    "extractor_used": "pymupdf",
+    "record_count": 26,
+    "quality_score": 1.0,
+    "needs_review": false
+  },
+  {
+    "source_name": "090304_POOP_B.pdf",
+    "source_type": "poop",
+    "file_size_bytes": 548380,
+    "sha256": "b61eedf504ef10e6ff4c72aaed99170a377d2334d64473d11345c2f26727c88f",
+    "strategy_used": "deterministic",
+    "extractor_used": "pymupdf",
+    "record_count": 48,
+    "quality_score": 0.985,
+    "needs_review": false
+  },
+  {
+    "source_name": "090304_POOP_B_1.pdf",
+    "source_type": "poop",
+    "file_size_bytes": 535487,
+    "sha256": "e548cf9009eebb57770611323008b202cec6fb9c95e769a45195bcfa3fa98470",
+    "strategy_used": "deterministic",
+    "extractor_used": "pymupdf",
+    "record_count": 48,
+    "quality_score": 0.985,
+    "needs_review": false
+  },
+  {
+    "source_name": "090301_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "file_size_bytes": 114590,
+    "sha256": "e627d4f04dc072b75a547afb5908bc878969b52c4375fb89069fc60c21a59627",
+    "strategy_used": "deterministic",
+    "extractor_used": "pymupdf",
+    "record_count": 65,
+    "quality_score": 0.798,
+    "needs_review": false
+  },
+  {
+    "source_name": "090302_ИТМО.pdf",
+    "source_type": "best_practices",
+    "file_size_bytes": 90740,
+    "sha256": "21cbeb7bb98ab30e9a59c2c595c2760a13511e3138e1794206ac772470e098e8",
+    "strategy_used": "deterministic",
+    "extractor_used": "pymupdf",
+    "record_count": 110,
+    "quality_score": 0.708,
+    "needs_review": false
+  },
+  {
+    "source_name": "090304_ВШЭ.pdf",
+    "source_type": "best_practices",
+    "file_size_bytes": 134023,
+    "sha256": "90c5ea80425d0c2659cdae6c231edc43cd85c2ad1217fab917f375f4ab77434f",
+    "strategy_used": "deterministic",
+    "extractor_used": "pymupdf",
+    "record_count": 69,
+    "quality_score": 0.8,
+    "needs_review": false
+  }
+]

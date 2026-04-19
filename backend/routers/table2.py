@@ -150,7 +150,7 @@ def _assert_can_approve(plan_id: int, db: Session) -> None:
 
 @router.post("", response_model=CurriculumPlanResponse)
 def create_plan(payload: CurriculumPlanCreate, db: Session = Depends(get_db)) -> CurriculumPlanResponse:
-    plan = CurriculumPlan(name=payload.name, status="draft")
+    plan = CurriculumPlan(name=payload.name, program_code=payload.program_code, status="draft")
     db.add(plan)
     db.commit()
     db.refresh(plan)

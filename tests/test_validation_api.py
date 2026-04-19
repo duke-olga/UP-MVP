@@ -68,7 +68,7 @@ def test_validate_plan_saves_llm_recommendations(monkeypatch) -> None:
 
     monkeypatch.setattr(validation, "generate_recommendations", fake_generate_recommendations)
 
-    create_plan_response = client.post("/api/v1/plans", json={"name": "Plan with llm"})
+    create_plan_response = client.post("/api/v1/plans", json={"name": "Plan with llm", "program_code": "090304"})
     plan_id = create_plan_response.json()["data"]["id"]
 
     client.post(
