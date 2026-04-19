@@ -1,0 +1,16 @@
+{
+  "source_name": "000000_empty_plan.pdf",
+  "source_type": "poop",
+  "strategy_used": "deterministic",
+  "extractor_used": "none",
+  "quality_score": 0.0,
+  "needs_review": true,
+  "warnings": [
+    "no_plan_markers_detected"
+  ],
+  "candidate_row_count": 0,
+  "record_count": 0,
+  "candidate_rows": [],
+  "records": [],
+  "plan_sections": []
+}

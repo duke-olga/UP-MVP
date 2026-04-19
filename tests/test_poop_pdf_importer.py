@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 
 import fitz
+import backend.modules.seed_ingest.poop_pdf_importer as importer
 
 from backend.modules.seed_ingest.poop_pdf_importer import (
     _is_aggregate_plan_name,
@@ -70,7 +71,8 @@ def test_extract_records_from_text_layer_pdf_returns_entries() -> None:
     assert all(not record.semesters or max(record.semesters) <= 8 for record in records)
 
 
-def test_import_poops_from_directory_keeps_empty_result_without_relevant_plan_text() -> None:
+def test_import_poops_from_directory_keeps_empty_result_without_relevant_plan_text(monkeypatch) -> None:
+    monkeypatch.setattr(importer, "_extract_table_blocks_with_docling", lambda _pdf_path: ([], ["docling_skipped_in_test"]))
     workspace = Path("tests/.tmp/poop_llm_fallback")
     if workspace.exists():
         shutil.rmtree(workspace)
@@ -97,7 +99,8 @@ def test_import_poops_from_directory_keeps_empty_result_without_relevant_plan_te
             shutil.rmtree(workspace)
 
 
-def test_import_poops_from_directory_writes_review_dump_for_problem_file() -> None:
+def test_import_poops_from_directory_writes_review_dump_for_problem_file(monkeypatch) -> None:
+    monkeypatch.setattr(importer, "_extract_table_blocks_with_docling", lambda _pdf_path: ([], ["docling_skipped_in_test"]))
     workspace = Path("tests/.tmp/poop_review_dump")
     if workspace.exists():
         shutil.rmtree(workspace)

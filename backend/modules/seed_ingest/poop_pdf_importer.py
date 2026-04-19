@@ -594,6 +594,23 @@ def _extract_plan_section_texts(pdf_path: Path) -> list[tuple[int, str]]:
     return sections
 
 
+def _pdf_contains_plan_markers(pdf_path: Path) -> bool:
+    with fitz.open(pdf_path) as document:
+        for page_index in range(document.page_count):
+            page = document.load_page(page_index)
+            text = _normalize_cell(page.get_text("text"))
+            if not text:
+                continue
+            lowered = text.casefold()
+            if any(marker in lowered for marker in START_HINTS):
+                return True
+            if "5.3" in lowered and ("компетенц" in lowered or "трудоемк" in lowered or "з.е" in lowered):
+                return True
+            if any(marker in lowered for marker in TABLE_HEADER_HINTS):
+                return True
+    return False
+
+
 def _normalize_text_lines(text: str) -> list[str]:
     raw_lines = [line.strip() for line in text.splitlines()]
     return [_normalize_cell(line) for line in raw_lines if _normalize_cell(line)]
@@ -1130,6 +1147,19 @@ def _analyze_pdf_deterministically(
     if candidate_rows:
         extractor_used = "pymupdf"
     else:
+        plan_sections = _extract_plan_section_texts(pdf_path)
+        if not plan_sections and not _pdf_contains_plan_markers(pdf_path):
+            warnings.append("no_plan_markers_detected")
+            return FileAnalysis(
+                records=[],
+                candidate_rows=[],
+                extractor_used="none",
+                quality_score=0.0,
+                needs_review=True,
+                warnings=warnings,
+                strategy_used="deterministic",
+            )
+
         docling_blocks, docling_warnings = _extract_table_blocks_with_docling(pdf_path)
         warnings.extend(docling_warnings)
         candidate_rows = _extract_candidate_rows_from_blocks(docling_blocks, source_name=pdf_path.name, source_type=source_type)
