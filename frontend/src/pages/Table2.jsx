@@ -31,15 +31,21 @@ const partLabels = {
 };
 
 const blockLabels = {
-  "1": "Блок 1. Дисциплины",
-  "2": "Блок 2. Практики",
-  "3": "Блок 3. ГИА",
+  "1": "Блок 1 · Дисциплины",
+  "2": "Блок 2 · Практики",
+  "3": "Блок 3 · ГИА",
   fac: "Факультативы",
 };
 
 const practiceTypeLabels = {
   educational: "Учебная",
   industrial: "Производственная",
+};
+
+const statusLabels = {
+  draft: "Черновик",
+  checked: "Проверен",
+  approved: "Утверждён",
 };
 
 function buildCompetencyMap(groupedCompetencies) {
@@ -55,24 +61,19 @@ function collectAllElements(groupedElements) {
 }
 
 function parseSemesters(value) {
-  if (!value || !String(value).trim()) {
-    return [];
-  }
-
-  const normalized = String(value)
-    .split(",")
-    .map((item) => item.trim())
-    .filter(Boolean)
-    .map((item) => Number(item))
-    .filter((item) => Number.isInteger(item) && item > 0);
-
-  return [...new Set(normalized)].sort((left, right) => left - right);
+  if (!value || !String(value).trim()) return [];
+  return [...new Set(
+    String(value)
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean)
+      .map(Number)
+      .filter((n) => Number.isInteger(n) && n > 0),
+  )].sort((a, b) => a - b);
 }
 
 function formatSemesters(semesters) {
-  if (!semesters || semesters.length === 0) {
-    return "—";
-  }
+  if (!semesters || semesters.length === 0) return "—";
   return semesters.join(", ");
 }
 
@@ -96,60 +97,88 @@ function ElementFormFields({ value, onChange }) {
       <div className="form-grid">
         <label className="field">
           <span>Наименование</span>
-          <input value={value.name} onChange={(event) => onChange("name", event.target.value)} required />
+          <input
+            value={value.name}
+            onChange={(e) => onChange("name", e.target.value)}
+            placeholder="Название дисциплины или практики"
+            required
+          />
         </label>
+
         <label className="field">
           <span>Блок</span>
-          <select value={value.block} onChange={(event) => onChange("block", event.target.value)}>
+          <select value={value.block} onChange={(e) => onChange("block", e.target.value)}>
             <option value="1">Блок 1</option>
             <option value="2">Блок 2</option>
             <option value="3">Блок 3</option>
             <option value="fac">Факультативы</option>
           </select>
         </label>
+
         <label className="field">
           <div className="field-label-row">
             <span>Часть плана</span>
-            <HelpTooltip text="Определяет принадлежность элемента к обязательной или вариативной части. Для ГИА используйте обязательную часть." />
+            <HelpTooltip text="Определяет принадлежность к обязательной или вариативной части. Для ГИА используйте обязательную часть." />
           </div>
-          <select value={value.part} onChange={(event) => onChange("part", event.target.value)}>
-            <option value="mandatory">Обязательная часть</option>
-            <option value="variative">Вариативная часть</option>
+          <select value={value.part} onChange={(e) => onChange("part", e.target.value)}>
+            <option value="mandatory">Обязательная</option>
+            <option value="variative">Вариативная</option>
           </select>
         </label>
+
         <label className="field">
-          <span>З.е.</span>
-          <input type="number" min="0" step="0.5" value={value.credits} onChange={(event) => onChange("credits", event.target.value)} />
+          <span>Зачётные единицы</span>
+          <input
+            type="number"
+            min="0"
+            step="0.5"
+            value={value.credits}
+            onChange={(e) => onChange("credits", e.target.value)}
+          />
         </label>
+
         <label className="field">
           <div className="field-label-row">
-            <span>Дополнительные часы</span>
-            <HelpTooltip text="Используются, например, для дисциплины «Физическая культура и спорт». Эти часы не переводятся в з.е. и учитываются отдельно." />
+            <span>Доп. часы</span>
+            <HelpTooltip text="Используются для «Физической культуры и спорта». Не переводятся в з.е., учитываются отдельно." />
           </div>
-          <input type="number" min="0" step="1" value={value.extra_hours} onChange={(event) => onChange("extra_hours", event.target.value)} />
+          <input
+            type="number"
+            min="0"
+            step="1"
+            value={value.extra_hours}
+            onChange={(e) => onChange("extra_hours", e.target.value)}
+          />
         </label>
+
         <label className="field">
           <div className="field-label-row">
             <span>Семестры</span>
-            <HelpTooltip text="Можно указать один или несколько семестров через запятую." />
+            <HelpTooltip text="Один или несколько номеров через запятую." />
           </div>
-          <input value={value.semesters} onChange={(event) => onChange("semesters", event.target.value)} placeholder="Например: 1, 2, 3" />
+          <input
+            value={value.semesters}
+            onChange={(e) => onChange("semesters", e.target.value)}
+            placeholder="1, 2"
+          />
         </label>
+
         <label className="field">
           <div className="field-label-row">
             <span>Тип практики</span>
-            <HelpTooltip text="Обязательный атрибут для элементов блока 2. Используется в проверках учебной и производственной практики." />
+            <HelpTooltip text="Обязательно для элементов Блока 2. Используется в проверках." />
           </div>
-          <select value={value.practice_type} onChange={(event) => onChange("practice_type", event.target.value)}>
+          <select value={value.practice_type} onChange={(e) => onChange("practice_type", e.target.value)}>
             <option value="">Не задан</option>
             <option value="educational">Учебная</option>
             <option value="industrial">Производственная</option>
           </select>
         </label>
       </div>
-      <div className="form-note">
-        <span>Часы по з.е. рассчитываются автоматически. Итоговая нагрузка элемента = часы по з.е. + дополнительные часы.</span>
-      </div>
+
+      <p className="form-note">
+        Часы по з.е. рассчитываются автоматически (1 з.е. = 36 ч.). Итоговая нагрузка = часы по з.е. + дополнительные часы.
+      </p>
     </>
   );
 }
@@ -165,10 +194,7 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
   const [editingId, setEditingId] = useState(null);
 
   useEffect(() => {
-    if (!planId) {
-      setData(null);
-      return;
-    }
+    if (!planId) { setData(null); return; }
 
     let cancelled = false;
 
@@ -177,30 +203,22 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
       setError("");
       try {
         const table2 = await getTable2(planId);
-        if (cancelled) {
-          return;
-        }
+        if (cancelled) return;
         setData(table2);
         const nextDrafts = {};
-        collectAllElements(table2.grouped_elements).forEach((element) => {
-          nextDrafts[element.id] = toDraft(element);
+        collectAllElements(table2.grouped_elements).forEach((el) => {
+          nextDrafts[el.id] = toDraft(el);
         });
         setDrafts(nextDrafts);
       } catch (loadError) {
-        if (!cancelled) {
-          setError(getErrorMessage(loadError, "Не удалось загрузить Таблицу 2."));
-        }
+        if (!cancelled) setError(getErrorMessage(loadError, "Не удалось загрузить структуру плана."));
       } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
+        if (!cancelled) setLoading(false);
       }
     };
 
     load();
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [planId, refreshToken]);
 
   useEffect(() => {
@@ -209,36 +227,24 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
     const loadCompetencies = async () => {
       try {
         const grouped = await listCompetencies();
-        if (!cancelled) {
-          setCompetencies(grouped);
-        }
+        if (!cancelled) setCompetencies(grouped);
       } catch (loadError) {
-        if (!cancelled) {
-          setGlobalNotice(getErrorMessage(loadError, "Не удалось загрузить список компетенций."));
-        }
+        if (!cancelled) setGlobalNotice(getErrorMessage(loadError, "Не удалось загрузить компетенции."));
       }
     };
 
     loadCompetencies();
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, [setGlobalNotice]);
 
   const competencyMap = useMemo(() => buildCompetencyMap(competencies), [competencies]);
 
   const updateDraft = (elementId, field, value) => {
-    setDrafts((current) => ({
-      ...current,
-      [elementId]: {
-        ...current[elementId],
-        [field]: value,
-      },
-    }));
+    setDrafts((cur) => ({ ...cur, [elementId]: { ...cur[elementId], [field]: value } }));
   };
 
   const updateNewElement = (field, value) => {
-    setNewElement((current) => ({ ...current, [field]: value }));
+    setNewElement((cur) => ({ ...cur, [field]: value }));
   };
 
   const normalizePayload = (draft) => ({
@@ -259,7 +265,7 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
     try {
       await updateTable2Element(planId, elementId, normalizePayload(draft));
       setEditingId(null);
-      onRefresh("Изменения в Таблице 2 сохранены.");
+      onRefresh("Изменения сохранены.");
     } catch (saveError) {
       setGlobalNotice(getErrorMessage(saveError, "Не удалось сохранить изменения."));
     } finally {
@@ -268,17 +274,15 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
   };
 
   const handleDeleteElement = async (element) => {
-    const warning = element.fgos_requirement
-      ? " Это нормативно значимый элемент, его удаление может заблокировать утверждение плана."
+    const extra = element.fgos_requirement
+      ? " Это нормативно значимый элемент — его удаление может заблокировать утверждение плана."
       : "";
-    if (!window.confirm(`Удалить элемент «${element.name}» из Таблицы 2?${warning}`)) {
-      return;
-    }
+    if (!window.confirm(`Удалить «${element.name}» из структуры плана?${extra}`)) return;
 
     setSaving(true);
     try {
       await deleteTable2Element(planId, element.id);
-      onRefresh("Элемент удалён из Таблицы 2.");
+      onRefresh("Элемент удалён.");
     } catch (deleteError) {
       setGlobalNotice(getErrorMessage(deleteError, "Не удалось удалить элемент."));
     } finally {
@@ -290,12 +294,9 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
     event.preventDefault();
     setSaving(true);
     try {
-      await createTable2Element(planId, {
-        ...normalizePayload(newElement),
-        source_element_id: null,
-      });
+      await createTable2Element(planId, { ...normalizePayload(newElement), source_element_id: null });
       setNewElement(defaultNewElement);
-      onRefresh("Новый элемент добавлен в Таблицу 2.");
+      onRefresh("Элемент добавлен.");
     } catch (createError) {
       setGlobalNotice(getErrorMessage(createError, "Не удалось добавить элемент."));
     } finally {
@@ -304,35 +305,32 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
   };
 
   if (!plan) {
-    return (
-      <section className="card">
-        <h2>Таблица 2</h2>
-        <p>Сначала выберите учебный план на стартовом экране.</p>
-      </section>
-    );
+    return <div className="card"><p>Сначала выберите учебный план.</p></div>;
   }
 
   return (
     <section className="stack-panel">
+      {/* Header */}
       <div className="card">
         <div className="section-header">
           <div>
-            <p className="card-kicker">Таблица 2</p>
-            <h2>Структура учебного плана</h2>
+            <p className="card-kicker">Шаг 2</p>
+            <h2 style={{ fontSize: "18px" }}>Структура учебного плана</h2>
+            <p className="status-muted" style={{ marginTop: "4px" }}>
+              Все нормативные расчёты и проверки строятся только на данных этой таблицы.
+            </p>
           </div>
-          <StatusBadge value={plan.status} />
+          <StatusBadge value={plan.status}>{statusLabels[plan.status] || plan.status}</StatusBadge>
         </div>
-        <p className="status-muted">
-          Здесь фиксируется итоговая структура плана. Все расчёты и нормативные проверки строятся только на данных Таблицы 2.
-        </p>
-        {loading ? <p className="status-muted">Загрузка Таблицы 2...</p> : null}
+        {loading ? <p className="status-muted">Загрузка структуры…</p> : null}
         {error ? <p className="status-message status-error">{error}</p> : null}
       </div>
 
+      {/* Aggregates */}
       {data ? (
         <div className="card totals-grid">
           <div className="metric-tile">
-            <span>Всего з.е. без факультативов</span>
+            <span>З.е. без факультативов</span>
             <strong>{data.aggregates.total_credits}</strong>
           </div>
           <div className="metric-tile">
@@ -340,7 +338,7 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
             <strong>{data.aggregates.total_base_hours}</strong>
           </div>
           <div className="metric-tile">
-            <span>Дополнительные часы</span>
+            <span>Доп. часы</span>
             <strong>{data.aggregates.total_extra_hours}</strong>
           </div>
           <div className="metric-tile">
@@ -350,67 +348,80 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
         </div>
       ) : null}
 
+      {/* Add element form */}
       <form className="card stacked-form" onSubmit={handleCreateElement}>
         <div className="section-header">
           <div>
-            <p className="card-kicker">Ручное добавление</p>
-            <h3>Добавить элемент в Таблицу 2</h3>
+            <p className="card-kicker">Добавить элемент</p>
+            <h3 style={{ fontSize: "15px" }}>Новая дисциплина или практика</h3>
           </div>
         </div>
-
         <ElementFormFields value={newElement} onChange={updateNewElement} />
-
         <CompetencyMultiSelect
           groupedCompetencies={competencies}
           selectedIds={newElement.competency_ids}
-          onChange={(value) => updateNewElement("competency_ids", value)}
+          onChange={(v) => updateNewElement("competency_ids", v)}
         />
-
-        <button className="primary-button" type="submit" disabled={saving}>
-          {saving ? "Сохранение..." : "Добавить элемент"}
+        <button className="primary-button" type="submit" disabled={saving} style={{ justifySelf: "start" }}>
+          {saving ? "Сохранение…" : "+ Добавить элемент"}
         </button>
       </form>
 
+      {/* Inline edit form */}
       {editingId ? (
         <div className="card stacked-form">
           <div className="section-header">
             <div>
               <p className="card-kicker">Редактирование</p>
-              <h3>Изменить элемент</h3>
+              <h3 style={{ fontSize: "15px" }}>
+                {drafts[editingId]?.name || "Изменить элемент"}
+              </h3>
             </div>
             <button type="button" className="secondary-button" onClick={() => setEditingId(null)}>
               Закрыть
             </button>
           </div>
-
-          <ElementFormFields value={drafts[editingId]} onChange={(field, value) => updateDraft(editingId, field, value)} />
-
+          <ElementFormFields
+            value={drafts[editingId]}
+            onChange={(field, value) => updateDraft(editingId, field, value)}
+          />
           <CompetencyMultiSelect
             groupedCompetencies={competencies}
             selectedIds={drafts[editingId]?.competency_ids || []}
-            onChange={(value) => updateDraft(editingId, "competency_ids", value)}
+            onChange={(v) => updateDraft(editingId, "competency_ids", v)}
           />
-
-          <button className="primary-button" type="button" onClick={() => handleSaveElement(editingId)} disabled={saving}>
-            {saving ? "Сохранение..." : "Сохранить изменения"}
-          </button>
+          <div style={{ display: "flex", gap: "8px" }}>
+            <button
+              className="primary-button"
+              type="button"
+              onClick={() => handleSaveElement(editingId)}
+              disabled={saving}
+            >
+              {saving ? "Сохранение…" : "Сохранить изменения"}
+            </button>
+            <button type="button" className="secondary-button" onClick={() => setEditingId(null)}>
+              Отмена
+            </button>
+          </div>
         </div>
       ) : null}
 
+      {/* Empty state */}
       {!loading && !error && data && collectAllElements(data.grouped_elements).length === 0 ? (
         <EmptyState
-          title="Таблица 2 пока пуста"
-          description="Перенесите элементы из Таблицы 1 или добавьте их вручную."
+          title="Структура плана пуста"
+          description="Перенесите элементы из Таблицы 1 или добавьте их вручную с помощью формы выше."
         />
       ) : null}
 
+      {/* Grouped elements by block */}
       {data
         ? Object.entries(data.grouped_elements).map(([block, parts]) => (
             <div key={block} className="card">
               <div className="section-header">
                 <div>
                   <p className="card-kicker">Состав плана</p>
-                  <h3>{blockLabels[block] || `Блок ${block}`}</h3>
+                  <h3 style={{ fontSize: "15px" }}>{blockLabels[block] || `Блок ${block}`}</h3>
                 </div>
               </div>
 
@@ -424,13 +435,13 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
                       <table className="data-table">
                         <thead>
                           <tr>
-                            <th>Наименование</th>
+                            <th style={{ minWidth: "180px" }}>Наименование</th>
                             <th>Семестры</th>
                             <th>З.е.</th>
                             <th>Часы</th>
-                            <th>Доп. часы</th>
-                            <th>Итого часов</th>
-                            <th>Компетенции</th>
+                            <th>Доп. ч.</th>
+                            <th>Итого ч.</th>
+                            <th style={{ minWidth: "120px" }}>Компетенции</th>
                             <th>Действия</th>
                           </tr>
                         </thead>
@@ -440,10 +451,16 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
                               <td>
                                 <strong>{element.name}</strong>
                                 <div className="table-secondary">
-                                  {(element.practice_type && practiceTypeLabels[element.practice_type]
-                                    ? `${practiceTypeLabels[element.practice_type]} практика · `
-                                    : "") +
-                                    (element.fgos_requirement ? "Нормативный элемент ФГОС" : "Пользовательский/рекомендованный элемент")}
+                                  {[
+                                    element.practice_type && practiceTypeLabels[element.practice_type]
+                                      ? `${practiceTypeLabels[element.practice_type]} практика`
+                                      : null,
+                                    element.fgos_requirement
+                                      ? "Норматив ФГОС"
+                                      : "Пользовательский",
+                                  ]
+                                    .filter(Boolean)
+                                    .join(" · ")}
                                 </div>
                               </td>
                               <td>{formatSemesters(element.semesters)}</td>
@@ -454,21 +471,25 @@ export default function Table2({ plan, planId, refreshToken, onRefresh, setGloba
                               <td>
                                 <div className="selected-tags">
                                   {element.competency_ids
-                                    .filter((competencyId) => competencyMap[competencyId])
-                                    .map((competencyId) => (
+                                    .filter((id) => competencyMap[id])
+                                    .map((id) => (
                                       <span
-                                        key={competencyId}
+                                        key={id}
                                         className="selected-tag light"
-                                        title={competencyMap[competencyId].name}
+                                        title={competencyMap[id].name}
                                       >
-                                        {competencyMap[competencyId].code}
+                                        {competencyMap[id].code}
                                       </span>
                                     ))}
                                 </div>
                               </td>
                               <td>
                                 <div className="row-actions">
-                                  <button className="small-button" type="button" onClick={() => setEditingId(element.id)}>
+                                  <button
+                                    className="small-button"
+                                    type="button"
+                                    onClick={() => setEditingId(element.id)}
+                                  >
                                     Изменить
                                   </button>
                                   <button
