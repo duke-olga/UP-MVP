@@ -1,145 +1,130 @@
 import { useEffect, useMemo, useState } from "react";
-
 import { getErrorMessage, getTable1, transferTable1 } from "../api";
 import EmptyState from "../components/EmptyState";
-import HelpTooltip from "../components/HelpTooltip";
 import SourceBadge from "../components/SourceBadge";
-import StatusBadge from "../components/StatusBadge";
 
-function formatSemesters(semesters) {
-  if (!semesters?.length) return "Семестры не указаны";
-  return `Сем. ${semesters.join(", ")}`;
+const FGOS_LABELS = {
+  philosophy: "Философия",
+  history: "История России",
+  foreign_language: "Иностранный язык",
+  life_safety: "Безопасность жизнедеятельности",
+  educational_practice: "Учебная практика",
+  industrial_practice: "Производственная практика",
+};
+
+const PART_LABELS = { mandatory: "Обязательная часть", variative: "Вариативная часть" };
+
+function SemChips({ semesters }) {
+  if (!semesters?.length) return <span className="text-muted" style={{ fontSize: 12 }}>Сем. не указаны</span>;
+  return (
+    <>
+      {semesters.map((s) => (
+        <span key={s} className="sem-chip">С{s}</span>
+      ))}
+    </>
+  );
 }
 
-function RecommendationCard({ item, checked, inputType = "checkbox", name, onChange }) {
+function RecCard({ item, checked, inputType = "checkbox", radioName, onChange }) {
+  const handleClick = () => {
+    if (inputType === "radio") {
+      onChange(item.id, !checked);
+    } else {
+      onChange(item.id, !checked);
+    }
+  };
+
   return (
-    <label className={`recommendation ${inputType === "checkbox" ? "checkbox" : "radio"}`}>
-      <input
-        type={inputType}
-        name={name}
-        checked={checked}
-        onChange={(e) => onChange(item.id, e.target.checked)}
-      />
-      <div>
-        <strong>{item.name}</strong>
-        <span>
-          {item.credits ?? 0} з.е. · {formatSemesters(item.semesters)}
-          {item.extra_hours ? ` · доп. ${item.extra_hours} ч.` : ""}
-        </span>
-        <div className="recommendation-meta">
-          <SourceBadge source={item.source_title || item.source_label || item.source} />
-          {item.source_label && item.source_title && item.source_label !== item.source_title ? (
-            <small>{item.source_label}</small>
-          ) : null}
-          {item.practice_type ? (
-            <small>
-              {item.practice_type === "educational" ? "Учебная практика" : "Производственная практика"}
-            </small>
-          ) : null}
+    <label
+      className={`rec-card${checked ? " selected" : ""}`}
+      onClick={(e) => { e.preventDefault(); handleClick(); }}
+    >
+      <div className="rec-card__check">
+        <input
+          type={inputType}
+          name={radioName}
+          checked={checked}
+          onChange={() => {}}
+          style={{ pointerEvents: "none" }}
+        />
+      </div>
+      <div className="rec-card__body">
+        <div className="rec-card__name">{item.name}</div>
+        <div className="rec-card__meta">
+          <span className="rec-card__credits">{item.credits ?? 0} з.е.</span>
+          <SemChips semesters={item.semesters} />
+          {item.extra_hours > 0 && (
+            <span className="sem-chip">+{item.extra_hours} ч.</span>
+          )}
+          <SourceBadge source={item.source} />
+          {item.practice_type && (
+            <span className="source-badge source-badge-local">
+              {item.practice_type === "educational" ? "Учебная" : "Производственная"}
+            </span>
+          )}
         </div>
-        {item.competency_codes?.length ? (
-          <small style={{ color: "var(--accent)" }}>{item.competency_codes.join(", ")}</small>
-        ) : null}
+        {item.competency_codes?.length > 0 && (
+          <div style={{ marginTop: 4, display: "flex", gap: 4, flexWrap: "wrap" }}>
+            {item.competency_codes.map((c) => (
+              <span key={c} className="comp-chip">{c}</span>
+            ))}
+          </div>
+        )}
       </div>
     </label>
   );
 }
 
-function GroupSelection({ title, groups, selections, onSingleSelect, onToggle, helperText }) {
+function RecSection({ title, headerClass = "", items, selections, onToggle, onSingleSelect, group }) {
+  const selected = items.filter((i) => selections[i.id]).length;
   return (
-    <div className="content-block">
-      <div className="inline-hint" style={{ marginBottom: "2px" }}>
-        <h4 style={{ fontSize: "13px", fontWeight: 600, color: "var(--text-2)", margin: 0 }}>{title}</h4>
-        <HelpTooltip text={helperText} />
+    <div className="rec-section">
+      <div className={`rec-section-header${headerClass ? " " + headerClass : ""}`}>
+        <span>{title}</span>
+        {group?.is_complete !== undefined && (
+          <span
+            className="rec-section-badge"
+            style={group.is_complete
+              ? { background: "var(--success-bg)", color: "var(--success)", borderColor: "var(--success-border)" }
+              : { background: "var(--warning-bg)", color: "var(--warning)", borderColor: "var(--warning-border)" }
+            }
+          >
+            {group.is_complete ? "✓ Выполнено" : "Ожидает"}
+          </span>
+        )}
+        {!group && <span className="rec-section-badge">{selected}/{items.length}</span>}
       </div>
-      {!groups.length ? <p className="status-muted">Нет доступных вариантов.</p> : null}
-      {groups.map((group) => (
-        <div key={group.requirement} className="fgos-group">
-          <div className="section-header" style={{ marginBottom: "8px" }}>
-            <div>
-              <strong style={{ fontSize: "13px", color: "var(--text)" }}>{group.title}</strong>
-              <p className="status-muted" style={{ marginTop: "1px" }}>
-                {group.is_complete ? "Выбор выполнен" : "Выбор не выполнен"}
-              </p>
-            </div>
-            <StatusBadge value={group.is_complete ? "approved" : "warning"}>
-              {group.is_complete ? "Готово" : "Ожидает"}
-            </StatusBadge>
+      {items.length === 0 ? (
+        <div className="rec-cards">
+          <div style={{ padding: "12px 16px", color: "var(--text-3)", fontSize: 13 }}>
+            Рекомендации не найдены — добавьте вручную на шаге «Учебный план».
           </div>
-          {!group.items.length ? (
-            <p className="status-muted">
-              Варианты не найдены — добавьте элемент вручную в Таблице 2.
-            </p>
-          ) : (
-            <div className="recommendation-list">
-              {group.items.map((item) => (
-                <RecommendationCard
-                  key={item.id}
-                  item={item}
-                  checked={Boolean(selections[item.id])}
-                  inputType={group.selection_mode === "single" ? "radio" : "checkbox"}
-                  name={group.requirement}
-                  onChange={(itemId, nextChecked) => {
-                    if (group.selection_mode === "single") {
-                      onSingleSelect(group, itemId, nextChecked);
-                    } else {
-                      onToggle(itemId, nextChecked);
-                    }
-                  }}
-                />
-              ))}
-            </div>
-          )}
         </div>
-      ))}
+      ) : (
+        <div className="rec-cards">
+          {items.map((item) => (
+            <RecCard
+              key={item.id}
+              item={item}
+              checked={Boolean(selections[item.id])}
+              inputType={group?.selection_mode === "single" ? "radio" : "checkbox"}
+              radioName={group?.requirement}
+              onChange={(id, val) => {
+                if (group?.selection_mode === "single") {
+                  onSingleSelect?.(group, id, val);
+                } else {
+                  onToggle(id, val);
+                }
+              }}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
-function CompetencySection({ section, selections, onToggle }) {
-  if (section.mode === "manual_only") {
-    return (
-      <div className="manual-note">
-        <div className="inline-hint" style={{ marginBottom: "4px" }}>
-          <strong>Ручной режим — ПКС</strong>
-          <HelpTooltip text="Для ПКС автоматические рекомендации не формируются. Связь дисциплин и практик с ПКС задаётся вручную в Таблице 2." />
-        </div>
-        <p>Добавьте элементы и свяжите их с компетенцией в Таблице 2.</p>
-      </div>
-    );
-  }
-
-  const groups = [
-    { title: "Дисциплины обязательной части", items: section.mandatory_disciplines },
-    { title: "Дисциплины вариативной части", items: section.variative_disciplines },
-    { title: "Практики обязательной части", items: section.mandatory_practices },
-  ];
-
-  return (
-    <div className="three-columns">
-      {groups.map((group) => (
-        <div key={group.title} className="content-block">
-          <h4>{group.title}</h4>
-          {!group.items.length ? (
-            <p className="status-muted" style={{ fontSize: "12px" }}>Рекомендации не найдены.</p>
-          ) : null}
-          <div className="recommendation-list">
-            {group.items.map((item) => (
-              <RecommendationCard
-                key={item.id}
-                item={item}
-                checked={Boolean(selections[item.id])}
-                onChange={onToggle}
-              />
-            ))}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-export default function Table1({ plan, planId, refreshToken, onNavigate, onRefresh, setGlobalNotice }) {
+export default function Table1({ plan, planId, onNotice, onRefresh, onNext }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -147,237 +132,271 @@ export default function Table1({ plan, planId, refreshToken, onNavigate, onRefre
   const [transferring, setTransferring] = useState(false);
 
   useEffect(() => {
-    if (!planId) {
-      setData(null);
-      setSelections({});
-      return;
-    }
-
+    if (!planId) { setData(null); setSelections({}); return; }
     let cancelled = false;
-
-    const load = async () => {
-      setLoading(true);
-      setError("");
-      try {
-        const nextData = await getTable1(planId);
+    setLoading(true);
+    setError("");
+    getTable1(planId)
+      .then((d) => {
         if (cancelled) return;
-
-        setData(nextData);
-        const nextSelections = {};
-        const collect = (items) => items.forEach((item) => { nextSelections[item.id] = item.selected; });
-
-        nextData.fgos_disciplines.forEach((group) => collect(group.items));
-        nextData.fgos_practices.forEach((group) => collect(group.items));
-        nextData.competencies.forEach((section) => {
-          collect(section.mandatory_disciplines);
-          collect(section.variative_disciplines);
-          collect(section.mandatory_practices);
+        setData(d);
+        const sel = {};
+        const collect = (items) => items.forEach((i) => { sel[i.id] = i.selected; });
+        d.fgos_disciplines.forEach((g) => collect(g.items));
+        d.fgos_practices.forEach((g) => collect(g.items));
+        d.competencies.forEach((s) => {
+          collect(s.mandatory_disciplines);
+          collect(s.variative_disciplines);
+          collect(s.mandatory_practices);
         });
-        setSelections(nextSelections);
-      } catch (loadError) {
-        if (!cancelled) setError(getErrorMessage(loadError, "Не удалось загрузить рекомендации."));
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    };
-
-    load();
+        setSelections(sel);
+      })
+      .catch((e) => { if (!cancelled) setError(getErrorMessage(e)); })
+      .finally(() => { if (!cancelled) setLoading(false); });
     return () => { cancelled = true; };
-  }, [planId, refreshToken]);
+  }, [planId]);
 
-  const selectedCount = useMemo(
-    () => Object.values(selections).filter(Boolean).length,
-    [selections],
-  );
+  const selectedCount = useMemo(() => Object.values(selections).filter(Boolean).length, [selections]);
 
-  const manualSectionCount = useMemo(
-    () => data?.competencies?.filter((s) => s.mode === "manual_only").length || 0,
-    [data],
-  );
+  const summary = data?.selection_summary;
+  const fgosOk = summary?.required_disciplines_complete && summary?.required_practices_complete;
 
-  const handleToggle = (elementId, checked) => {
-    setSelections((cur) => ({ ...cur, [elementId]: checked }));
-  };
-
-  const handleSingleSelect = (group, itemId, checked) => {
-    setSelections((cur) => {
-      const next = { ...cur };
-      group.items.forEach((item) => { next[item.id] = false; });
-      if (checked) next[itemId] = true;
+  const toggle = (id, val) => setSelections((s) => ({ ...s, [id]: val }));
+  const singleSelect = (group, itemId, val) => {
+    setSelections((s) => {
+      const next = { ...s };
+      group.items.forEach((i) => { next[i.id] = false; });
+      if (val) next[itemId] = true;
       return next;
     });
   };
 
   const handleTransfer = async () => {
-    if (!planId) return;
-
     setTransferring(true);
     try {
-      const payload = Object.entries(selections).map(([elementId, selected]) => ({
-        element_id: Number(elementId),
-        selected,
+      const payload = Object.entries(selections).map(([id, sel]) => ({
+        element_id: Number(id),
+        selected: sel,
       }));
       const result = await transferTable1(planId, payload);
-      setGlobalNotice(`Перенос завершён. Добавлено: ${result.created_count}, обновлено: ${result.updated_count}.`);
-      onRefresh();
-      onNavigate("table2");
-    } catch (transferError) {
-      setGlobalNotice(getErrorMessage(transferError, "Не удалось перенести выбранные элементы в Таблицу 2."));
+      onNotice?.(`Перенос завершён. Добавлено: ${result.created_count}, обновлено: ${result.updated_count}.`, "success");
+      onRefresh?.();
+      onNext?.();
+    } catch (e) {
+      onNotice?.(getErrorMessage(e), "error");
     } finally {
       setTransferring(false);
     }
   };
 
-  if (!plan) {
-    return (
-      <div className="card">
-        <p>Сначала выберите учебный план.</p>
-      </div>
-    );
-  }
+  if (!plan) return null;
 
-  const fgosComplete =
-    data?.selection_summary?.required_disciplines_complete &&
-    data?.selection_summary?.required_practices_complete;
+  if (loading) return (
+    <EmptyState icon="⏳" title="Загрузка рекомендаций…" description="Получаем рекомендации ФГОС для вашей программы" />
+  );
+  if (error) return (
+    <div className="notice notice-error"><span className="notice-icon">✗</span>{error}</div>
+  );
+  if (!data) return null;
 
   return (
-    <section className="stack-panel">
-      {/* Header card */}
-      <div className="card">
-        <div className="section-header">
-          <div>
-            <p className="card-kicker">Шаг 1</p>
-            <h2 style={{ fontSize: "18px" }}>Рекомендации и обязательные элементы ФГОС</h2>
-            <p className="status-muted" style={{ marginTop: "4px" }}>
-              Направление {plan.program_code} · Выбор здесь не влияет на расчёты — только определяет,
-              что перенести в структуру плана.
-            </p>
+    <div className="page-panel">
+      <div className="section-header">
+        <div>
+          <div className="section-header__title">Рекомендации ФГОС</div>
+          <div className="section-header__sub">
+            Программа {plan.program_code} · Выберите дисциплины и практики для переноса в план
           </div>
-          <button
-            className="primary-button"
-            type="button"
-            onClick={handleTransfer}
-            disabled={transferring || !data}
-          >
-            {transferring ? "Перенос…" : "Перенести выбранное →"}
-          </button>
         </div>
-        {loading ? <p className="status-muted">Загрузка рекомендаций…</p> : null}
-        {error ? <p className="status-message status-error">{error}</p> : null}
       </div>
 
-      {/* Metrics */}
-      {data ? (
-        <div className="card totals-grid">
-          <div className="metric-tile">
-            <span>Выбрано элементов</span>
-            <strong>{selectedCount}</strong>
-          </div>
-          <div className="metric-tile">
-            <span>Компетенций</span>
-            <strong>{data.competencies.length}</strong>
-          </div>
-          <div className="metric-tile">
-            <span>ПКС в ручном режиме</span>
-            <strong>{manualSectionCount}</strong>
-          </div>
-          <div className="metric-tile">
-            <span>Полнота ФГОС</span>
-            <strong style={{ fontSize: "15px", color: fgosComplete ? "var(--green)" : "var(--amber)" }}>
-              {fgosComplete ? "Полная" : "Есть пропуски"}
-            </strong>
-          </div>
-        </div>
-      ) : null}
+      <div className="rec-layout">
+        {/* Left: cards */}
+        <div>
+          {/* FGOS mandatory disciplines */}
+          {data.fgos_disciplines.length > 0 && (
+            <>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-3)", textTransform: "uppercase", letterSpacing: ".4px", marginBottom: 8 }}>
+                Обязательные дисциплины ФГОС
+              </div>
+              {data.fgos_disciplines.map((group) => (
+                <RecSection
+                  key={group.requirement}
+                  title={FGOS_LABELS[group.requirement] || group.title}
+                  headerClass="fgos"
+                  items={group.items}
+                  selections={selections}
+                  onToggle={toggle}
+                  onSingleSelect={singleSelect}
+                  group={group}
+                />
+              ))}
+            </>
+          )}
 
-      {/* FGOS completeness status */}
-      {data ? (
-        <div className="card">
-          <div className="section-header">
-            <div>
-              <p className="card-kicker">Статус ФГОС</p>
-              <h3 style={{ fontSize: "15px" }}>Обязательные элементы</h3>
-            </div>
-            <StatusBadge value={fgosComplete ? "approved" : "warning"}>
-              {fgosComplete ? "Всё выбрано" : "Есть пропуски"}
-            </StatusBadge>
-          </div>
-          <div style={{ display: "grid", gap: "6px" }}>
-            <div className="inline-hint">
-              <span style={{ color: data.selection_summary.required_disciplines_complete ? "var(--green-text)" : "var(--amber-text)" }}>
-                {data.selection_summary.required_disciplines_complete
-                  ? "✓ Все обязательные дисциплины ФГОС выбраны."
-                  : `⚠ Не выбраны дисциплины: ${data.selection_summary.missing_discipline_requirements.join(", ") || "нет данных"}.`}
-              </span>
-            </div>
-            <div className="inline-hint">
-              <span style={{ color: data.selection_summary.required_practices_complete ? "var(--green-text)" : "var(--amber-text)" }}>
-                {data.selection_summary.required_practices_complete
-                  ? "✓ Обязательные категории практик выбраны."
-                  : `⚠ Не выбраны практики: ${data.selection_summary.missing_practice_requirements.join(", ") || "нет данных"}.`}
-              </span>
-            </div>
-          </div>
-        </div>
-      ) : null}
+          {/* FGOS mandatory practices */}
+          {data.fgos_practices.length > 0 && (
+            <>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-3)", textTransform: "uppercase", letterSpacing: ".4px", marginBottom: 8, marginTop: 16 }}>
+                Обязательные практики ФГОС
+              </div>
+              {data.fgos_practices.map((group) => (
+                <RecSection
+                  key={group.requirement}
+                  title={FGOS_LABELS[group.requirement] || group.title}
+                  headerClass="fgos-practices"
+                  items={group.items}
+                  selections={selections}
+                  onToggle={toggle}
+                  onSingleSelect={singleSelect}
+                  group={group}
+                />
+              ))}
+            </>
+          )}
 
-      {/* FGOS mandatory elements */}
-      {data ? (
-        <div className="card">
-          <div className="section-header">
-            <div>
-              <p className="card-kicker">ФГОС</p>
-              <h3 style={{ fontSize: "15px" }}>Нормативно обязательные элементы</h3>
+          {/* Competency recommendations */}
+          {data.competencies.length > 0 && (
+            <div style={{ marginTop: 16 }}>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-3)", textTransform: "uppercase", letterSpacing: ".4px", marginBottom: 8 }}>
+                Рекомендации по компетенциям
+              </div>
+              {data.competencies.map((section) => {
+                if (section.mode === "manual_only") {
+                  return (
+                    <div key={section.competency.id} className="rec-section">
+                      <div className="rec-section-header" style={{ background: "var(--surface-2)" }}>
+                        <span>{section.competency.code} — {section.competency.name}</span>
+                        <span className="badge badge-manual" style={{ marginLeft: "auto" }}>Ручной режим (ПКС)</span>
+                      </div>
+                      <div className="rec-cards">
+                        <div style={{ padding: "12px 16px", color: "var(--text-3)", fontSize: 13 }}>
+                          ПКС не имеют автоматических рекомендаций. Добавьте дисциплины вручную в разделе «Учебный план» и свяжите их с этой компетенцией.
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+
+                const allItems = [
+                  ...section.mandatory_disciplines,
+                  ...section.variative_disciplines,
+                  ...section.mandatory_practices,
+                ];
+
+                if (allItems.length === 0) return null;
+
+                const grouped = [
+                  { title: "Дисциплины · Обязательная часть", items: section.mandatory_disciplines },
+                  { title: "Дисциплины · Вариативная часть",  items: section.variative_disciplines },
+                  { title: "Практики · Обязательная часть",   items: section.mandatory_practices },
+                ].filter((g) => g.items.length > 0);
+
+                return (
+                  <div key={section.competency.id} className="rec-section">
+                    <div className="rec-section-header">
+                      <span>{section.competency.code} — {section.competency.name}</span>
+                      <span className="rec-section-badge">{section.competency.type}</span>
+                    </div>
+                    <div className="rec-cards">
+                      {grouped.map((g) => (
+                        <div key={g.title}>
+                          <div style={{
+                            padding: "5px 16px",
+                            fontSize: 11, fontWeight: 600, color: "var(--text-3)",
+                            textTransform: "uppercase", letterSpacing: ".3px",
+                            background: "var(--surface-2)", borderBottom: "1px solid var(--border)",
+                          }}>
+                            {g.title}
+                          </div>
+                          {g.items.map((item) => (
+                            <RecCard
+                              key={item.id}
+                              item={item}
+                              checked={Boolean(selections[item.id])}
+                              onChange={toggle}
+                            />
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-          </div>
-          <div className="two-columns">
-            <GroupSelection
-              title="Обязательные дисциплины"
-              groups={data.fgos_disciplines}
-              selections={selections}
-              onSingleSelect={handleSingleSelect}
-              onToggle={handleToggle}
-              helperText="Для каждой нормативной дисциплины выберите один вариант реализации или оставьте пустым и добавьте вручную в Таблице 2."
+          )}
+
+          {data.fgos_disciplines.length === 0 && data.fgos_practices.length === 0 && data.competencies.length === 0 && (
+            <EmptyState
+              icon="📭"
+              title="Рекомендации не найдены"
+              description="Для данной программы рекомендации отсутствуют. Добавьте дисциплины вручную на следующем шаге."
             />
-            <GroupSelection
-              title="Обязательные категории практик"
-              groups={data.fgos_practices}
-              selections={selections}
-              onSingleSelect={handleSingleSelect}
-              onToggle={handleToggle}
-              helperText="Для каждой категории практик можно выбрать один или несколько вариантов."
-            />
+          )}
+        </div>
+
+        {/* Right: sticky summary */}
+        <div>
+          <div className="rec-summary">
+            <div className="rec-summary__header">Сводка выбора</div>
+            <div className="rec-summary__body">
+              <div className="card-section-title">Требования ФГОС</div>
+
+              {summary?.required_disciplines_complete !== undefined && (
+                <>
+                  <div className={`req-row ${summary.required_disciplines_complete ? "ok" : summary.missing_discipline_requirements?.length ? "warn" : "pending"}`}>
+                    <span className="req-row__icon">{summary.required_disciplines_complete ? "✓" : "○"}</span>
+                    <span className="req-row__label">Дисциплины ФГОС</span>
+                  </div>
+                  {!summary.required_disciplines_complete && summary.missing_discipline_requirements?.length > 0 && (
+                    <div style={{ paddingLeft: 24, fontSize: 11.5, color: "var(--warning)", lineHeight: 1.5 }}>
+                      Не выбраны: {summary.missing_discipline_requirements.map((r) => FGOS_LABELS[r] || r).join(", ")}
+                    </div>
+                  )}
+                  <div className={`req-row ${summary.required_practices_complete ? "ok" : "warn"}`}>
+                    <span className="req-row__icon">{summary.required_practices_complete ? "✓" : "○"}</span>
+                    <span className="req-row__label">Практики ФГОС</span>
+                  </div>
+                  {!summary.required_practices_complete && summary.missing_practice_requirements?.length > 0 && (
+                    <div style={{ paddingLeft: 24, fontSize: 11.5, color: "var(--warning)", lineHeight: 1.5 }}>
+                      Не выбраны: {summary.missing_practice_requirements.map((r) => FGOS_LABELS[r] || r).join(", ")}
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+
+            <div className="rec-summary__count">
+              Выбрано: <strong>{selectedCount}</strong> элементов
+            </div>
+
+            {!fgosOk && (
+              <div style={{ padding: "8px 16px", fontSize: 12, color: "var(--warning)", borderTop: "1px solid var(--border)" }}>
+                ⚠ Не все требования ФГОС выполнены. Вы всё равно можете перенести выбранное.
+              </div>
+            )}
+
+            <div className="rec-summary__footer">
+              <button
+                className="btn btn-primary"
+                style={{ width: "100%" }}
+                onClick={handleTransfer}
+                disabled={transferring || selectedCount === 0}
+              >
+                {transferring
+                  ? <><span className="spinner" /> Перенос…</>
+                  : `Перенести ${selectedCount > 0 ? `(${selectedCount})` : ""} в план →`
+                }
+              </button>
+              {selectedCount === 0 && (
+                <div style={{ marginTop: 8, fontSize: 12, color: "var(--text-3)", textAlign: "center" }}>
+                  Отметьте хотя бы одну дисциплину
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      ) : null}
-
-      {/* Competency sections */}
-      {!loading && !error && data && data.competencies.length === 0 ? (
-        <EmptyState
-          title="Компетенции не найдены"
-          description="Для выбранного плана в системе пока нет доступных компетенций."
-        />
-      ) : null}
-
-      {data?.competencies.map((section) => (
-        <article key={section.competency.id} className="card competency-card">
-          <div className="section-header">
-            <div>
-              <p className="card-kicker">{section.competency.type}</p>
-              <h3 style={{ fontSize: "15px" }}>
-                {section.competency.code} — {section.competency.name}
-              </h3>
-              <p className="status-muted" style={{ marginTop: "3px" }}>
-                {section.competency.description}
-              </p>
-            </div>
-            {section.mode === "manual_only" ? (
-              <StatusBadge value="manual">Ручной режим</StatusBadge>
-            ) : null}
-          </div>
-          <CompetencySection section={section} selections={selections} onToggle={handleToggle} />
-        </article>
-      ))}
-    </section>
+      </div>
+    </div>
   );
 }

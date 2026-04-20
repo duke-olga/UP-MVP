@@ -104,6 +104,12 @@ export const updatePlanStatus = async (planId, status) => {
 
 export const getExportUrl = (planId) => `/api/v1/plans/${planId}/export/xlsx`;
 
+export const chatWithPlan = async (planId, message) => {
+  const { data } = await api.post(`/plans/${planId}/chat`, { message }, { timeout: 120000 });
+  return data.data.answer;
+};
+
+
 export const getErrorMessage = (error, fallbackMessage) =>
   normalizeMessage(error?.response?.data?.detail || error?.message, fallbackMessage);
 

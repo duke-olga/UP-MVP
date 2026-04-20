@@ -1,122 +1,108 @@
-import { useMemo, useState } from "react";
-
-import HelpTooltip from "./HelpTooltip";
-
-const groupLabels = {
-  УК: "УК",
-  ОПК: "ОПК",
-  ПК: "ПК",
-  ПКС: "ПКС",
-};
-
-function normalize(value) {
-  return value.trim().toLowerCase();
-}
+import { useEffect, useMemo, useRef, useState } from "react";
 
 export default function CompetencyMultiSelect({
   groupedCompetencies,
   selectedIds,
   onChange,
-  title = "Компетенции",
 }) {
   const [query, setQuery] = useState("");
-  const [expanded, setExpanded] = useState(false);
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const allItems = useMemo(
+    () => Object.values(groupedCompetencies).flat(),
+    [groupedCompetencies],
+  );
 
   const selectedItems = useMemo(
-    () =>
-      Object.values(groupedCompetencies)
-        .flat()
-        .filter((item) => selectedIds.includes(item.id)),
-    [groupedCompetencies, selectedIds],
+    () => allItems.filter((c) => selectedIds.includes(c.id)),
+    [allItems, selectedIds],
   );
 
   const filteredGroups = useMemo(() => {
-    const preparedQuery = normalize(query);
+    const q = query.trim().toLowerCase();
     return Object.fromEntries(
       Object.entries(groupedCompetencies).map(([group, items]) => [
         group,
-        items.filter((item) => {
-          if (!preparedQuery) {
-            return true;
-          }
-          return `${item.code} ${item.name}`.toLowerCase().includes(preparedQuery);
-        }),
+        q ? items.filter((i) => `${i.code} ${i.name}`.toLowerCase().includes(q)) : items,
       ]),
     );
   }, [groupedCompetencies, query]);
 
-  const toggleItem = (itemId, checked) => {
-    if (checked) {
-      onChange([...selectedIds, itemId]);
-      return;
-    }
-    onChange(selectedIds.filter((id) => id !== itemId));
+  const toggle = (id, checked) => {
+    onChange(checked ? [...selectedIds, id] : selectedIds.filter((x) => x !== id));
   };
 
   return (
-    <div className="competency-select">
-      <div className="field-label-row">
-        <span className="field-title">{title}</span>
-        <HelpTooltip text="Выберите одну или несколько компетенций. Поиск работает по коду и названию." />
-      </div>
-
-      <button
-        type="button"
-        className="select-toggle"
-        onClick={() => setExpanded((value) => !value)}
-        aria-expanded={expanded}
+    <div className="comp-multiselect" ref={containerRef}>
+      <div
+        className={`comp-multiselect__trigger${open ? " open" : ""}`}
+        onClick={() => setOpen((o) => !o)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setOpen((o) => !o); }}
       >
-        <span>{title}</span>
-        <strong>{selectedItems.length > 0 ? `Выбрано: ${selectedItems.length}` : "Выбрать компетенции"}</strong>
-      </button>
-
-      {selectedItems.length > 0 ? (
-        <div className="selected-tags">
-          {selectedItems.map((item) => (
-            <span key={item.id} className="selected-tag" title={item.name}>
+        {selectedItems.length === 0 ? (
+          <span className="comp-multiselect__placeholder">Выбрать компетенции…</span>
+        ) : (
+          selectedItems.map((item) => (
+            <span key={item.id} className="comp-chip" title={item.name}>
               {item.code}
             </span>
-          ))}
-        </div>
-      ) : null}
+          ))
+        )}
+      </div>
 
-      {expanded ? (
-        <div className="select-panel">
-          <label className="field">
-            <span>Поиск по коду или названию</span>
+      {open && (
+        <div className="comp-multiselect__panel">
+          <div className="comp-multiselect__search">
             <input
+              type="text"
               value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Например, УК-1 или Системное мышление"
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Поиск по коду или названию…"
+              onClick={(e) => e.stopPropagation()}
+              autoFocus
             />
-          </label>
-
-          <div className="select-groups">
+          </div>
+          <div className="comp-multiselect__list">
             {Object.entries(filteredGroups).map(([group, items]) =>
               items.length > 0 ? (
-                <div key={group} className="select-group">
-                  <p className="select-group-title">{groupLabels[group] || group}</p>
-                  <div className="select-options">
-                    {items.map((item) => (
-                      <label key={item.id} className="select-option">
-                        <input
-                          type="checkbox"
-                          checked={selectedIds.includes(item.id)}
-                          onChange={(event) => toggleItem(item.id, event.target.checked)}
-                        />
-                        <div>
-                          <strong>{item.code}</strong>
-                          <span>{item.name}</span>
-                        </div>
-                      </label>
-                    ))}
-                  </div>
+                <div key={group}>
+                  <div className="comp-multiselect__group-label">{group}</div>
+                  {items.map((item) => (
+                    <label
+                      key={item.id}
+                      className={`comp-multiselect__option${selectedIds.includes(item.id) ? " selected" : ""}`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedIds.includes(item.id)}
+                        onChange={(e) => toggle(item.id, e.target.checked)}
+                        style={{ width: 14, height: 14, flexShrink: 0 }}
+                      />
+                      <span className="comp-multiselect__code">{item.code}</span>
+                      <span style={{ color: "var(--text-2)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        {item.name}
+                      </span>
+                    </label>
+                  ))}
                 </div>
-              ) : null,
+              ) : null
             )}
           </div>
         </div>
-      ) : null}
+      )}
     </div>
   );
 }

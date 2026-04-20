@@ -1,21 +1,16 @@
-const sourceLabelMap = {
-  poop: "ПООП",
-  best_practice: "Лучшие практики",
-  best_practices: "Лучшие практики",
-  local_requirement: "Локальные требования вуза",
-  local: "Локальные требования вуза",
+const SOURCE_MAP = {
+  poop:              { label: "ПООП",                   cls: "source-badge-poop" },
+  best_practice:     { label: "Лучшие практики",         cls: "source-badge-best" },
+  best_practices:    { label: "Лучшие практики",         cls: "source-badge-best" },
+  local_requirement: { label: "Локальные требования вуза", cls: "source-badge-local" },
+  local:             { label: "Локальные требования вуза", cls: "source-badge-local" },
 };
 
 export function getSourceLabel(source) {
-  if (!source) {
-    return "Источник не указан";
-  }
-  if (sourceLabelMap[source]) {
-    return sourceLabelMap[source];
-  }
-  return source;
+  return SOURCE_MAP[source]?.label || source || "Источник не указан";
 }
 
 export default function SourceBadge({ source }) {
-  return <span className="source-badge">{getSourceLabel(source)}</span>;
+  const cfg = SOURCE_MAP[source] || { label: source || "—", cls: "source-badge-poop" };
+  return <span className={`source-badge ${cfg.cls}`}>{cfg.label}</span>;
 }

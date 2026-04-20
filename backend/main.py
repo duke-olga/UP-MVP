@@ -6,7 +6,7 @@ from sqlalchemy import inspect, text
 from backend.database import Base, SessionLocal, engine
 from backend.modules.plan_builder import calculator as _calculator  # noqa: F401
 from backend.modules.seed_ingest.loader import load_seed_data
-from backend.routers import competencies, export, table1, table2, table3, validation
+from backend.routers import chat, competencies, export, table1, table2, table3, validation
 from backend.schemas import HealthResponse, HealthResponseWrapper
 
 
@@ -100,6 +100,7 @@ async def lifespan(_: FastAPI):
 
 
 app = FastAPI(title="UP-MVP API", version="0.1.0", lifespan=lifespan)
+app.include_router(chat.router)
 app.include_router(competencies.router)
 app.include_router(table1.router)
 app.include_router(table2.router)
