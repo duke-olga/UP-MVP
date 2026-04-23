@@ -1118,3 +1118,70 @@ tr:hover .row-actions { opacity: 1; }
   .ai-panel { width: 100vw; }
   .inline-edit-grid { grid-template-columns: 1fr 1fr; }
 }
+
+/* =====================================================================
+   Semantic competency suggestion modal (Table2)
+   ===================================================================== */
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 300;
+  background: rgba(15,23,42,.45);
+  display: flex; align-items: center; justify-content: center;
+  padding: var(--s-4);
+  animation: fade-in 150ms ease;
+}
+.modal--wide { max-width: 680px; padding: 0; }
+.modal-header {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: var(--s-3);
+  padding: var(--s-5) var(--s-5) var(--s-4);
+  border-bottom: 1px solid var(--border);
+}
+.modal-title { font-size: 16px; font-weight: 700; color: var(--text-1); }
+.modal-sub { font-size: 13px; color: var(--text-3); margin-top: 2px; }
+.modal-close {
+  background: none; border: none; cursor: pointer; color: var(--text-3);
+  font-size: 16px; padding: 2px 6px; border-radius: var(--radius-sm);
+  transition: color 120ms, background 120ms; flex-shrink: 0;
+}
+.modal-close:hover { color: var(--text-1); background: var(--border); }
+.modal-footer {
+  display: flex; justify-content: flex-end; gap: var(--s-2);
+  padding: var(--s-4) var(--s-5);
+  border-top: 1px solid var(--border);
+}
+
+.suggest-loading {
+  display: flex; flex-direction: column; align-items: center; gap: var(--s-2);
+  padding: var(--s-6); color: var(--text-3); font-size: 14px;
+}
+.suggest-loading__hint { font-size: 12px; color: var(--text-4, var(--text-3)); text-align: center; }
+.suggest-model { font-size: 11px; color: var(--text-3); padding: var(--s-2) var(--s-5); }
+
+.suggest-list {
+  display: flex; flex-direction: column;
+  max-height: 420px; overflow-y: auto;
+  padding: var(--s-2) var(--s-3);
+}
+.comp-suggest-item {
+  display: flex; align-items: flex-start; gap: var(--s-3);
+  padding: var(--s-3) var(--s-2);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 120ms;
+}
+.comp-suggest-item:hover { background: var(--surface-2, var(--surface)); }
+.comp-suggest-item--added { opacity: .6; cursor: default; }
+.comp-suggest-item input[type="checkbox"] { margin-top: 3px; flex-shrink: 0; cursor: pointer; }
+.comp-suggest-item__body { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; }
+.comp-suggest-item__header { display: flex; align-items: center; gap: var(--s-2); flex-wrap: wrap; }
+.comp-suggest-item__code { font-size: 12px; font-weight: 700; color: var(--primary); font-family: monospace; }
+.comp-suggest-item__tag { font-size: 11px; color: var(--text-3); background: var(--border); padding: 1px 6px; border-radius: 99px; }
+.comp-suggest-item__name { font-size: 13px; color: var(--text-1); font-weight: 500; }
+.comp-suggest-item__desc { font-size: 12px; color: var(--text-3); line-height: 1.4; }
+
+/* Score badge (shared Table1/Table2) */
+.score-badge {
+  font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 99px; white-space: nowrap;
+}
+.score-badge--green  { background: #d1fae5; color: #065f46; }
+.score-badge--yellow { background: #fef3c7; color: #92400e; }
+.score-badge--grey   { background: #f1f5f9; color: #64748b; }

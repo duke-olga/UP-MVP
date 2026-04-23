@@ -265,6 +265,28 @@ class Table1TransferResponse(BaseModel):
     data: dict[str, object]
 
 
+class SemanticSearchItem(BaseModel):
+    element: Table1RecommendedElement
+    score: float
+
+
+class SemanticSearchResponse(BaseModel):
+    data: list[SemanticSearchItem]
+    query: str
+    model_name: str
+
+
+class CompetencySuggestion(BaseModel):
+    competency: CompetencyRead
+    score: float
+
+
+class CompetencySuggestionsResponse(BaseModel):
+    data: list[CompetencySuggestion]
+    discipline_name: str
+    model_name: str
+
+
 class Table3Data(BaseModel):
     plan: CurriculumPlanRead
     aggregates: dict[str, object]

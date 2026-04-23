@@ -104,6 +104,22 @@ export const updatePlanStatus = async (planId, status) => {
 
 export const getExportUrl = (planId) => `/api/v1/plans/${planId}/export/xlsx`;
 
+export const semanticSearch = async (planId, query, topK = 10) => {
+  const { data } = await api.get(`/plans/${planId}/table1/semantic`, {
+    params: { query, top_k: topK },
+    timeout: 60000,
+  });
+  return data;
+};
+
+export const suggestCompetencies = async (planId, elementId, topK = 10) => {
+  const { data } = await api.get(`/plans/${planId}/table2/elements/${elementId}/suggest-competencies`, {
+    params: { top_k: topK },
+    timeout: 60000,
+  });
+  return data;
+};
+
 export const chatWithPlan = async (planId, message) => {
   const { data } = await api.post(`/plans/${planId}/chat`, { message }, { timeout: 120000 });
   return data.data.answer;

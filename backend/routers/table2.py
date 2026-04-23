@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from backend.database import get_db
@@ -11,6 +11,9 @@ from backend.modules.plan_builder.calculator import (
 )
 from backend.modules.validation.engine import run_checks
 from backend.schemas import (
+    CompetencyRead,
+    CompetencySuggestion,
+    CompetencySuggestionsResponse,
     CurriculumPlanCreate,
     CurriculumPlanListResponse,
     CurriculumPlanRead,
@@ -222,6 +225,40 @@ def update_plan_element(
     db.commit()
     db.refresh(element)
     return PlanElementResponse(data=PlanElementRead.model_validate(element))
+
+
+@router.get("/{plan_id}/table2/elements/{element_id}/suggest-competencies", response_model=CompetencySuggestionsResponse)
+def suggest_competencies_for_element(
+    plan_id: int,
+    element_id: int,
+    top_k: int = Query(default=10, ge=1, le=50),
+    db: Session = Depends(get_db),
+) -> CompetencySuggestionsResponse:
+    from backend.modules.recommendation.embedder import MODEL_NAME, is_available  # noqa: PLC0415
+    from backend.modules.recommendation.service import suggest_competencies  # noqa: PLC0415
+
+    if not is_available():
+        raise HTTPException(
+            status_code=503,
+            detail="Semantic search is unavailable: could not load the embedding model. Check that sentence-transformers is installed.",
+        )
+
+    _get_plan_or_404(plan_id, db)
+    element = _get_plan_element_or_404(plan_id, element_id, db)
+    competencies = db.query(Competency).order_by(Competency.type, Competency.code).all()
+    ranked = suggest_competencies(element.name, competencies, top_k=top_k)
+
+    return CompetencySuggestionsResponse(
+        data=[
+            CompetencySuggestion(
+                competency=CompetencyRead.model_validate(r.competency),
+                score=round(float(r.score), 3),
+            )
+            for r in ranked
+        ],
+        discipline_name=element.name,
+        model_name=MODEL_NAME,
+    )
 
 
 @router.delete("/{plan_id}/table2/elements/{element_id}")

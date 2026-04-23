@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { getErrorMessage, getTable1, transferTable1 } from "../api";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { getErrorMessage, getTable1, semanticSearch, transferTable1 } from "../api";
 import EmptyState from "../components/EmptyState";
 import SourceBadge from "../components/SourceBadge";
 
@@ -124,6 +124,145 @@ function RecSection({ title, headerClass = "", items, selections, onToggle, onSi
   );
 }
 
+function ScoreBadge({ score }) {
+  const pct = Math.round(score * 100);
+  const color = pct >= 70 ? "var(--success)" : pct >= 45 ? "var(--warning)" : "var(--text-3)";
+  return (
+    <span style={{
+      fontSize: 11, fontWeight: 700, padding: "1px 6px",
+      borderRadius: 10, border: `1px solid ${color}`, color,
+      background: "transparent", whiteSpace: "nowrap",
+    }}>
+      {pct}%
+    </span>
+  );
+}
+
+function SemanticSearchPanel({ planId, selections, onToggle }) {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [open, setOpen] = useState(false);
+  const debounceRef = useRef(null);
+
+  const runSearch = (q) => {
+    if (!q || q.trim().length < 2) { setResults(null); setError(""); return; }
+    setLoading(true);
+    setError("");
+    semanticSearch(planId, q.trim())
+      .then((res) => { setResults(res.data); })
+      .catch((e) => {
+        const msg = e?.response?.data?.detail || e?.message || "Ошибка поиска";
+        setError(msg);
+        setResults(null);
+      })
+      .finally(() => setLoading(false));
+  };
+
+  const handleChange = (e) => {
+    const q = e.target.value;
+    setQuery(q);
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => runSearch(q), 400);
+  };
+
+  return (
+    <div style={{ marginBottom: 16, border: "1px solid var(--border)", borderRadius: 8, overflow: "hidden" }}>
+      <button
+        onClick={() => setOpen((v) => !v)}
+        style={{
+          width: "100%", textAlign: "left", padding: "10px 16px",
+          background: open ? "var(--indigo-50, #eef2ff)" : "var(--surface-2)",
+          border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 8,
+          fontSize: 13, fontWeight: 600, color: "var(--text-1)",
+        }}
+      >
+        <span style={{ fontSize: 15 }}>🔍</span>
+        Семантический поиск по смыслу
+        <span style={{ marginLeft: "auto", color: "var(--text-3)", fontWeight: 400, fontSize: 12 }}>
+          {open ? "▲ свернуть" : "▼ развернуть"}
+        </span>
+      </button>
+
+      {open && (
+        <div style={{ padding: "12px 16px", background: "var(--surface-1)" }}>
+          <div style={{ fontSize: 12, color: "var(--text-3)", marginBottom: 8 }}>
+            Введите название компетенции, тему или ключевые слова — система найдёт похожие дисциплины по смыслу, даже если слова не совпадают точно.
+          </div>
+          <input
+            type="text"
+            value={query}
+            onChange={handleChange}
+            placeholder="Например: машинное обучение, анализ данных, программная инженерия…"
+            style={{
+              width: "100%", padding: "8px 12px", border: "1px solid var(--border)",
+              borderRadius: 6, fontSize: 13, outline: "none", boxSizing: "border-box",
+              background: "var(--surface-1)", color: "var(--text-1)",
+            }}
+          />
+
+          {loading && (
+            <div style={{ marginTop: 10, color: "var(--text-3)", fontSize: 13 }}>
+              <span className="spinner" style={{ marginRight: 6 }} />
+              Вычисляем сходство… (первый запрос загружает модель)
+            </div>
+          )}
+
+          {error && (
+            <div style={{ marginTop: 10, fontSize: 12, color: "var(--error, #dc2626)" }}>
+              {error.includes("unavailable") || error.includes("503")
+                ? "⚠ Семантическая модель недоступна. Убедитесь, что sentence-transformers установлен."
+                : `Ошибка: ${error}`}
+            </div>
+          )}
+
+          {results && results.length === 0 && !loading && (
+            <div style={{ marginTop: 10, color: "var(--text-3)", fontSize: 13 }}>Ничего не найдено.</div>
+          )}
+
+          {results && results.length > 0 && (
+            <div style={{ marginTop: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: "var(--text-3)", textTransform: "uppercase", letterSpacing: ".3px", marginBottom: 6 }}>
+                Результаты · по убыванию сходства
+              </div>
+              <div className="rec-cards">
+                {results.map(({ element, score }) => (
+                  <label
+                    key={element.id}
+                    className={`rec-card${selections[element.id] ? " selected" : ""}`}
+                    onClick={(e) => { e.preventDefault(); onToggle(element.id, !selections[element.id]); }}
+                  >
+                    <div className="rec-card__check">
+                      <input type="checkbox" checked={Boolean(selections[element.id])} onChange={() => {}} style={{ pointerEvents: "none" }} />
+                    </div>
+                    <div className="rec-card__body">
+                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <span className="rec-card__name" style={{ flex: 1 }}>{element.name}</span>
+                        <ScoreBadge score={score} />
+                      </div>
+                      <div className="rec-card__meta">
+                        <span className="rec-card__credits">{element.credits ?? 0} з.е.</span>
+                        {element.semesters?.map((s) => <span key={s} className="sem-chip">С{s}</span>)}
+                        <SourceBadge source={element.source} />
+                      </div>
+                      {element.competency_codes?.length > 0 && (
+                        <div style={{ marginTop: 4, display: "flex", gap: 4, flexWrap: "wrap" }}>
+                          {element.competency_codes.map((c) => <span key={c} className="comp-chip">{c}</span>)}
+                        </div>
+                      )}
+                    </div>
+                  </label>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Table1({ plan, planId, onNotice, onRefresh, onNext }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -209,6 +348,8 @@ export default function Table1({ plan, planId, onNotice, onRefresh, onNext }) {
           </div>
         </div>
       </div>
+
+      <SemanticSearchPanel planId={planId} selections={selections} onToggle={toggle} />
 
       <div className="rec-layout">
         {/* Left: cards */}

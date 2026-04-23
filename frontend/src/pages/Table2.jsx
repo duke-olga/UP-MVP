@@ -6,6 +6,7 @@ import {
   getErrorMessage,
   getTable2,
   listCompetencies,
+  suggestCompetencies,
   updateTable2Element,
 } from "../api";
 import CompetencyMultiSelect from "../components/CompetencyMultiSelect";
@@ -152,8 +153,116 @@ function ElementForm({ value, onChange, competencies, saving, onSave, onCancel, 
   );
 }
 
+/* -------------------------------------------------- Score badge ---- */
+function ScoreBadge({ score }) {
+  const pct = Math.round(score * 100);
+  const cls = pct >= 70 ? "score-badge--green" : pct >= 45 ? "score-badge--yellow" : "score-badge--grey";
+  return <span className={`score-badge ${cls}`}>{pct}%</span>;
+}
+
+/* -------------------------------------------------- Suggest modal -- */
+function SemanticCompetencyModal({ planId, elementId, elementName, existingIds, onApply, onClose }) {
+  const [loading, setLoading] = useState(true);
+  const [results, setResults] = useState([]);
+  const [error, setError] = useState("");
+  const [modelName, setModelName] = useState("");
+  const [selected, setSelected] = useState(new Set());
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true); setError(""); setResults([]); setSelected(new Set());
+    suggestCompetencies(planId, elementId, 15)
+      .then((resp) => {
+        if (cancelled) return;
+        setResults(resp.data || []);
+        setModelName(resp.model_name || "");
+      })
+      .catch((e) => { if (!cancelled) setError(getErrorMessage(e, "Не удалось получить подсказки")); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, [planId, elementId]);
+
+  const toggle = (id) => setSelected((prev) => {
+    const next = new Set(prev);
+    next.has(id) ? next.delete(id) : next.add(id);
+    return next;
+  });
+
+  const handleApply = () => {
+    const merged = [...new Set([...existingIds, ...selected])];
+    onApply(merged);
+  };
+
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="modal modal--wide" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-header">
+          <div>
+            <div className="modal-title">Подбор компетенций</div>
+            <div className="modal-sub">«{elementName}»</div>
+          </div>
+          <button className="modal-close" onClick={onClose}>✕</button>
+        </div>
+
+        {loading && (
+          <div className="suggest-loading">
+            <span className="spinner" />
+            <span>Поиск похожих компетенций…</span>
+            <span className="suggest-loading__hint">Первый запрос может занять до минуты — загружается модель</span>
+          </div>
+        )}
+        {error && <div className="notice notice-error" style={{ margin: "var(--s-4)" }}><span className="notice-icon">✗</span>{error}</div>}
+
+        {!loading && !error && results.length === 0 && (
+          <div style={{ padding: "var(--s-5)", color: "var(--text-3)", textAlign: "center" }}>Результатов не найдено</div>
+        )}
+
+        {!loading && results.length > 0 && (
+          <>
+            <div className="suggest-list">
+              {results.map(({ competency: c, score }) => {
+                const alreadyAdded = existingIds.includes(c.id);
+                const checked = selected.has(c.id) || alreadyAdded;
+                return (
+                  <label key={c.id} className={`comp-suggest-item${alreadyAdded ? " comp-suggest-item--added" : ""}`}>
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      disabled={alreadyAdded}
+                      onChange={() => !alreadyAdded && toggle(c.id)}
+                    />
+                    <div className="comp-suggest-item__body">
+                      <div className="comp-suggest-item__header">
+                        <span className="comp-suggest-item__code">{c.code}</span>
+                        <ScoreBadge score={score} />
+                        {alreadyAdded && <span className="comp-suggest-item__tag">уже добавлена</span>}
+                      </div>
+                      <div className="comp-suggest-item__name">{c.name}</div>
+                      {c.description && <div className="comp-suggest-item__desc">{c.description}</div>}
+                    </div>
+                  </label>
+                );
+              })}
+            </div>
+            {modelName && <div className="suggest-model">Модель: {modelName}</div>}
+            <div className="modal-footer">
+              <button className="btn btn-secondary btn-sm" onClick={onClose}>Закрыть</button>
+              <button
+                className="btn btn-primary btn-sm"
+                onClick={handleApply}
+                disabled={selected.size === 0}
+              >
+                Применить{selected.size > 0 ? ` (${selected.size})` : ""}
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 /* -------------------------------------------------- Block section -- */
-function BlockSection({ block, parts, competencies, competencyMap, onEdit, onDelete, editingId, drafts, onDraftChange, onSave, onCancelEdit, saving, showAddForm, onShowAdd, addDraft, onAddChange, onAdd }) {
+function BlockSection({ block, parts, competencies, competencyMap, onEdit, onDelete, onSuggest, editingId, drafts, onDraftChange, onSave, onCancelEdit, saving, showAddForm, onShowAdd, addDraft, onAddChange, onAdd }) {
   const [open, setOpen] = useState(true);
   const totalCredits = Object.values(parts).flat().reduce((s, e) => s + (e.credits || 0), 0);
 
@@ -240,6 +349,7 @@ function BlockSection({ block, parts, competencies, competencyMap, onEdit, onDel
                             </td>
                             <td>
                               <div className="row-actions">
+                                <button className="btn-icon" type="button" title="Подобрать компетенции (семантический поиск)" onClick={() => onSuggest(el)}>✨</button>
                                 <button className="btn-icon" type="button" title="Редактировать" onClick={() => onEdit(el.id)}>✏</button>
                                 <button className="btn-icon danger" type="button" title="Удалить" onClick={() => onDelete(el)} disabled={saving}>✕</button>
                               </div>
@@ -297,6 +407,7 @@ export default function Table2({ plan, planId, onNotice, onRefresh, onNext }) {
   const [competencies, setCompetencies] = useState({});
   const [addBlock, setAddBlock] = useState(null);  // block key where add form is open
   const [addDraft, setAddDraft] = useState(EMPTY_FORM);
+  const [suggestTarget, setSuggestTarget] = useState(null); // { id, name, competency_ids }
 
   useEffect(() => {
     if (!planId) { setData(null); return; }
@@ -361,6 +472,17 @@ export default function Table2({ plan, planId, onNotice, onRefresh, onNext }) {
       setAddDraft(EMPTY_FORM);
       reload("Элемент добавлен");
     } catch (e) { onNotice?.(getErrorMessage(e), "error"); }
+    finally { setSaving(false); }
+  };
+
+  const handleSuggestApply = async (mergedIds) => {
+    if (!suggestTarget) return;
+    setSuggestTarget(null);
+    setSaving(true);
+    try {
+      await updateTable2Element(planId, suggestTarget.id, { competency_ids: mergedIds });
+      reload("Компетенции обновлены");
+    } catch (e) { onNotice?.(getErrorMessage(e, "Не удалось обновить компетенции"), "error"); }
     finally { setSaving(false); }
   };
 
@@ -434,6 +556,7 @@ export default function Table2({ plan, planId, onNotice, onRefresh, onNext }) {
           saving={saving}
           onEdit={(id) => { setEditingId(id); setAddBlock(null); }}
           onDelete={handleDelete}
+          onSuggest={(el) => setSuggestTarget({ id: el.id, name: el.name, competency_ids: el.competency_ids || [] })}
           onDraftChange={(id, f, v) => setDrafts((s) => ({ ...s, [id]: { ...s[id], [f]: v } }))}
           onSave={handleSave}
           onCancelEdit={() => setEditingId(null)}
@@ -448,6 +571,17 @@ export default function Table2({ plan, planId, onNotice, onRefresh, onNext }) {
           onAdd={handleAdd}
         />
       ))}
+
+      {suggestTarget && (
+        <SemanticCompetencyModal
+          planId={planId}
+          elementId={suggestTarget.id}
+          elementName={suggestTarget.name}
+          existingIds={suggestTarget.competency_ids}
+          onApply={handleSuggestApply}
+          onClose={() => setSuggestTarget(null)}
+        />
+      )}
     </div>
   );
 }

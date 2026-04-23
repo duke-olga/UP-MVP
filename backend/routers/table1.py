@@ -1,13 +1,15 @@
 from collections import defaultdict
 from pathlib import Path
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session, selectinload
 
 from backend.database import get_db
 from backend.models import Competency, CurriculumPlan, PlanElement, RecommendedElement
 from backend.schemas import (
     CompetencyRead,
+    SemanticSearchItem,
+    SemanticSearchResponse,
     Table1CompetencySection,
     Table1Data,
     Table1FgosGroup,
@@ -322,6 +324,47 @@ def get_table1(plan_id: int, db: Session = Depends(get_db)) -> Table1Response:
             fgos_practices=fgos_practices,
             selection_summary=_build_selection_summary(fgos_disciplines, fgos_practices),
         )
+    )
+
+
+@router.get("/{plan_id}/table1/semantic", response_model=SemanticSearchResponse)
+def semantic_search_table1(
+    plan_id: int,
+    query: str = Query(..., min_length=2, max_length=500),
+    top_k: int = Query(default=10, ge=1, le=50),
+    db: Session = Depends(get_db),
+) -> SemanticSearchResponse:
+    from backend.modules.recommendation.embedder import MODEL_NAME, is_available  # noqa: PLC0415
+    from backend.modules.recommendation.service import semantic_search  # noqa: PLC0415
+
+    if not is_available():
+        raise HTTPException(
+            status_code=503,
+            detail="Semantic search is unavailable: could not load the embedding model. Check that sentence-transformers is installed.",
+        )
+
+    plan = _get_plan_or_404(plan_id, db)
+    elements = (
+        db.query(RecommendedElement)
+        .options(selectinload(RecommendedElement.competencies))
+        .filter(RecommendedElement.program_code == plan.program_code)
+        .order_by(RecommendedElement.id)
+        .all()
+    )
+
+    selected_source_ids = _get_selected_source_ids(plan_id, db)
+    ranked = semantic_search(query, elements, top_k=top_k)
+
+    return SemanticSearchResponse(
+        data=[
+            SemanticSearchItem(
+                element=_build_recommendation_payload(r.element, selected_source_ids),
+                score=round(float(r.score), 3),
+            )
+            for r in ranked
+        ],
+        query=query,
+        model_name=MODEL_NAME,
     )
 
 
