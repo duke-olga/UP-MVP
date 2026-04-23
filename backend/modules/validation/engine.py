@@ -307,6 +307,26 @@ def _check_competency_balance(elements: list[PlanElement], competencies: list[Co
     return None
 
 
+def _check_duplicate_disciplines(elements: list[PlanElement]) -> list[CheckResult]:
+    results: list[CheckResult] = []
+    seen: dict[str, list[str]] = defaultdict(list)
+    for element in elements:
+        key = _normalize_name(element.name)
+        seen[key].append(element.name)
+    for key, names in seen.items():
+        if len(names) > 1:
+            results.append(
+                CheckResult(
+                    rule_id=21,
+                    level="warning",
+                    message=f"Дисциплина «{names[0]}» встречается в учебном плане {len(names)} раза(-з). Возможно дублирование.",
+                    actual=len(names),
+                    expected=1,
+                )
+            )
+    return results
+
+
 def _check_structure_parts(elements: list[PlanElement]) -> list[CheckResult]:
     results: list[CheckResult] = []
     for element in elements:
@@ -385,6 +405,7 @@ def run_checks(plan_id: int, db: Session) -> CheckReport:
     results.extend(_check_hours_match(elements, params))
     results.extend(_check_semester_credits(elements, params))
     results.extend(_check_structure_parts(elements))
+    results.extend(_check_duplicate_disciplines(elements))
 
     report = CheckReport(
         plan_id=plan.id,

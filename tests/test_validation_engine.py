@@ -130,6 +130,106 @@ def test_run_checks_detects_invalid_hours_ratio() -> None:
         db.close()
 
 
+def test_run_checks_detects_duplicate_disciplines() -> None:
+    db = _prepare_db()
+    try:
+        _add_normative_params(db)
+        competencies = _add_competencies(db)
+
+        plan = CurriculumPlan(name="Duplicates plan", program_code="090304", status="draft")
+        db.add(plan)
+        db.flush()
+
+        db.add_all(
+            [
+                PlanElement(
+                    plan_id=plan.id,
+                    name="Математический анализ",
+                    block="1",
+                    part="mandatory",
+                    credits=4.0,
+                    hours=0,
+                    semesters=[1],
+                    competency_ids=[competencies[0].id],
+                ),
+                PlanElement(
+                    plan_id=plan.id,
+                    name="Математический анализ",
+                    block="1",
+                    part="variative",
+                    credits=4.0,
+                    hours=0,
+                    semesters=[2],
+                    competency_ids=[competencies[0].id],
+                ),
+                PlanElement(
+                    plan_id=plan.id,
+                    name="  Математический  анализ  ",
+                    block="1",
+                    part="variative",
+                    credits=4.0,
+                    hours=0,
+                    semesters=[3],
+                    competency_ids=[competencies[0].id],
+                ),
+            ]
+        )
+        db.commit()
+
+        report = run_checks(plan.id, db)
+        duplicate_results = [item for item in report.results if item["rule_id"] == 21]
+
+        assert len(duplicate_results) == 1
+        assert duplicate_results[0]["level"] == "warning"
+        assert duplicate_results[0]["actual"] == 3
+    finally:
+        db.close()
+
+
+def test_run_checks_no_duplicate_warning_for_unique_disciplines() -> None:
+    db = _prepare_db()
+    try:
+        _add_normative_params(db)
+        competencies = _add_competencies(db)
+
+        plan = CurriculumPlan(name="No duplicates", program_code="090304", status="draft")
+        db.add(plan)
+        db.flush()
+
+        db.add_all(
+            [
+                PlanElement(
+                    plan_id=plan.id,
+                    name="Линейная алгебра",
+                    block="1",
+                    part="mandatory",
+                    credits=3.0,
+                    hours=0,
+                    semesters=[1],
+                    competency_ids=[competencies[0].id],
+                ),
+                PlanElement(
+                    plan_id=plan.id,
+                    name="Математический анализ",
+                    block="1",
+                    part="mandatory",
+                    credits=4.0,
+                    hours=0,
+                    semesters=[2],
+                    competency_ids=[competencies[0].id],
+                ),
+            ]
+        )
+        db.commit()
+
+        report = run_checks(plan.id, db)
+        duplicate_results = [item for item in report.results if item["rule_id"] == 21]
+
+        assert len(duplicate_results) == 0
+    finally:
+        db.close()
+
+
 def test_run_checks_adds_semester_warning_for_overloaded_semester() -> None:
     db = _prepare_db()
     try:
