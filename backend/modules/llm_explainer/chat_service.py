@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
-from backend.models import CheckReport, Competency, CurriculumPlan, NormativeParam, PlanElement
+from backend.models import CheckReport, Competency, CurriculumPlan, NormativeParam, PlanElement, RecommendedElement
 from backend.modules.llm_explainer.adapter import LLMAdapterError, OllamaAdapter
 from backend.modules.plan_builder.calculator import (
     aggregate_by_block,
@@ -11,9 +11,19 @@ from backend.modules.plan_builder.calculator import (
     get_competency_coverage,
 )
 
-_SYSTEM_PROMPT = """\
+_BLOCK_NAMES = {"1": "Блок 1 (Дисциплины)", "2": "Блок 2 (Практики)", "3": "Блок 3 (ГИА)", "fac": "Факультативные"}
+_PART_NAMES = {"mandatory": "обязательная", "variative": "вариативная"}
+
+
+def _build_system_prompt(program_code: str) -> str:
+    return f"""\
 Ты — ИИ-ассистент методиста вуза по проектированию учебных планов ОПОП/ФГОС.
-У тебя есть доступ к текущей структуре учебного плана (см. контекст ниже).
+Ты работаешь с образовательной программой по направлению подготовки {program_code}.
+
+У тебя есть доступ к двум источникам контекста:
+1. «УЧЕБНЫЙ ПЛАН» — текущая структура проектируемого плана (дисциплины, нагрузка, компетенции, нарушения).
+2. «НОРМАТИВНАЯ БАЗА» — рекомендации ПООП, лучшие практики и описания компетенций для направления {program_code},
+   отобранные по смыслу вопроса через семантический поиск.
 
 Отвечай ТОЛЬКО на вопросы, связанные с проектированием учебных планов:
 размещение дисциплин по семестрам, нагрузка, компетенции, нормативы ФГОС,
@@ -23,11 +33,9 @@ _SYSTEM_PROMPT = """\
 вежливо объясни, что ты помогаешь только с проектированием ОПОП.
 
 Отвечай на русском языке. Будь конкретным и практичным.
-Не выдумывай данные, которых нет в контексте. Опирайся на предоставленный план.\
+Ссылайся на конкретные дисциплины, компетенции и источники из предоставленного контекста.
+Не выдумывай данные, которых нет в контексте.\
 """
-
-_BLOCK_NAMES = {"1": "Блок 1 (Дисциплины)", "2": "Блок 2 (Практики)", "3": "Блок 3 (ГИА)", "fac": "Факультативные"}
-_PART_NAMES = {"mandatory": "обязательная", "variative": "вариативная"}
 
 
 def _get_norms(db: Session) -> dict[str, float]:
@@ -53,7 +61,7 @@ def build_plan_context(plan_id: int, db: Session) -> str:
 
     lines: list[str] = []
     lines.append(f"=== УЧЕБНЫЙ ПЛАН: «{plan.name}» ===")
-    lines.append(f"Программа: {plan.program_code}, Статус: {plan.status}")
+    lines.append(f"Направление: {plan.program_code} | Статус: {plan.status}")
     lines.append(f"Всего зачётных единиц: {total_credits:.1f} (норматив: {norms.get('X_total', 240):.0f} з.е.)")
     lines.append(
         f"Обязательная часть: {mand_pct * 100:.1f}% (норматив: ≥{norms.get('X_mandatory_percent', 0.4) * 100:.0f}%)"
@@ -113,6 +121,48 @@ def build_plan_context(plan_id: int, db: Session) -> str:
     return "\n".join(lines)
 
 
+def _build_rag_context(
+    query: str,
+    program_code: str,
+    db: Session,
+    top_k: int = 8,
+) -> str:
+    """Retrieves semantically relevant chunks from the knowledge base for this program_code.
+    Returns empty string if the embedding model is unavailable."""
+    from backend.modules.rag.retriever import retrieve  # noqa: PLC0415
+    from backend.modules.recommendation.embedder import is_available  # noqa: PLC0415
+
+    if not is_available():
+        return ""
+
+    elements = (
+        db.query(RecommendedElement)
+        .options(selectinload(RecommendedElement.competencies))
+        .filter(RecommendedElement.program_code == program_code)
+        .all()
+    )
+    competencies = db.query(Competency).order_by(Competency.type, Competency.code).all()
+
+    results = retrieve(
+        query=query,
+        program_code=program_code,
+        elements=elements,
+        competencies=competencies,
+        top_k=top_k,
+    )
+    if not results:
+        return ""
+
+    lines: list[str] = [
+        f"\n=== НОРМАТИВНАЯ БАЗА (направление {program_code}, отобрано по смыслу вопроса) ==="
+    ]
+    for i, r in enumerate(results, 1):
+        score_pct = int(r.score * 100)
+        lines.append(f"{i}. [{r.chunk.source_label}] {r.chunk.text}  (релевантность: {score_pct}%)")
+
+    return "\n".join(lines)
+
+
 def chat_with_plan(
     plan_id: int,
     user_message: str,
@@ -122,11 +172,20 @@ def chat_with_plan(
     if adapter is None:
         adapter = OllamaAdapter()
 
-    context = build_plan_context(plan_id, db)
-    user_prompt = f"{context}\n\n=== ВОПРОС ПОЛЬЗОВАТЕЛЯ ===\n{user_message}"
+    plan = db.query(CurriculumPlan).filter(CurriculumPlan.id == plan_id).first()
+    program_code = plan.program_code if plan else "не определено"
+
+    plan_context = build_plan_context(plan_id, db)
+    rag_context = _build_rag_context(user_message, program_code, db)
+
+    user_prompt = (
+        f"{plan_context}"
+        f"{rag_context}"
+        f"\n\n=== ВОПРОС ПОЛЬЗОВАТЕЛЯ ===\n{user_message}"
+    )
 
     try:
-        return adapter.generate(prompt=user_prompt, system_prompt=_SYSTEM_PROMPT)
+        return adapter.generate(prompt=user_prompt, system_prompt=_build_system_prompt(program_code))
     except LLMAdapterError as exc:
         return (
             f"ИИ-ассистент временно недоступен (Ollama не запущен или не отвечает).\n"
