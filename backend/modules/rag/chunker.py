@@ -46,9 +46,9 @@ def build_chunks(
     # --- Synthetic normative block-volume chunk ---
     # Added first so it gets high retrieval priority for min-volume queries.
     if norms:
-        b1 = norms.get("X_block1_min", 160)
-        b2 = norms.get("X_block2_min", 20)
-        b3 = norms.get("X_block3_min", 9)
+        b1 = norms.get("X_b1", 160)
+        b2 = norms.get("X_b2", 20)
+        b3 = norms.get("X_b3", 9)
         total = norms.get("X_total", 240)
         sem_max = norms.get("X_semester_max", 35)
         text = (

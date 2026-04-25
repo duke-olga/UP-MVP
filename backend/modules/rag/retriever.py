@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import logging
 from dataclasses import dataclass
 
@@ -21,8 +22,25 @@ class RetrievedChunk:
     score: float
 
 
-# Cache: program_code → (element_count, competency_count, norms_count, fgos_chunks, fgos_vecs, db_chunks, db_vecs)
-_rag_cache: dict[str, tuple[int, int, int, list[Chunk], np.ndarray, list[Chunk], np.ndarray]] = {}
+# Cache: program_code → (content_hash, fgos_chunks, fgos_vecs, db_chunks, db_vecs)
+_rag_cache: dict[str, tuple[str, list[Chunk], np.ndarray, list[Chunk], np.ndarray]] = {}
+
+
+def _content_hash(
+    elements: list[RecommendedElement],
+    competencies: list[Competency],
+    norms: dict[str, float] | None,
+) -> str:
+    """Stable hash of the data that determines corpus content."""
+    parts = []
+    for el in sorted(elements, key=lambda e: e.id):
+        parts.append(f"el:{el.id}:{el.name}:{el.credits}")
+    for co in sorted(competencies, key=lambda c: c.id):
+        parts.append(f"co:{co.id}:{co.code}:{co.name}")
+    if norms:
+        for k, v in sorted(norms.items()):
+            parts.append(f"n:{k}:{v}")
+    return hashlib.md5("|".join(parts).encode()).hexdigest()  # noqa: S324
 
 
 def _build_corpus(
@@ -32,15 +50,14 @@ def _build_corpus(
     norms: dict[str, float] | None = None,
 ) -> tuple[list[Chunk], np.ndarray, list[Chunk], np.ndarray]:
     """Return (fgos_chunks, fgos_vecs, db_chunks, db_vecs) — two separate corpora."""
-    el_count = len(elements)
-    co_count = len(competencies)
-    norms_count = len(norms) if norms else 0
+    current_hash = _content_hash(elements, competencies, norms)
 
     cached = _rag_cache.get(program_code)
     if cached is not None:
-        c_el, c_co, c_no, fc, fv, dc, dv = cached
-        if c_el == el_count and c_co == co_count and c_no == norms_count:
+        cached_hash, fc, fv, dc, dv = cached
+        if cached_hash == current_hash:
             return fc, fv, dc, dv
+        _log.info("RAG cache invalidated for %s (data changed)", program_code)
 
     fgos_chunks = load_fgos_chunks(program_code)
     all_db_chunks = build_chunks(program_code, elements, competencies, norms=norms)
@@ -54,7 +71,7 @@ def _build_corpus(
     fgos_vecs = embed([c.text for c in fgos_chunks]) if fgos_chunks else np.empty((0, 384))
     db_vecs = embed([c.text for c in db_chunks]) if db_chunks else np.empty((0, 384))
 
-    _rag_cache[program_code] = (el_count, co_count, norms_count, fgos_chunks, fgos_vecs, db_chunks, db_vecs)
+    _rag_cache[program_code] = (current_hash, fgos_chunks, fgos_vecs, db_chunks, db_vecs)
     return fgos_chunks, fgos_vecs, db_chunks, db_vecs
 
 

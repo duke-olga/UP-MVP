@@ -156,7 +156,12 @@ def load_fgos_chunks(program_code: str) -> list[Chunk]:
     try:
         raw = _extract_full_text(pdf_files[0])
         chunks = _split_into_chunks(_clean(raw), program_code)
-    except Exception:
+    except Exception as exc:
+        import logging as _logging
+        _logging.getLogger(__name__).error(
+            "FGOS PDF parse failed for program %s (%s): %s",
+            program_code, pdf_files[0], exc, exc_info=True,
+        )
         chunks = []
 
     _fgos_chunk_cache[program_code] = chunks
