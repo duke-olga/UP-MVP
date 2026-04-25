@@ -1,6 +1,9 @@
 from contextlib import asynccontextmanager
+import logging
 
 from fastapi import FastAPI
+
+logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
 from sqlalchemy import inspect, text
 
 from backend.database import Base, SessionLocal, engine

@@ -20,6 +20,10 @@ class OllamaAdapter:
                 "prompt": prompt,
                 "system": system_prompt,
                 "stream": False,
+                "options": {
+                    "num_ctx": 8192,   # expand context window; model supports up to 8192
+                    "temperature": 0.1, # low temp = more factual, less creative hallucination
+                },
             }
         ).encode("utf-8")
         http_request = request.Request(

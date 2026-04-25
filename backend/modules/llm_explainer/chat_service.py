@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+import logging
 from sqlalchemy.orm import Session, selectinload
+
+_log = logging.getLogger(__name__)
 
 from backend.models import CheckReport, Competency, CurriculumPlan, NormativeParam, PlanElement, RecommendedElement
 from backend.modules.llm_explainer.adapter import LLMAdapterError, OllamaAdapter
@@ -17,24 +20,20 @@ _PART_NAMES = {"mandatory": "обязательная", "variative": "вариа
 
 def _build_system_prompt(program_code: str) -> str:
     return f"""\
-Ты — ИИ-ассистент методиста вуза по проектированию учебных планов ОПОП/ФГОС.
-Ты работаешь с образовательной программой по направлению подготовки {program_code}.
+Ты — методист-помощник по проектированию ОПОП/ФГОС для направления {program_code}.
 
-У тебя есть доступ к двум источникам контекста:
-1. «УЧЕБНЫЙ ПЛАН» — текущая структура проектируемого плана (дисциплины, нагрузка, компетенции, нарушения).
-2. «НОРМАТИВНАЯ БАЗА» — рекомендации ПООП, лучшие практики и описания компетенций для направления {program_code},
-   отобранные по смыслу вопроса через семантический поиск.
+В каждом запросе тебе предоставлены два источника:
+— «НОРМАТИВНАЯ БАЗА» — фрагменты ФГОС ВО и нормативных документов (что должно быть).
+— «УЧЕБНЫЙ ПЛАН» — текущее состояние проектируемого плана (что есть сейчас).
 
-Отвечай ТОЛЬКО на вопросы, связанные с проектированием учебных планов:
-размещение дисциплин по семестрам, нагрузка, компетенции, нормативы ФГОС,
-структура блоков, соотношение обязательной и вариативной частей.
+Правила:
+1. Используй ТОЛЬКО информацию из этих разделов. Не добавляй знания из памяти.
+2. Для вопросов о требованиях, нормативах, перечнях — опирайся прежде всего на «НОРМАТИВНАЯ БАЗА» и цитируй источник (номер пункта ФГОС).
+3. Для вопросов об анализе плана, нарушениях, покрытии компетенций — используй оба источника.
+4. Если нужной информации нет ни в одном из разделов — так и скажи.
+5. Отвечай только по теме проектирования учебных планов. На посторонние вопросы вежливо откажи.
 
-Если вопрос не относится к учебным планам и образовательным программам —
-вежливо объясни, что ты помогаешь только с проектированием ОПОП.
-
-Отвечай на русском языке. Будь конкретным и практичным.
-Ссылайся на конкретные дисциплины, компетенции и источники из предоставленного контекста.
-Не выдумывай данные, которых нет в контексте.\
+Отвечай на русском. Будь конкретным. Ссылайся на источник.\
 """
 
 
@@ -128,39 +127,66 @@ def _build_rag_context(
     top_k: int = 8,
 ) -> str:
     """Retrieves semantically relevant chunks from the knowledge base for this program_code.
-    Returns empty string if the embedding model is unavailable."""
-    from backend.modules.rag.retriever import retrieve  # noqa: PLC0415
-    from backend.modules.recommendation.embedder import is_available  # noqa: PLC0415
+    Returns empty string if the embedding model is unavailable or if retrieval fails."""
+    try:
+        from backend.modules.rag.retriever import retrieve  # noqa: PLC0415
+        from backend.modules.recommendation.embedder import is_available  # noqa: PLC0415
 
-    if not is_available():
+        if not is_available():
+            _log.warning("RAG: embedding model unavailable, skipping FGOS context")
+            return ""
+
+        elements = (
+            db.query(RecommendedElement)
+            .options(selectinload(RecommendedElement.competencies))
+            .filter(RecommendedElement.program_code == program_code)
+            .all()
+        )
+        # Only competencies linked to this program's recommended elements
+        linked_ids = {c.id for el in elements for c in (el.competencies or [])}
+        competencies = (
+            db.query(Competency)
+            .filter(Competency.id.in_(linked_ids))
+            .order_by(Competency.type, Competency.code)
+            .all()
+        ) if linked_ids else []
+
+        norms = _get_norms(db)
+
+        results = retrieve(
+            query=query,
+            program_code=program_code,
+            elements=elements,
+            competencies=competencies,
+            top_k=top_k,
+            norms=norms,
+        )
+        if not results:
+            _log.info("RAG: no results for query=%r program=%s", query, program_code)
+            return ""
+
+        _log.info(
+            "RAG: retrieved %d chunks for query=%r: %s",
+            len(results),
+            query,
+            ", ".join(f"{r.chunk.source_label}({r.score:.2f})" for r in results),
+        )
+
+        lines: list[str] = [
+            f"\n=== НОРМАТИВНАЯ БАЗА (направление {program_code}) ===",
+            "Ниже приведены фрагменты нормативных документов, найденные по смыслу вопроса.",
+            "Используй именно эту информацию для ответа.",
+            "",
+        ]
+        for r in results:
+            lines.append(f"[{r.chunk.source_label}]")
+            lines.append(r.chunk.text)
+            lines.append("")
+
+        return "\n".join(lines)
+    except Exception as exc:
+        _log.warning("RAG context build failed, falling back to no-RAG mode: %s", exc, exc_info=True)
         return ""
-
-    elements = (
-        db.query(RecommendedElement)
-        .options(selectinload(RecommendedElement.competencies))
-        .filter(RecommendedElement.program_code == program_code)
-        .all()
-    )
-    competencies = db.query(Competency).order_by(Competency.type, Competency.code).all()
-
-    results = retrieve(
-        query=query,
-        program_code=program_code,
-        elements=elements,
-        competencies=competencies,
-        top_k=top_k,
-    )
-    if not results:
-        return ""
-
-    lines: list[str] = [
-        f"\n=== НОРМАТИВНАЯ БАЗА (направление {program_code}, отобрано по смыслу вопроса) ==="
-    ]
-    for i, r in enumerate(results, 1):
-        score_pct = int(r.score * 100)
-        lines.append(f"{i}. [{r.chunk.source_label}] {r.chunk.text}  (релевантность: {score_pct}%)")
-
-    return "\n".join(lines)
 
 
 def chat_with_plan(
@@ -176,13 +202,25 @@ def chat_with_plan(
     program_code = plan.program_code if plan else "не определено"
 
     plan_context = build_plan_context(plan_id, db)
-    rag_context = _build_rag_context(user_message, program_code, db)
+    rag_context = _build_rag_context(user_message, program_code, db, top_k=10)
 
-    user_prompt = (
-        f"{plan_context}"
-        f"{rag_context}"
-        f"\n\n=== ВОПРОС ПОЛЬЗОВАТЕЛЯ ===\n{user_message}"
-    )
+    # RAG context goes FIRST so the model attends to it (small models have "lost in the middle" problem).
+    # Instruction is repeated at the very end (second-highest attention position).
+    if rag_context:
+        user_prompt = (
+            f"{rag_context}\n\n"
+            f"{plan_context}"
+            f"\n\n=== ВОПРОС ===\n{user_message}"
+            f"\n\n=== ВАЖНО ===\n"
+            f"Ответь, опираясь на раздел «НОРМАТИВНАЯ БАЗА» выше. "
+            f"Если там есть нужная информация — процитируй её точно с указанием пункта. "
+            f"Не добавляй ничего от себя."
+        )
+    else:
+        user_prompt = (
+            f"{plan_context}"
+            f"\n\n=== ВОПРОС ===\n{user_message}"
+        )
 
     try:
         return adapter.generate(prompt=user_prompt, system_prompt=_build_system_prompt(program_code))
