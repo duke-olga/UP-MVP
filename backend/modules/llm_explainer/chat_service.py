@@ -142,14 +142,11 @@ def _build_rag_context(
             .filter(RecommendedElement.program_code == program_code)
             .all()
         )
-        # Only competencies linked to this program's recommended elements
-        linked_ids = {c.id for el in elements for c in (el.competencies or [])}
         competencies = (
             db.query(Competency)
-            .filter(Competency.id.in_(linked_ids))
             .order_by(Competency.type, Competency.code)
             .all()
-        ) if linked_ids else []
+        )
 
         norms = _get_norms(db)
 
